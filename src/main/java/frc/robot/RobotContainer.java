@@ -10,6 +10,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.RunTestShooter;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.TestShooter;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -22,7 +23,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private TestShooter testShooter = new TestShooter();
+  private Joystick shooterStick = new Joystick(0);
+
+  private TestShooter testShooter = new TestShooter(shooterStick);
   private RunTestShooter runTestShooter = new RunTestShooter(testShooter);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed

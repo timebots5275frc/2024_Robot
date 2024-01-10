@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TestShooter extends SubsystemBase {
@@ -18,25 +19,34 @@ public class TestShooter extends SubsystemBase {
   private CANSparkMax shooterMotorController2;
   private SparkPIDController shooterMotorPID;
   private SparkPIDController shooterMotorPID2;
+  private double joyVal;
+  private Joystick speedStick;
 
   /** Creates a new TestShooter. */
-  public TestShooter() {
+  public TestShooter(Joystick j) {
     shooterId = 21;
     shooterMotorController = new CANSparkMax(shooterId, CANSparkLowLevel.MotorType.kBrushless);
     shooterMotorPID = shooterMotorController.getPIDController();
     shooterId2 = 31;
     shooterMotorController2 = new CANSparkMax(shooterId2, CANSparkLowLevel.MotorType.kBrushless);
     shooterMotorPID2 = shooterMotorController2.getPIDController();
+    speedStick = j;
+    // shooterMotorPID.setP(0);
+    // shooterMotorPID.setFF(0.02);
+    // shooterMotorPID2.setP(0);
+    // shooterMotorPID2.setFF(0.055);
   }
 
   public void shoot() {
-    shooterMotorPID.setReference(600, ControlType.kVelocity);
-    shooterMotorPID2.setReference(-600, ControlType.kVelocity);
+    shooterMotorPID.setReference(joyVal, ControlType.kCurrent);
+    shooterMotorPID2.setReference(-joyVal, ControlType.kCurrent);
   }
 
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    joyVal = speedStick.getThrottle();
+
   }
 }
