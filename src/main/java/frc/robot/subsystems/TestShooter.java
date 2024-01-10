@@ -15,23 +15,23 @@ public class TestShooter extends SubsystemBase {
   private int shooterId;
   private int shooterId2;
   private CANSparkMax shooterMotorController;
-  private CANSparkMax shotterMotorController2;
+  private CANSparkMax shooterMotorController2;
   private SparkPIDController shooterMotorPID;
   private SparkPIDController shooterMotorPID2;
 
   /** Creates a new TestShooter. */
   public TestShooter() {
-    shooterId = 20;
+    shooterId = 21;
     shooterMotorController = new CANSparkMax(shooterId, CANSparkLowLevel.MotorType.kBrushless);
     shooterMotorPID = shooterMotorController.getPIDController();
-    shooterId2 = 0;
-    shooterMotorController = new CANSparkMax(shooterId2, CANSparkLowLevel.MotorType.kBrushless);
-    shooterMotorPID2 = shotterMotorController2.getPIDController();
+    shooterId2 = 31;
+    shooterMotorController2 = new CANSparkMax(shooterId2, CANSparkLowLevel.MotorType.kBrushless);
+    shooterMotorPID2 = shooterMotorController2.getPIDController();
   }
 
   public void shoot() {
-    shooterMotorPID.setReference(0.25, ControlType.kCurrent);
-    shooterMotorPID2.setReference(-0.25, ControlType.kCurrent);
+    shooterMotorPID.setReference(600, ControlType.kVelocity);
+    shooterMotorPID2.setReference(-600, ControlType.kVelocity);
   }
 
 
