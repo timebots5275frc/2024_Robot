@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
@@ -38,8 +39,8 @@ public class TestShooter extends SubsystemBase {
   }
 
   public void shoot() {
-    shooterMotorPID.setReference(joyVal, ControlType.kCurrent);
-    shooterMotorPID2.setReference(-joyVal, ControlType.kCurrent);
+    shooterMotorPID.setReference(joyVal, CANSparkBase.ControlType.kCurrent);
+    shooterMotorPID2.setReference(-joyVal, CANSparkBase.ControlType.kCurrent);
   }
 
 
