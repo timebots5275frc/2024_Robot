@@ -8,7 +8,6 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,15 +31,15 @@ public class TestShooter extends SubsystemBase {
     shooterMotorController2 = new CANSparkMax(shooterId2, CANSparkLowLevel.MotorType.kBrushless);
     shooterMotorPID2 = shooterMotorController2.getPIDController();
     speedStick = j;
-    // shooterMotorPID.setP(0);
-    // shooterMotorPID.setFF(0.02);
-    // shooterMotorPID2.setP(0);
-    // shooterMotorPID2.setFF(0.055);
+    shooterMotorPID.setP(0);
+    shooterMotorPID.setFF(0.02);
+    shooterMotorPID2.setP(0);
+    shooterMotorPID2.setFF(0.02);
   }
 
   public void shoot() {
-    shooterMotorPID.setReference(joyVal, CANSparkBase.ControlType.kCurrent);
-    shooterMotorPID2.setReference(-joyVal, CANSparkBase.ControlType.kCurrent);
+    shooterMotorPID.setReference(3500 * joyVal, CANSparkBase.ControlType.kVelocity);
+    shooterMotorPID2.setReference(3500 * -joyVal, CANSparkBase.ControlType.kVelocity);
   }
 
 
