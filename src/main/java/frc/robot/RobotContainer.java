@@ -4,11 +4,11 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
+
 import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
+
 import frc.robot.commands.RunTestShooter;
-import frc.robot.subsystems.ExampleSubsystem;
+
 import frc.robot.subsystems.TestShooter;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,9 +29,9 @@ public class RobotContainer {
   private RunTestShooter runTestShooter = new RunTestShooter(testShooter);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
+  /*private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
-
+*/
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
