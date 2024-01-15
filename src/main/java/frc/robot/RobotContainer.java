@@ -6,9 +6,9 @@ package frc.robot;
 
 
 import frc.robot.commands.Autos;
-
+import frc.robot.commands.IntakeC;
 import frc.robot.commands.RunTestShooter;
-
+import frc.robot.subsystems.IntakeSS;
 import frc.robot.subsystems.TestShooter;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,10 +24,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private Joystick shooterStick = new Joystick(0);
-
   private TestShooter testShooter = new TestShooter(shooterStick);
   private RunTestShooter runTestShooter = new RunTestShooter(testShooter);
 
+  private IntakeSS inSS = new IntakeSS();
+  private IntakeC  inC  = new IntakeC(inSS);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   /*private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -35,6 +36,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    inSS.setDefaultCommand(inC);
     testShooter.setDefaultCommand(runTestShooter);
     configureBindings();
   }
