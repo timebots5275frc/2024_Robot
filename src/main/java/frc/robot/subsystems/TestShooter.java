@@ -37,15 +37,22 @@ public class TestShooter extends SubsystemBase {
     shooterEncoder = shooterMotorController.getEncoder();
     shooterEncoder2 = shooterMotorController2.getEncoder();
     speedStick = j;
-    shooterMotorPID.setP(0);
-    shooterMotorPID.setFF(0.02);
-    shooterMotorPID2.setP(0);
-    shooterMotorPID2.setFF(0.02);
+    //shooterMotorPID.setP(0.016 );
+    // shooterMotorPID.setI(0.00000002);
+    // shooterMotorPID.setFF(0);
+    // shooterMotorPID2.setP(0.016);
+    // shooterMotorPID2.setI(0.00000002);
+    // shooterMotorPID2.setFF(0);
+
+    shooterMotorPID.setP(0.00005);
+    shooterMotorPID.setFF(0.0002);
+    shooterMotorPID2.setP(0.00005);
+    shooterMotorPID2.setFF(0.0002);
   }
 
   public void shoot() {
-    shooterMotorPID.setReference(3500 * joyVal, CANSparkBase.ControlType.kVelocity);
-    shooterMotorPID2.setReference(3500 * -joyVal, CANSparkBase.ControlType.kVelocity);
+    shooterMotorPID.setReference(2000 * joyVal, CANSparkBase.ControlType.kVelocity);
+    shooterMotorPID2.setReference(1700 * -joyVal, CANSparkBase.ControlType.kVelocity);
   }
 
 
