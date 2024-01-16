@@ -45,21 +45,26 @@ public class TestShooter extends SubsystemBase {
     // shooterMotorPID2.setFF(0);
 
     shooterMotorPID.setP(0.00005);
+    shooterMotorPID.setI(0.0);
+    shooterMotorPID.setD(0.0);
     shooterMotorPID.setFF(0.0002);
     shooterMotorPID2.setP(0.00005);
+    shooterMotorPID2.setI(0.0);
+    shooterMotorPID2.setD(0.0);
     shooterMotorPID2.setFF(0.0002);
   }
 
   public void shoot() {
-    shooterMotorPID.setReference(2000 * joyVal, CANSparkBase.ControlType.kVelocity);
-    shooterMotorPID2.setReference(1700 * -joyVal, CANSparkBase.ControlType.kVelocity);
+    shooterMotorPID.setReference(2100 * joyVal, CANSparkBase.ControlType.kVelocity);
+    shooterMotorPID2.setReference(1050 * -joyVal, CANSparkBase.ControlType.kVelocity);
+    //2100 for consistent not break
   }
 
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    joyVal = speedStick.getThrottle();
+    joyVal = (speedStick.getThrottle() - 1) / 2;
     SmartDashboard.putNumber("Spark 1", shooterEncoder.getVelocity());
     SmartDashboard.putNumber("Spark 2", shooterEncoder2.getVelocity());
 

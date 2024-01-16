@@ -18,4 +18,11 @@ public final class Constants {
     public static final int intakeTalonMotor = 0;
     public static final double intakeTalonMotorPercent = 0.5f;
   }
+
+  public static class intakeConstants {
+    public static final double pivotMotorRotationnsPer360 = 100;
+    public static final double pivotMotorRotationnsPerDegree = pivotMotorRotationnsPer360 / 360;
+    
+
+  }
 }

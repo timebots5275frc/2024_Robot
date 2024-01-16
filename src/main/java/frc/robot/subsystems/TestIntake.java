@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TestIntake extends SubsystemBase {
@@ -19,28 +20,37 @@ public class TestIntake extends SubsystemBase {
   // private double k_pivotMotorI = 0.0;
   // private double k_pivotMotorD = 0.001;
 
-` private CANSparkMax intakeMotor;
+  private CANSparkMax intakeMotor;
   private SparkPIDController intakePID;
   private RelativeEncoder intakeEncoder;
-  private double intakeMotorP;
+  private double intakeMotorFF;
 
 
 
   public TestIntake() {
-    intakeMotor = new CANSparkMax(placeholder, CANSparkLowLevel.MotorType.kBrushless);
+    intakeMotor = new CANSparkMax(42, CANSparkLowLevel.MotorType.kBrushless);
     intakePID = intakeMotor.getPIDController();
     intakeEncoder = intakeMotor.getEncoder();
-    intakeMotorP = 0.001;
-    intakePID.setP(intakeMotorP);
+    intakeMotorFF = 0.001;
+    intakePID.setP(0.0);
+    intakePID.setI(0.0);
+    intakePID.setD(0.0);
+    intakePID.setFF(intakeMotorFF);
   }
 
 
   public void runIntake() {
-    intakePID.setReference(500, CANSparkBase.ControlType.kVelocity);
+    intakePID.setReference(-1200, CANSparkBase.ControlType.kVelocity);
+  }
+
+  public void stopIntake() {
+    intakePID.setReference(0, CANSparkBase.ControlType.kVelocity);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    SmartDashboard.putNumber("IntakeSpeed", intakeEncoder.getVelocity());
   }
 }

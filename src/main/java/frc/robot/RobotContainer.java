@@ -8,7 +8,9 @@ package frc.robot;
 import frc.robot.commands.Autos;
 import frc.robot.commands.IntakeC;
 import frc.robot.commands.RunTestShooter;
+import frc.robot.commands.TestIntakeCommand;
 import frc.robot.subsystems.IntakeSS;
+import frc.robot.subsystems.TestIntake;
 import frc.robot.subsystems.TestShooter;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,9 +28,11 @@ public class RobotContainer {
   private Joystick shooterStick = new Joystick(0);
   private TestShooter testShooter = new TestShooter(shooterStick);
   private RunTestShooter runTestShooter = new RunTestShooter(testShooter);
+  private TestIntake testIntake = new TestIntake();
+  private TestIntakeCommand intakeCommand = new TestIntakeCommand(testIntake, shooterStick);
 
-  private IntakeSS inSS = new IntakeSS();
-  private IntakeC  inC  = new IntakeC(inSS);
+  // private IntakeSS inSS = new IntakeSS();
+  // private IntakeC  inC  = new IntakeC(inSS);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   /*private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -36,8 +40,8 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
-    inSS.setDefaultCommand(inC);
     testShooter.setDefaultCommand(runTestShooter);
+    testIntake.setDefaultCommand(intakeCommand);
     configureBindings();
   }
 
@@ -51,6 +55,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+
+    
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
