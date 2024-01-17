@@ -4,14 +4,17 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSS;
 
 public class IntakeC extends Command {
   /** Creates a new IntakeC. */
   private IntakeSS inSS;
-  public IntakeC(IntakeSS intakeSS) {
+  private Joystick joyR;
+  public IntakeC(IntakeSS intakeSS, Joystick joystickR) {
     this.inSS = intakeSS;
+    joyR=joystickR;
     addRequirements();
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -23,7 +26,7 @@ public class IntakeC extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    inSS.Pull();
+    if (joyR.getRawButtonPressed(2))   inSS.Pull();
   }
 
   // Called once the command ends or is interrupted.
