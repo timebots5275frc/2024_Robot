@@ -15,14 +15,28 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
-    public static final int intakeTalonMotor = 0;
-    public static final double intakeTalonMotorPercent = 0.5f;
+    
   }
+  public static class PIDConstants {
+    public static final double intakeP = 0.0f;
+    public static final double intakeI = 0.0f;
+    public static final double intakeD = 0.0f;
+    public static final double intakeFF= 0.001f;
 
+
+    public static final double shooterP = 0.00005f;
+    public static final double shooterI = 0.0f;
+    public static final double shooterD = 0.0f;
+    public static final double shooterFF= 0.0f;
+    
+  }
   public static class intakeConstants {
     public static final double pivotMotorRotationnsPer360 = 100;
     public static final double pivotMotorRotationnsPerDegree = pivotMotorRotationnsPer360 / 360;
+    public static final int IntakeDeviceID = 42;
     
+    public static final int ColesNEOMotor = 0;
+    public static final double ColesNEOMotorPercent = 0.5f;
 
   }
 }

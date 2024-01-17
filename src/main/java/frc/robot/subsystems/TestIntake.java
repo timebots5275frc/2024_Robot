@@ -12,6 +12,7 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class TestIntake extends SubsystemBase {
   /** Creates a new TestIntake. */
@@ -23,19 +24,19 @@ public class TestIntake extends SubsystemBase {
   private CANSparkMax intakeMotor;
   private SparkPIDController intakePID;
   private RelativeEncoder intakeEncoder;
-  private double intakeMotorFF;
 
 
 
   public TestIntake() {
-    intakeMotor = new CANSparkMax(42, CANSparkLowLevel.MotorType.kBrushless);
+    
+    intakeMotor = new CANSparkMax(Constants.intakeConstants.IntakeDeviceID, CANSparkLowLevel.MotorType.kBrushless);
     intakePID = intakeMotor.getPIDController();
     intakeEncoder = intakeMotor.getEncoder();
-    intakeMotorFF = 0.001;
-    intakePID.setP(0.0);
-    intakePID.setI(0.0);
-    intakePID.setD(0.0);
-    intakePID.setFF(intakeMotorFF);
+    
+    intakePID.setP(Constants.PIDConstants.intakeP);
+    intakePID.setI(Constants.PIDConstants.intakeI);
+    intakePID.setD(Constants.PIDConstants.intakeD);
+    intakePID.setFF(Constants.PIDConstants.intakeFF);
   }
 
 
