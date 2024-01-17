@@ -39,8 +39,8 @@ public class TestIntake extends SubsystemBase {
   }
 
 
-  public void runIntake() {
-    intakePID.setReference(-1200, CANSparkBase.ControlType.kVelocity);
+  public void runIntake(double thing) {
+    intakePID.setReference(1200 * thing, CANSparkBase.ControlType.kVelocity);
   }
 
   public void stopIntake() {

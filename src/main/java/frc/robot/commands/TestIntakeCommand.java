@@ -13,13 +13,13 @@ public class TestIntakeCommand extends Command {
 
   private TestIntake testIntake;
   private Joystick joy;
-  private boolean toggle;
+  private int toggle;
 
   public TestIntakeCommand(TestIntake intake, Joystick stick) {
     // Use addRequirements() here to declare subsystem dependencies.
     testIntake = intake;
     joy = stick;
-    toggle = false;
+    toggle = 0;
     addRequirements(testIntake);
   }
 
@@ -34,11 +34,18 @@ public class TestIntakeCommand extends Command {
   public void execute() {
 
     if (joy.getRawButtonPressed(4)) {
-      toggle = !toggle;
+      toggle = 1;
     }
-
-    if (toggle) {
-      testIntake.runIntake();
+    else if (joy.getRawButtonPressed(3)) {
+      toggle = 2;
+    }
+    else if (joy.getRawButtonPressed(5)) {
+      toggle = 0;
+    }
+    if (toggle == 1) {
+      testIntake.runIntake(1);
+    } else if (toggle == 2) {
+      testIntake.runIntake(-1);
     } else {
       testIntake.stopIntake();
     }
