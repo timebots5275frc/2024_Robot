@@ -4,19 +4,25 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkLowLevel;
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeSS extends SubsystemBase {
-  private TalonSRX intakeM;
+  private CANSparkMax csp;
   /** Creates a new IntakeSS. */
   public IntakeSS() {
-    intakeM = new TalonSRX(Constants.OperatorConstants.intakeTalonMotor);
+    
+    csp = new CANSparkMax(Constants.intakeConstants.ColesNEOMotor, CANSparkLowLevel.MotorType.kBrushless);
+    csp.getPIDController().setP(Constants.PIDConstants.intakeP);
+    csp.getPIDController().setI(Constants.PIDConstants.intakeI);
+    csp.getPIDController().setD(Constants.PIDConstants.intakeD);
+    csp.getPIDController().setFF(Constants.PIDConstants.intakeFF);
   }
   public void Pull() {
-    intakeM.set(TalonSRXControlMode.PercentOutput, Constants.OperatorConstants.intakeTalonMotorPercent);
+    csp.set(Constants.intakeConstants.ColesNEOMotorPercent);
   }
   @Override
   public void periodic() {

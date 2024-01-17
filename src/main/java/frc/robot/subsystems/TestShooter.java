@@ -13,6 +13,7 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class TestShooter extends SubsystemBase {
   private int shooterId;
@@ -44,14 +45,14 @@ public class TestShooter extends SubsystemBase {
     // shooterMotorPID2.setI(0.00000002);
     // shooterMotorPID2.setFF(0);
 
-    shooterMotorPID.setP(0.00005);
-    shooterMotorPID.setI(0.0);
-    shooterMotorPID.setD(0.0);
-    shooterMotorPID.setFF(0.0002);
-    shooterMotorPID2.setP(0.00005);
-    shooterMotorPID2.setI(0.0);
-    shooterMotorPID2.setD(0.0);
-    shooterMotorPID2.setFF(0.0002);
+    shooterMotorPID.setP(Constants.PIDConstants.shooterP);
+    shooterMotorPID.setI(Constants.PIDConstants.shooterI);
+    shooterMotorPID.setD(Constants.PIDConstants.shooterD);
+    shooterMotorPID.setFF(Constants.PIDConstants.shooterFF);
+    shooterMotorPID2.setP(Constants.PIDConstants.shooterP);
+    shooterMotorPID2.setI(Constants.PIDConstants.shooterI);
+    shooterMotorPID2.setD(Constants.PIDConstants.shooterD);
+    shooterMotorPID2.setFF(Constants.PIDConstants.shooterFF);
   }
 
   public void shoot() {

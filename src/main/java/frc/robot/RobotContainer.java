@@ -42,6 +42,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     testShooter.setDefaultCommand(runTestShooter);
     testIntake.setDefaultCommand(intakeCommand);
+    //inC.setDefaultCommand(inSS);
     configureBindings();
   }
 
