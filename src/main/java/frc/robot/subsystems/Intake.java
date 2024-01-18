@@ -4,11 +4,26 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.RelativeEncoder;
+
+import com.revrobotics.SparkPIDController;
+
+import com.revrobotics.CANSparkMax;
+
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
 
-  
+  private CANSparkMax intakeRunMotor;
+  private SparkPIDController intakeRunPID;
+  private RelativeEncoder intakeRunEncoder;
+
+  private CANSparkMax intakePivotMotor;
+  private SparkPIDController intakePivotPID;
+  private RelativeEncoder intakePivotEncoder;
+
 
   public enum IntakeState {
     NONE,
@@ -20,7 +35,14 @@ public class Intake extends SubsystemBase {
 
 
   public Intake() {
-
+    intakeRunMotor = new CANSparkMax(Constants.intakeConstants.IntakeDeviceID, CANSparkLowLevel.MotorType.kBrushless);
+    intakeRunPID = intakeMotor.getPIDController();
+    intakeRunEncoder = intakeMotor.getEncoder();
+    
+    intakeRunPID.setP(Constants.PIDConstants.intakeP);
+    intakeRunPID.setI(Constants.PIDConstants.intakeI);
+    intakeRunPID.setD(Constants.PIDConstants.intakeD);
+    intakeRunPID.setFF(Constants.PIDConstants.intakeFF);
 
   }
 
