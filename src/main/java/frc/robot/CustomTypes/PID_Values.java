@@ -5,7 +5,7 @@ public class PID_Values {
     public double I;
     public double D;
     public double IZ;
-    public double KFF;
+    public double kFF;
 
     public PID_Values(double P_, double I_, double D_)
     {
@@ -13,7 +13,7 @@ public class PID_Values {
         I = I_;
         D = D_;
         IZ = 0.0;
-        KFF = 0.0;
+        kFF = 0.0;
     }
 
     public PID_Values(double P_, double I_, double D_, double IZ_, double KFF_)
@@ -22,6 +22,6 @@ public class PID_Values {
         I = I_;
         D = D_;
         IZ = IZ_;
-        KFF = KFF_;
+        kFF = KFF_;
     }
 }

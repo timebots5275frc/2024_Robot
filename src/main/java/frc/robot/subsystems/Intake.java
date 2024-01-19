@@ -7,10 +7,10 @@ package frc.robot.subsystems;
 import com.revrobotics.RelativeEncoder;
 
 import com.revrobotics.SparkPIDController;
-
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -24,26 +24,54 @@ public class Intake extends SubsystemBase {
   private SparkPIDController intakePivotPID;
   private RelativeEncoder intakePivotEncoder;
 
+  private IntakeState currentState;
+
 
   public enum IntakeState {
     NONE,
     INTAKE,
     EJECT,
-    PULSE,
+    READY,
     FEED_SHOOTER,
   }
 
 
   public Intake() {
-    intakeRunMotor = new CANSparkMax(Constants.intakeConstants.IntakeDeviceID, CANSparkLowLevel.MotorType.kBrushless);
-    intakeRunPID = intakeMotor.getPIDController();
-    intakeRunEncoder = intakeMotor.getEncoder();
-    
-    intakeRunPID.setP(Constants.PIDConstants.intakeP);
-    intakeRunPID.setI(Constants.PIDConstants.intakeI);
-    intakeRunPID.setD(Constants.PIDConstants.intakeD);
-    intakeRunPID.setFF(Constants.PIDConstants.intakeFF);
+    intakeRunMotor = new CANSparkMax(Constants.IntakeConstants.INTAKE_RUN_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+    intakeRunPID = intakeRunMotor.getPIDController();
+    intakeRunEncoder = intakeRunMotor.getEncoder();
 
+    intakePivotMotor = new CANSparkMax(Constants.IntakeConstants.INTAKE_FLIP_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+    intakePivotPID = intakePivotMotor.getPIDController();
+    intakePivotEncoder = intakePivotMotor.getEncoder();
+
+    intakeRunPID.setP(Constants.IntakeConstants.IntakeRunPIDs.P);
+    intakeRunPID.setI(Constants.IntakeConstants.IntakeRunPIDs.I);
+    intakeRunPID.setD(Constants.IntakeConstants.IntakeRunPIDs.D);
+    intakeRunPID.setFF(Constants.IntakeConstants.IntakeRunPIDs.kFF);
+
+    currentState = IntakeState.NONE;
+  }
+
+  public void IntakeSet(IntakeState state) {
+    switch(state) {
+      // Moves motor to position according to rotations and starts motors
+      case NONE:
+      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_DEFAULT_POS, ControlType.kPosition);
+      intakeRunPID.setReference(0, ControlType.kVelocity);
+      case INTAKE:
+      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_COLLECT_POS, ControlType.kPosition);
+      intakeRunPID.setReference(Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
+      case EJECT:
+      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_COLLECT_POS, ControlType.kPosition);
+      intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
+      case READY:
+      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_FEED_POS, ControlType.kPosition);
+      intakeRunPID.setReference(0, ControlType.kVelocity);
+      case FEED_SHOOTER:
+      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_FEED_POS, ControlType.kPosition);
+      intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
+    }
   }
 
   @Override

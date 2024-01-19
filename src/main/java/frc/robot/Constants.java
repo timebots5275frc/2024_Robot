@@ -151,4 +151,43 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
       }
     }
   }
+
+  public static class ShooterConstants {
+    public static final PID_Values ShooterRunPIDs = new PID_Values(
+    0.00005,
+    0.0,
+    0.0,
+    0.0,
+    0.0002);
+
+    public static final PID_Values ShooterPivotPIDs = new PID_Values(
+    0,
+    0,
+    0);
+
+  }
+
+  public static class IntakeConstants {
+    public static final PID_Values IntakeRunPIDs = new PID_Values(
+    0.0, 
+    0.0,
+    0.0,
+    0.0,
+    0.001);
+
+    public static final PID_Values IntakeFlipPIDs = new PID_Values(
+    0.12, 
+    0.0,
+    0.001);
+    // Spark Max Motor ID's
+    public static final int INTAKE_RUN_MOTOR_ID = 0;
+    public static final int INTAKE_FLIP_MOTOR_ID = 0;
+    // Positions of intake in motor rotations
+    public static final double INTAKE_DEFAULT_POS = 0;
+    public static final double INTAKE_COLLECT_POS = 0;
+    public static final double INTAKE_FEED_POS = 0;
+
+    public static final double INTAKE_RUN_SPEED = 1200;
+
+  }
 }
