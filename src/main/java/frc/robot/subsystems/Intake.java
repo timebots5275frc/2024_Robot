@@ -18,17 +18,18 @@ public class Intake extends SubsystemBase {
 
   private CANSparkMax intakeRunMotor;
   private SparkPIDController intakeRunPID;
-  private RelativeEncoder intakeRunEncoder;
+  // private RelativeEncoder intakeRunEncoder;
 
   private CANSparkMax intakePivotMotor;
   private SparkPIDController intakePivotPID;
   private RelativeEncoder intakePivotEncoder;
 
-  private IntakeState currentState;
+  // private IntakeState currentState;
 
 
   public enum IntakeState {
     NONE,
+    REST,
     INTAKE,
     EJECT,
     READY,
@@ -39,7 +40,7 @@ public class Intake extends SubsystemBase {
   public Intake() {
     intakeRunMotor = new CANSparkMax(Constants.IntakeConstants.INTAKE_RUN_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
     intakeRunPID = intakeRunMotor.getPIDController();
-    intakeRunEncoder = intakeRunMotor.getEncoder();
+    // intakeRunEncoder = intakeRunMotor.getEncoder();
 
     intakePivotMotor = new CANSparkMax(Constants.IntakeConstants.INTAKE_FLIP_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
     intakePivotPID = intakePivotMotor.getPIDController();
@@ -50,13 +51,17 @@ public class Intake extends SubsystemBase {
     intakeRunPID.setD(Constants.IntakeConstants.IntakeRunPIDs.D);
     intakeRunPID.setFF(Constants.IntakeConstants.IntakeRunPIDs.kFF);
 
-    currentState = IntakeState.NONE;
+    //Set Pivot PIDS here
+
+    intakeSetState(IntakeState.NONE);
   }
 
-  public void IntakeSet(IntakeState state) {
+  public void intakeSetState(IntakeState state) {
     switch(state) {
       // Moves motor to position according to rotations and starts motors
       case NONE:
+      intakePivotPID.setReference(intakePivotEncoder.getPosition(), ControlType.kVelocity);
+      case REST:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_DEFAULT_POS, ControlType.kPosition);
       intakeRunPID.setReference(0, ControlType.kVelocity);
       case INTAKE:
