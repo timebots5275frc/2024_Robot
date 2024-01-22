@@ -29,10 +29,9 @@ public class Shooter extends SubsystemBase {
   public enum ShooterState {
     REST,
     VISION_SHOOT,
-    VISION_AMP,
+    AMP/*,
     TRAP,
-    DEFAULT_SHOOT,
-    DEFAULT_AMP
+    DEFAULT_SHOOT*/
   }
 
   public Shooter() {
@@ -69,7 +68,14 @@ public class Shooter extends SubsystemBase {
       shooterPivotPID.setReference(shooterPivotEncoder.getPosition(), ControlType.kPosition);
       leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_SHOOTER_SPEED, ControlType.kVelocity);
       rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_SHOOTER_SPEED, ControlType.kVelocity);
-
+      case AMP:
+      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_DEFAULT_AMP_POS, ControlType.kPosition);
+      leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_AMP_SPEED, ControlType.kVelocity);
+      rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_AMP_SPEED, ControlType.kVelocity);
+      // case TRAP:
+      
+      // case DEFAULT_SHOOT: 
+      
     }
   }
 

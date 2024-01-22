@@ -172,6 +172,9 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
     public final static double LEFT_SHOOTER_SPEED = 2100;
     public final static double RIGHT_SHOOTER_SPEED = -0.5 * LEFT_SHOOTER_SPEED;
 
+    public final static double LEFT_AMP_SPEED = 500;
+    public final static double RIGHT_AMP_SPEED = -0.5 * LEFT_AMP_SPEED;
+
     public final static double SHOOTER_DEFAULT_POS = 0;
     public final static double SHOOTER_DEFAULT_SHOOTING_POS = 0;
     public final static double SHOOTER_DEFAULT_AMP_POS = 0;
