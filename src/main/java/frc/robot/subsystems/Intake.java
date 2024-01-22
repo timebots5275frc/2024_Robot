@@ -28,11 +28,11 @@ public class Intake extends SubsystemBase {
 
 
   public enum IntakeState {
-    NONE,
+    IDLE,
     REST,
     INTAKE,
     EJECT,
-    READY,
+    READY_TO_FEED,
     FEED_SHOOTER,
   }
 
@@ -53,14 +53,15 @@ public class Intake extends SubsystemBase {
 
     //Set Pivot PIDS here
 
-    intakeSetState(IntakeState.NONE);
+    intakeSetState(IntakeState.IDLE);
   }
 
   public void intakeSetState(IntakeState state) {
     switch(state) {
       // Moves motor to position according to rotations and starts motors
-      case NONE:
-      intakePivotPID.setReference(intakePivotEncoder.getPosition(), ControlType.kVelocity);
+      case IDLE:
+      intakePivotPID.setReference(intakePivotEncoder.getPosition(), ControlType.kPosition);
+      intakeRunPID.setReference(0, ControlType.kVelocity);
       case REST:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_DEFAULT_POS, ControlType.kPosition);
       intakeRunPID.setReference(0, ControlType.kVelocity);
@@ -70,7 +71,7 @@ public class Intake extends SubsystemBase {
       case EJECT:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_COLLECT_POS, ControlType.kPosition);
       intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
-      case READY:
+      case READY_TO_FEED:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_FEED_POS, ControlType.kPosition);
       intakeRunPID.setReference(0, ControlType.kVelocity);
       case FEED_SHOOTER:
