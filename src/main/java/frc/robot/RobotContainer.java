@@ -5,6 +5,10 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.ShooterState;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
@@ -15,7 +19,11 @@ import edu.wpi.first.wpilibj2.command.Command;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  
+  Shooter shooter = new Shooter();
+  Intake intake = new Intake();
 
+  ShooterCommand shooterRest = new ShooterCommand(shooter, ShooterState.REST);
 
 
   public RobotContainer() {
