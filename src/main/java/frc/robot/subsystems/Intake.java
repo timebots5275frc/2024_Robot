@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -24,7 +25,11 @@ public class Intake extends SubsystemBase {
   private SparkPIDController intakePivotPID;
   private RelativeEncoder intakePivotEncoder;
 
-  // private IntakeState currentState;
+  private IntakeState currentState;
+
+  private Shooter shooter;
+
+  private DigitalInput limitSwitch;
 
 
   public enum IntakeState {
@@ -33,11 +38,11 @@ public class Intake extends SubsystemBase {
     INTAKE,
     EJECT,
     READY_TO_FEED,
-    FEED_SHOOTER,
+    FEED_SHOOTER
   }
 
 
-  public Intake() {
+  public Intake(Shooter shooter) {
     intakeRunMotor = new CANSparkMax(Constants.IntakeConstants.INTAKE_RUN_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
     intakeRunPID = intakeRunMotor.getPIDController();
     // intakeRunEncoder = intakeRunMotor.getEncoder();
@@ -54,6 +59,10 @@ public class Intake extends SubsystemBase {
     //Set Pivot PIDS here
 
     intakeSetState(IntakeState.IDLE);
+
+    this.shooter = shooter;
+
+    limitSwitch = new DigitalInput(0);
   }
 
   public void intakeSetState(IntakeState state) {
@@ -62,21 +71,39 @@ public class Intake extends SubsystemBase {
       case IDLE:
       intakePivotPID.setReference(intakePivotEncoder.getPosition(), ControlType.kPosition);
       intakeRunPID.setReference(0, ControlType.kVelocity);
+      currentState = IntakeState.IDLE;
       case REST:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_DEFAULT_POS, ControlType.kPosition);
       intakeRunPID.setReference(0, ControlType.kVelocity);
+      currentState = IntakeState.REST;
       case INTAKE:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_COLLECT_POS, ControlType.kPosition);
       intakeRunPID.setReference(Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
+      currentState = IntakeState.INTAKE;
       case EJECT:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_COLLECT_POS, ControlType.kPosition);
       intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
+      currentState = IntakeState.EJECT;
       case READY_TO_FEED:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_FEED_POS, ControlType.kPosition);
       intakeRunPID.setReference(0, ControlType.kVelocity);
+      currentState = IntakeState.READY_TO_FEED;
       case FEED_SHOOTER:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_FEED_POS, ControlType.kPosition);
       intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
+      currentState = IntakeState.READY_TO_FEED;
+    }
+  }
+
+  public void feedShooter() {
+    if (shooter.isReady()) {
+      intakeSetState(IntakeState.FEED_SHOOTER);
+    }
+  }
+
+  public void autoReady() {
+    if ((currentState == IntakeState.INTAKE) && limitSwitch.get()) {
+      intakeSetState(IntakeState.READY_TO_FEED);
     }
   }
 

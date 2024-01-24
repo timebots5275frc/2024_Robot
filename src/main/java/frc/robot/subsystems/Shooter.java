@@ -26,8 +26,14 @@ public class Shooter extends SubsystemBase {
   private SparkPIDController shooterPivotPID;
   private RelativeEncoder shooterPivotEncoder;
 
+  private ShooterState currentState;
+
+  private double currentPos;
+  private double leftCurrentSpeed;
+  private double rightCurrentSpeed;
+
   public enum ShooterState {
-    REST,
+    IDLE,
     VISION_SHOOT,
     AMP/*,
     TRAP,
@@ -60,18 +66,21 @@ public class Shooter extends SubsystemBase {
 
   public void shooterSetState(ShooterState state) {
     switch(state) {
-      case REST:
+      case IDLE:
       shooterPivotPID.setReference(shooterPivotEncoder.getPosition(), ControlType.kPosition);
       leftShooterRunPID.setReference(0, ControlType.kVelocity);
       rightShooterRunPID.setReference(0, ControlType.kVelocity);
+      currentState = ShooterState.IDLE;
       case VISION_SHOOT: 
       shooterPivotPID.setReference(shooterPivotEncoder.getPosition(), ControlType.kPosition);
       leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_SHOOTER_SPEED, ControlType.kVelocity);
       rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_SHOOTER_SPEED, ControlType.kVelocity);
+      currentState = ShooterState.VISION_SHOOT;
       case AMP:
       shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_DEFAULT_AMP_POS, ControlType.kPosition);
       leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_AMP_SPEED, ControlType.kVelocity);
       rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_AMP_SPEED, ControlType.kVelocity);
+      currentState = ShooterState.AMP;
       // case TRAP:
       
       // case DEFAULT_SHOOT: 
@@ -79,8 +88,28 @@ public class Shooter extends SubsystemBase {
     }
   }
 
+  public boolean isReady() {
+    // Change pivotready bool to work with vision value in future
+    boolean pivotReady = ((currentPos > Constants.ShooterConstants.SHOOTER_DEFAULT_SHOOTING_POS - Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET)
+      && (currentPos < Constants.ShooterConstants.SHOOTER_DEFAULT_SHOOTING_POS + Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET))
+      || ((currentPos > Constants.ShooterConstants.SHOOTER_DEFAULT_AMP_POS - Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET)
+      && (currentPos < Constants.ShooterConstants.SHOOTER_DEFAULT_AMP_POS + Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET));
+    boolean leftReady = (leftCurrentSpeed > Constants.ShooterConstants.LEFT_SHOOTER_SPEED - Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET)
+      && (leftCurrentSpeed < Constants.ShooterConstants.LEFT_SHOOTER_SPEED + Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET)
+      || (leftCurrentSpeed > Constants.ShooterConstants.LEFT_AMP_SPEED - Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET)
+      && (leftCurrentSpeed < Constants.ShooterConstants.LEFT_AMP_SPEED + Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET);
+    boolean rightReady = (rightCurrentSpeed > Constants.ShooterConstants.RIGHT_SHOOTER_SPEED- Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET)
+      && (rightCurrentSpeed < Constants.ShooterConstants.RIGHT_SHOOTER_SPEED + Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET)
+      || (rightCurrentSpeed > Constants.ShooterConstants.RIGHT_AMP_SPEED- Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET)
+      && (rightCurrentSpeed < Constants.ShooterConstants.RIGHT_AMP_SPEED + Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET);
+    
+    return (pivotReady && leftReady && rightReady);
+  }
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    currentPos = shooterPivotEncoder.getPosition();
+    leftCurrentSpeed = leftShooterRunEncoder.getVelocity();
+    rightCurrentSpeed = rightShooterRunEncoder.getVelocity();
   }
 }

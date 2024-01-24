@@ -178,6 +178,10 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
     public final static double SHOOTER_DEFAULT_POS = 0;
     public final static double SHOOTER_DEFAULT_SHOOTING_POS = 0;
     public final static double SHOOTER_DEFAULT_AMP_POS = 0;
+
+    public final static double SHOOTER_PIVOT_ALLOWED_OFFSET = 0;
+    public final static double LEFT_SHOOTER_ALLOWED_OFFSET = 0;
+    public final static double RIGHT_SHOOTER_ALLOWED_OFFSET = 0;
   }
 
   public static class IntakeConstants {
