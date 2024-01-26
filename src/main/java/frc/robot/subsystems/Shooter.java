@@ -33,9 +33,11 @@ public class Shooter extends SubsystemBase {
   private double rightCurrentSpeed;
 
   public enum ShooterState {
+    START,
     IDLE,
     VISION_SHOOT,
-    AMP/*,
+    AMP,
+    TEST/*,
     TRAP,
     DEFAULT_SHOOT*/
   }
@@ -66,6 +68,10 @@ public class Shooter extends SubsystemBase {
 
   public void shooterSetState(ShooterState state) {
     switch(state) {
+      case START:
+      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_DEFAULT_POS, ControlType.kPosition);
+      leftShooterRunPID.setReference(0, ControlType.kVelocity);
+      rightShooterRunPID.setReference(0, ControlType.kVelocity);
       case IDLE:
       shooterPivotPID.setReference(shooterPivotEncoder.getPosition(), ControlType.kPosition);
       leftShooterRunPID.setReference(0, ControlType.kVelocity);
@@ -98,13 +104,15 @@ public class Shooter extends SubsystemBase {
       && (leftCurrentSpeed < Constants.ShooterConstants.LEFT_SHOOTER_SPEED + Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET)
       || (leftCurrentSpeed > Constants.ShooterConstants.LEFT_AMP_SPEED - Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET)
       && (leftCurrentSpeed < Constants.ShooterConstants.LEFT_AMP_SPEED + Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET);
-    boolean rightReady = (rightCurrentSpeed > Constants.ShooterConstants.RIGHT_SHOOTER_SPEED- Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET)
+    boolean rightReady = (rightCurrentSpeed > Constants.ShooterConstants.RIGHT_SHOOTER_SPEED - Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET)
       && (rightCurrentSpeed < Constants.ShooterConstants.RIGHT_SHOOTER_SPEED + Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET)
       || (rightCurrentSpeed > Constants.ShooterConstants.RIGHT_AMP_SPEED- Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET)
       && (rightCurrentSpeed < Constants.ShooterConstants.RIGHT_AMP_SPEED + Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET);
     
     return (pivotReady && leftReady && rightReady);
   }
+
+
 
   @Override
   public void periodic() {
