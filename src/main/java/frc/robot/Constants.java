@@ -182,6 +182,10 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
     public final static double SHOOTER_PIVOT_ALLOWED_OFFSET = 0;
     public final static double LEFT_SHOOTER_ALLOWED_OFFSET = 0;
     public final static double RIGHT_SHOOTER_ALLOWED_OFFSET = 0;
+
+    public final static double LEFT_SHOOTER_TEST_SPEED = 2100;
+    public final static double RIGHT_SHOOTER_TEST_SPEED = -.5*LEFT_SHOOTER_TEST_SPEED;
+    
   }
 
   public static class IntakeConstants {
