@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import frc.robot.commands.AutoIntake;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Intake.IntakeState;
 import frc.robot.subsystems.Shooter.ShooterState;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -19,16 +22,31 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   
-  Shooter shooter = new Shooter();
-  Intake intake = new Intake(shooter);
+  Shooter shooter;
+  Intake intake;
 
-  ShooterCommand shooterIdle = new ShooterCommand(shooter, ShooterState.IDLE);
-  ShooterCommand shooterFire = new ShooterCommand(shooter, ShooterState.VISION_SHOOT);
+  AutoIntake autoIntake = new AutoIntake(intake, shooter);
 
-  
+  IntakeCommand intakeIdle, intakeRest, intakeIntake, intakeEject, intakeReady, intakeFeed;
 
+  ShooterCommand shooterStart, shooterIdle, shooterFire, shooterAmp, shooterTest;
 
   public RobotContainer() {
+    shooter = new Shooter();
+    intake = new Intake(shooter);
+
+    intakeIdle = new IntakeCommand(intake, IntakeState.IDLE);
+    intakeRest = new IntakeCommand(intake, IntakeState.REST);
+    intakeIntake = new IntakeCommand(intake, IntakeState.INTAKE);
+    intakeEject = new IntakeCommand(intake, IntakeState.EJECT);
+    intakeReady = new IntakeCommand(intake, IntakeState.READY_TO_FEED);
+    intakeFeed = new IntakeCommand(intake, IntakeState.FEED_SHOOTER);
+
+    shooterStart = new ShooterCommand(shooter, ShooterState.START);
+    shooterIdle = new ShooterCommand(shooter, ShooterState.IDLE);
+    shooterFire = new ShooterCommand(shooter, ShooterState.VISION_SHOOT);
+    shooterAmp = new ShooterCommand(shooter, ShooterState.AMP);
+    shooterTest = new ShooterCommand(shooter, ShooterState.TEST);
 
     configureBindings();
   }

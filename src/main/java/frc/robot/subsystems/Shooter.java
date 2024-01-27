@@ -88,7 +88,7 @@ public class Shooter extends SubsystemBase {
       rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_AMP_SPEED, ControlType.kVelocity);
       currentState = ShooterState.AMP;
       case TEST:
-      shooterPivotPID.setReference(shooterPivotEncoder.getPosition(), ControlType.kPosition);
+      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_TEST_POS, ControlType.kPosition);
       leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_SHOOTER_TEST_SPEED, ControlType.kVelocity);
       rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_SHOOTER_TEST_SPEED, ControlType.kVelocity);
       // case TRAP:
