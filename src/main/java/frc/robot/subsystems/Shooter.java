@@ -91,6 +91,7 @@ public class Shooter extends SubsystemBase {
       shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_TEST_POS, ControlType.kPosition);
       leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_SHOOTER_TEST_SPEED, ControlType.kVelocity);
       rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_SHOOTER_TEST_SPEED, ControlType.kVelocity);
+      currentState = ShooterState.TEST;
       // case TRAP:
       
       // case DEFAULT_SHOOT: 
@@ -98,7 +99,7 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-  public boolean isReady() {
+  public boolean shooterReady() {
     // Change pivotready bool to work with vision value in future
     boolean pivotReady = ((currentPos > Constants.ShooterConstants.SHOOTER_DEFAULT_SHOOTING_POS - Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET)
       && (currentPos < Constants.ShooterConstants.SHOOTER_DEFAULT_SHOOTING_POS + Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET))
@@ -116,7 +117,9 @@ public class Shooter extends SubsystemBase {
     return (pivotReady && leftReady && rightReady);
   }
 
-
+  public ShooterState getState() {
+    return currentState;
+  }
 
   @Override
   public void periodic() {

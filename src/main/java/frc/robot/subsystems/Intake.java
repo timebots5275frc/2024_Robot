@@ -96,13 +96,13 @@ public class Intake extends SubsystemBase {
   }
 
   public void feedShooter() {
-    if (shooter.isReady()) {
+    if (shooter.shooterReady()) {
       intakeSetState(IntakeState.FEED_SHOOTER);
     }
   }
 
   public void autoReady() {
-    if ((currentState == IntakeState.INTAKE) && limitSwitch.get()) {
+    if (currentState == IntakeState.INTAKE && limitSwitch.get()) {
       intakeSetState(IntakeState.READY_TO_FEED);
     }
   }
