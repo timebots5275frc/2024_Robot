@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   
-  SwerveDrive drive;
+  SwerveDrive swerveDrive;
   Shooter shooter;
   Intake intake;
 
@@ -50,7 +50,7 @@ public class RobotContainer {
   SequentialCommandGroup autoCommands;
 
   public RobotContainer() {
-    drive = new SwerveDrive();
+    swerveDrive = new SwerveDrive();
     shooter = new Shooter();
     intake = new Intake(shooter);
 
@@ -58,7 +58,7 @@ public class RobotContainer {
     buttonBoard = new GenericHID(1);
     input = new Input(driveStick);
 
-    joyDrive = new TeleopJoystickDrive(drive, driveStick, input, true);
+    joyDrive = new TeleopJoystickDrive(swerveDrive, driveStick, input, true);
     intakeIdle = new IntakeCommand(intake, IntakeState.IDLE);
     intakeRest = new IntakeCommand(intake, IntakeState.REST);
     intakeIntake = new IntakeCommand(intake, IntakeState.INTAKE);
@@ -80,6 +80,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    //swerveDrive.setDefaultCommand(joyDrive);
     //intake.setDefaultCommand(autoIntake);
 
     //.onTrue() calls command once per button press
