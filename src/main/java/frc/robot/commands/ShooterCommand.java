@@ -16,6 +16,7 @@ public class ShooterCommand extends Command {
   public ShooterCommand(Shooter shooter, ShooterState state) {
     this.shooter = shooter;
     this.state = state;
+    addRequirements(this.shooter);
   }
 
   // Called when the command is initially scheduled.

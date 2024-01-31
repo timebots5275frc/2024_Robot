@@ -16,6 +16,7 @@ public class IntakeCommand extends Command {
   public IntakeCommand(Intake intake, IntakeState state) {
     this.intake = intake;
     this.state = state;
+    addRequirements(this.intake);
   }
 
   // Called when the command is initially scheduled.

@@ -69,11 +69,11 @@ public class Shooter extends SubsystemBase {
   public void shooterSetState(ShooterState state) {
     switch(state) {
       case START:
-      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_DEFAULT_POS, ControlType.kPosition);
+      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_START_POS, ControlType.kPosition);
       leftShooterRunPID.setReference(0, ControlType.kVelocity);
       rightShooterRunPID.setReference(0, ControlType.kVelocity);
       case IDLE:
-      shooterPivotPID.setReference(shooterPivotEncoder.getPosition(), ControlType.kPosition);
+      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_IDLE_POS, ControlType.kPosition);
       leftShooterRunPID.setReference(0, ControlType.kVelocity);
       rightShooterRunPID.setReference(0, ControlType.kVelocity);
       currentState = ShooterState.IDLE;

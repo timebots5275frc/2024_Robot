@@ -6,13 +6,12 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
 
 public class AutoIntake extends Command {
 
   private Intake intake;
 
-  public AutoIntake(Intake intake, Shooter shooter) {
+  public AutoIntake(Intake intake) {
     this.intake = intake;
     addRequirements(this.intake);
   }

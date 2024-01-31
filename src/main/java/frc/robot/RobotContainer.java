@@ -16,6 +16,7 @@ import frc.robot.subsystems.Shooter.ShooterState;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -37,7 +38,7 @@ public class RobotContainer {
 
   TeleopJoystickDrive joyDrive;
 
-  AutoIntake autoIntake = new AutoIntake(intake, shooter);
+  AutoIntake autoIntake;
 
   IntakeCommand intakeIdle, intakeRest, intakeIntake, intakeEject, intakeReady, intakeFeed;
 
@@ -60,6 +61,8 @@ public class RobotContainer {
     intakeReady = new IntakeCommand(intake, IntakeState.READY_TO_FEED);
     intakeFeed = new IntakeCommand(intake, IntakeState.FEED_SHOOTER);
 
+    autoIntake = new AutoIntake(intake);
+
     shooterStart = new ShooterCommand(shooter, ShooterState.START);
     shooterIdle = new ShooterCommand(shooter, ShooterState.IDLE);
     shooterFire = new ShooterCommand(shooter, ShooterState.VISION_SHOOT);
@@ -72,11 +75,21 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    //intake.setDefaultCommand(autoIntake);
+
     //.onTrue() calls command once per button press
     //.whileTrue() calls command while button is held or until command finishes
     //.toggleOnTrue() makes a toggle which runs when pressed and then stops when presse again
 
-    new JoystickButton(buttonBoard, 1).whileTrue(shooterTest);
+    new JoystickButton(buttonBoard, 1).onTrue(new RepeatCommand(shooterTest));
+    new JoystickButton(buttonBoard, 2).onTrue(new RepeatCommand(shooterStart));
+    new JoystickButton(buttonBoard, 3).onTrue(new RepeatCommand(shooterIdle));
+
+    new JoystickButton(buttonBoard, 4).onTrue(new RepeatCommand(intakeIdle));
+    new JoystickButton(buttonBoard, 5).onTrue(new RepeatCommand(intakeIntake));
+    new JoystickButton(buttonBoard, 6).onTrue(new RepeatCommand(intakeReady));
+    new JoystickButton(buttonBoard, 7).onTrue(new RepeatCommand(intakeFeed));
+    
   }
 
   /**
