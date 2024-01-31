@@ -8,6 +8,9 @@ import com.revrobotics.RelativeEncoder;
 
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
+
+import java.util.function.BooleanSupplier;
+
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
@@ -106,6 +109,10 @@ public class Intake extends SubsystemBase {
       intakeSetState(IntakeState.READY_TO_FEED);
     }
   }
+
+  public BooleanSupplier autoIntake = new BooleanSupplier() {
+    public boolean getAsBoolean() {return limitSwitch.get();}
+  };
 
   @Override
   public void periodic() {

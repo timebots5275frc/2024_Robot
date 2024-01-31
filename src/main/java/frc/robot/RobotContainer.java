@@ -11,6 +11,7 @@ import frc.robot.commands.TeleopJoystickDrive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
+import frc.robot.subsystems.Input.Input;
 import frc.robot.subsystems.Intake.IntakeState;
 import frc.robot.subsystems.Shooter.ShooterState;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -36,6 +37,8 @@ public class RobotContainer {
   Joystick driveStick;
   GenericHID buttonBoard;
 
+  Input input;
+
   TeleopJoystickDrive joyDrive;
 
   AutoIntake autoIntake;
@@ -52,8 +55,10 @@ public class RobotContainer {
     intake = new Intake(shooter);
 
     driveStick = new Joystick(0);
+    buttonBoard = new GenericHID(1);
+    input = new Input(driveStick);
 
-    joyDrive = new TeleopJoystickDrive(drive, driveStick, true);
+    joyDrive = new TeleopJoystickDrive(drive, driveStick, input, true);
     intakeIdle = new IntakeCommand(intake, IntakeState.IDLE);
     intakeRest = new IntakeCommand(intake, IntakeState.REST);
     intakeIntake = new IntakeCommand(intake, IntakeState.INTAKE);
@@ -86,7 +91,7 @@ public class RobotContainer {
     new JoystickButton(buttonBoard, 3).onTrue(new RepeatCommand(shooterIdle));
 
     new JoystickButton(buttonBoard, 4).onTrue(new RepeatCommand(intakeIdle));
-    new JoystickButton(buttonBoard, 5).onTrue(new RepeatCommand(intakeIntake));
+    new JoystickButton(buttonBoard, 5).onTrue(new RepeatCommand(intakeIntake).until(intake.autoIntake));
     new JoystickButton(buttonBoard, 6).onTrue(new RepeatCommand(intakeReady));
     new JoystickButton(buttonBoard, 7).onTrue(new RepeatCommand(intakeFeed));
     
