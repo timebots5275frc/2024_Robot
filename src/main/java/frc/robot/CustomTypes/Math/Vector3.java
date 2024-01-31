@@ -73,4 +73,9 @@ public class Vector3 {
     public String toString() {
         return "(" + x + ", " + y + ", " + z + ")";
     }
+
+    public String toString(int decimals) {
+        double mult = Math.pow(10, decimals);
+        return "(" + (int)(x * mult) / mult + ", " + (int)(y * mult) / mult + ", " + (int)(z * mult) / mult + ")";
+    }
 }

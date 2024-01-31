@@ -6,7 +6,6 @@ package frc.robot.subsystems.DriveTrain;
 
 import java.util.List;
 import com.ctre.phoenix6.hardware.Pigeon2;
-// import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
