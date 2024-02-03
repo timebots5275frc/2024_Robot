@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import java.util.Vector;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
