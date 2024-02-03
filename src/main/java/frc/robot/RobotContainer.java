@@ -48,7 +48,6 @@ public class RobotContainer {
   ShooterCommand shooterStart, shooterIdle, shooterFire, shooterAmp, shooterTest;
   
   SequentialCommandGroup autoCommands;
-
   public RobotContainer() {
     swerveDrive = new SwerveDrive();
     shooter = new Shooter();

@@ -3,7 +3,7 @@ package frc.robot.CustomTypes.Math;
 public class Vector3 {
     public double x, y, z;
 
-    public static Vector3 zero = new Vector3(0, 0, 0);
+    public static Vector3 zero = new Vector3();
 
     public Vector3(double x, double y, double z)
     {
