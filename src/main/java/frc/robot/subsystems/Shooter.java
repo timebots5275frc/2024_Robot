@@ -64,6 +64,10 @@ public class Shooter extends SubsystemBase {
     rightShooterRunPID.setI(Constants.ShooterConstants.ShooterRunPIDs.I);
     rightShooterRunPID.setD(Constants.ShooterConstants.ShooterRunPIDs.D);
     rightShooterRunPID.setFF(Constants.ShooterConstants.ShooterRunPIDs.kFF);
+
+    shooterPivotPID.setP(Constants.ShooterConstants.ShooterPivotPIDs.P);
+    shooterPivotPID.setI(Constants.ShooterConstants.ShooterPivotPIDs.I);
+    shooterPivotPID.setD(Constants.ShooterConstants.ShooterPivotPIDs.D);
   }
 
   public void shooterSetState(ShooterState state) {
@@ -105,14 +109,14 @@ public class Shooter extends SubsystemBase {
       && (currentPos < Constants.ShooterConstants.SHOOTER_DEFAULT_SHOOTING_POS + Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET))
       || ((currentPos > Constants.ShooterConstants.SHOOTER_DEFAULT_AMP_POS - Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET)
       && (currentPos < Constants.ShooterConstants.SHOOTER_DEFAULT_AMP_POS + Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET));
-    boolean leftReady = (leftCurrentSpeed > Constants.ShooterConstants.LEFT_SHOOTER_SPEED - Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET)
-      && (leftCurrentSpeed < Constants.ShooterConstants.LEFT_SHOOTER_SPEED + Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET)
-      || (leftCurrentSpeed > Constants.ShooterConstants.LEFT_AMP_SPEED - Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET)
-      && (leftCurrentSpeed < Constants.ShooterConstants.LEFT_AMP_SPEED + Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET);
-    boolean rightReady = (rightCurrentSpeed > Constants.ShooterConstants.RIGHT_SHOOTER_SPEED - Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET)
-      && (rightCurrentSpeed < Constants.ShooterConstants.RIGHT_SHOOTER_SPEED + Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET)
-      || (rightCurrentSpeed > Constants.ShooterConstants.RIGHT_AMP_SPEED- Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET)
-      && (rightCurrentSpeed < Constants.ShooterConstants.RIGHT_AMP_SPEED + Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET);
+    boolean leftReady = ((leftCurrentSpeed > Constants.ShooterConstants.LEFT_SHOOTER_SPEED - Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET)
+      && (leftCurrentSpeed < Constants.ShooterConstants.LEFT_SHOOTER_SPEED + Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET))
+      || ((leftCurrentSpeed > Constants.ShooterConstants.LEFT_AMP_SPEED - Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET)
+      && (leftCurrentSpeed < Constants.ShooterConstants.LEFT_AMP_SPEED + Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET));
+    boolean rightReady = ((rightCurrentSpeed > Constants.ShooterConstants.RIGHT_SHOOTER_SPEED - Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET)
+      && (rightCurrentSpeed < Constants.ShooterConstants.RIGHT_SHOOTER_SPEED + Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET))
+      || ((rightCurrentSpeed > Constants.ShooterConstants.RIGHT_AMP_SPEED- Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET)
+      && (rightCurrentSpeed < Constants.ShooterConstants.RIGHT_AMP_SPEED + Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET));
     
     return (pivotReady && leftReady && rightReady);
   }

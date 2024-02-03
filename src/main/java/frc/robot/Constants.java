@@ -199,6 +199,9 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
     public final static double RIGHT_SHOOTER_TEST_SPEED = -0.5 * LEFT_SHOOTER_TEST_SPEED;
   
     public final static double SHOOTER_TEST_POS = 60 /*degrees*/;
+
+    public final static double SHOOTER_TARGET_HEIGHT = 80; /*inches */
+    public final static double LIMELIGHT_HEIGHT_WITH_OFFSET = 0;
   }
 
   public static class IntakeConstants {
