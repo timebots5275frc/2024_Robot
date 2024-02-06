@@ -75,26 +75,32 @@ public class Intake extends SubsystemBase {
       intakePivotPID.setReference(intakePivotEncoder.getPosition(), ControlType.kPosition);
       intakeRunPID.setReference(0, ControlType.kVelocity);
       currentState = IntakeState.IDLE;
+      break;
       case REST:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_DEFAULT_POS, ControlType.kPosition);
       intakeRunPID.setReference(0, ControlType.kVelocity);
       currentState = IntakeState.REST;
+      break;
       case INTAKE:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_COLLECT_POS, ControlType.kPosition);
       intakeRunPID.setReference(Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
       currentState = IntakeState.INTAKE;
+      break;
       case EJECT:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_COLLECT_POS, ControlType.kPosition);
       intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
       currentState = IntakeState.EJECT;
+      break;
       case READY_TO_FEED:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_FEED_POS, ControlType.kPosition);
       intakeRunPID.setReference(0, ControlType.kVelocity);
       currentState = IntakeState.READY_TO_FEED;
+      break;
       case FEED_SHOOTER:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_FEED_POS, ControlType.kPosition);
       intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
       currentState = IntakeState.READY_TO_FEED;
+      break;
     }
   }
 
