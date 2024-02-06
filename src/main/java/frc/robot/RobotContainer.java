@@ -49,23 +49,23 @@ public class RobotContainer {
   
   SequentialCommandGroup autoCommands;
   public RobotContainer() {
-    swerveDrive = new SwerveDrive();
+    //swerveDrive = new SwerveDrive();
     shooter = new Shooter();
-    intake = new Intake(shooter);
+    //intake = new Intake(shooter);
 
     driveStick = new Joystick(0);
-    buttonBoard = new GenericHID(1);
+    //buttonBoard = new GenericHID(1);
     input = new Input(driveStick);
 
-    joyDrive = new TeleopJoystickDrive(swerveDrive, driveStick, input, true);
-    intakeIdle = new IntakeCommand(intake, IntakeState.IDLE);
-    intakeRest = new IntakeCommand(intake, IntakeState.REST);
-    intakeIntake = new IntakeCommand(intake, IntakeState.INTAKE);
-    intakeEject = new IntakeCommand(intake, IntakeState.EJECT);
-    intakeReady = new IntakeCommand(intake, IntakeState.READY_TO_FEED);
-    intakeFeed = new IntakeCommand(intake, IntakeState.FEED_SHOOTER);
+    //joyDrive = new TeleopJoystickDrive(swerveDrive, driveStick, input, true);
+    //intakeIdle = new IntakeCommand(intake, IntakeState.IDLE);
+    //intakeRest = new IntakeCommand(intake, IntakeState.REST);
+    //intakeIntake = new IntakeCommand(intake, IntakeState.INTAKE);
+    //intakeEject = new IntakeCommand(intake, IntakeState.EJECT);
+    //intakeReady = new IntakeCommand(intake, IntakeState.READY_TO_FEED);
+    //intakeFeed = new IntakeCommand(intake, IntakeState.FEED_SHOOTER);
 
-    autoIntake = new AutoIntake(intake);
+    //autoIntake = new AutoIntake(intake);
 
     shooterStart = new ShooterCommand(shooter, ShooterState.START);
     shooterIdle = new ShooterCommand(shooter, ShooterState.IDLE);
@@ -86,14 +86,14 @@ public class RobotContainer {
     //.whileTrue() calls command while button is held or until command finishes
     //.toggleOnTrue() makes a toggle which runs when pressed and then stops when presse again
 
-    new JoystickButton(buttonBoard, 1).onTrue(new RepeatCommand(shooterTest));
-    new JoystickButton(buttonBoard, 2).onTrue(new RepeatCommand(shooterStart));
-    new JoystickButton(buttonBoard, 3).onTrue(new RepeatCommand(shooterIdle));
+    new JoystickButton(driveStick, 3).whileTrue(new ShooterCommand(shooter, ShooterState.START));
+    new JoystickButton(driveStick, 4).whileTrue(new ShooterCommand(shooter, ShooterState.TEST));
+    //new JoystickButton(buttonBoard, 3).onTrue(new RepeatCommand(shooterIdle));
 
-    new JoystickButton(buttonBoard, 4).onTrue(new RepeatCommand(intakeIdle));
-    new JoystickButton(buttonBoard, 5).onTrue(new RepeatCommand(intakeIntake).until(intake.autoIntake));
-    new JoystickButton(buttonBoard, 6).onTrue(new RepeatCommand(intakeReady));
-    new JoystickButton(buttonBoard, 7).onTrue(new RepeatCommand(intakeFeed));
+    //new JoystickButton(buttonBoard, 4).onTrue(new RepeatCommand(intakeIdle));
+    //new JoystickButton(buttonBoard, 5).onTrue(new RepeatCommand(intakeIntake).until(intake.autoIntake));
+    //new JoystickButton(buttonBoard, 6).onTrue(new RepeatCommand(intakeReady));
+    //new JoystickButton(buttonBoard, 7).onTrue(new RepeatCommand(intakeFeed));
     
   }
 

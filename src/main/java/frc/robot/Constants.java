@@ -172,13 +172,21 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
     0.0002);
 
     public static final PID_Values ShooterPivotPIDs = new PID_Values(
-    0,
-    0,
-    0);
+    0.0015,
+    0.0,
+    0.0);
+    public static final double SHOOTER_PIVOT_FF = 0.0;
+    public static final double SHOOTER_PIVOT_MAX_VEL = 17.25;
+    public static final double SHOOTER_PIVOT_MAX_ACCEL = 34.5;
 
-    public final static int LEFT_SHOOTER_ID = 0;
-    public final static int RIGHT_SHOOTER_ID = 0;
-    public final static int PIVOT_SHOOTER_ID = 0;
+    public static final double SHOOTER_PIVOT_GEAR_RATIO = 621;
+    public static final double SHOOTER_PIVOT_ROTATIONS_PER_DEGREE = SHOOTER_PIVOT_GEAR_RATIO / 360.0;
+
+
+    public final static int LEFT_SHOOTER_ID = 32;
+    public final static int RIGHT_SHOOTER_ID = 31;
+    public final static int PIVOT_SHOOTER_ID = 20;
+    public final static int PIVOT_SHOOTER_CANCODER_ID = 21;
 
     public final static double LEFT_SHOOTER_SPEED = 2100;
     public final static double RIGHT_SHOOTER_SPEED = -0.5 * LEFT_SHOOTER_SPEED;
@@ -186,9 +194,9 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
     public final static double LEFT_AMP_SPEED = 500;
     public final static double RIGHT_AMP_SPEED = -0.5 * LEFT_AMP_SPEED;
 
-    public final static double SHOOTER_START_POS = 0;
+    public final static double SHOOTER_START_POS = 10 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_IDLE_POS = 0;
-    public final static double SHOOTER_DEFAULT_SHOOTING_POS = 0;
+    public final static double SHOOTER_DEFAULT_SHOOTING_POS = 0.0;
     public final static double SHOOTER_DEFAULT_AMP_POS = 0;
 
     public final static double SHOOTER_PIVOT_ALLOWED_OFFSET = 0;
@@ -198,7 +206,7 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
     public final static double LEFT_SHOOTER_TEST_SPEED = 2100;
     public final static double RIGHT_SHOOTER_TEST_SPEED = -0.5 * LEFT_SHOOTER_TEST_SPEED;
   
-    public final static double SHOOTER_TEST_POS = 60 /*degrees*/;
+    public final static double SHOOTER_TEST_POS = 40 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
 
     public final static double SHOOTER_TARGET_HEIGHT = 80; /*inches */
     public final static double LIMELIGHT_HEIGHT_WITH_OFFSET = 0;

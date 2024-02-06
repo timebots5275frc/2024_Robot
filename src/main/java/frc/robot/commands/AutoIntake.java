@@ -24,7 +24,7 @@ public class AutoIntake extends Command {
   @Override
   public void execute() {
     intake.autoReady();
-    intake.feedShooter();
+    // intake.feedShooter();
   }
 
   // Called once the command ends or is interrupted.

@@ -98,11 +98,11 @@ public class Intake extends SubsystemBase {
     }
   }
 
-  public void feedShooter() {
-    if (shooter.shooterReady()) {
-      intakeSetState(IntakeState.FEED_SHOOTER);
-    }
-  }
+  // public void feedShooter() {
+  //   if (shooter.shooterReady()) {
+  //     intakeSetState(IntakeState.FEED_SHOOTER);
+  //   }
+  // }
 
   public void autoReady() {
     if (currentState == IntakeState.INTAKE && limitSwitch.get()) {
