@@ -16,6 +16,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.Vision.VisionShooterCalculator;
 
 public class Shooter extends SubsystemBase {
 
@@ -86,6 +87,8 @@ public class Shooter extends SubsystemBase {
     shooterPivotPID.setD(Constants.ShooterConstants.ShooterPivotPIDs.D);
     shooterPivotPID.setFF(Constants.ShooterConstants.SHOOTER_PIVOT_FF);
     shooterPivotPID.setOutputRange(-1, 1);
+
+    VisionShooterCalculator.SetShooterReference(this);
 
   }
 
