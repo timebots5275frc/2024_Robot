@@ -174,9 +174,9 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
     0.0002);
 
     public static final PID_Values ShooterPivotPIDs = new PID_Values(
-    0.0,
-    0.0,
-    0.0);
+    0.00003,
+    0.00000003,
+    0.000064);
     public static final double SHOOTER_PIVOT_FF = 0.0001;
     public static final double SHOOTER_PIVOT_MAX_VEL = 1035 * 1.5;
     public static final double SHOOTER_PIVOT_MAX_ACCEL = SHOOTER_PIVOT_MAX_VEL * 2;
@@ -208,7 +208,7 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
     public final static double LEFT_SHOOTER_TEST_SPEED = 2100;
     public final static double RIGHT_SHOOTER_TEST_SPEED = -0.5 * LEFT_SHOOTER_TEST_SPEED;
   
-    public final static double SHOOTER_TEST_POS = 40 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+    public final static double SHOOTER_TEST_POS = 60 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
 
     public final static double SPEAKER_MIN_SHOT_DISTANCE = .8; // Meters
     public final static double SPEAKER_MAX_SHOT_DISTANCE = 5; // Meters

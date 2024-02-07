@@ -174,7 +174,8 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter Spark Max Pos", shooterPivotEncoder.getPosition());
     SmartDashboard.putNumber("Shooter Pivot Vel", shooterPivotEncoder.getVelocity());
     SmartDashboard.putNumber("Shooter CANCODER Pos", angleEncoder.getAbsolutePosition().getValueAsDouble() * 360);
-    SmartDashboard.putNumber("SP Output Voltage", shooterPivotMotor.getOutputCurrent());
+    SmartDashboard.putNumber("SP Output Current", shooterPivotMotor.getOutputCurrent());
+
     SmartDashboard.putString("Shooter Current State", currentState.toString());
   }
 }
