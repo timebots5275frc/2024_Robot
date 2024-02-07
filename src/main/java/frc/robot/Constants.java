@@ -174,12 +174,12 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
     0.0002);
 
     public static final PID_Values ShooterPivotPIDs = new PID_Values(
-    0.0015,
+    0.0,
     0.0,
     0.0);
-    public static final double SHOOTER_PIVOT_FF = 0.0;
-    public static final double SHOOTER_PIVOT_MAX_VEL = 17.25;
-    public static final double SHOOTER_PIVOT_MAX_ACCEL = 34.5;
+    public static final double SHOOTER_PIVOT_FF = 0.0001;
+    public static final double SHOOTER_PIVOT_MAX_VEL = 1035 * 1.5;
+    public static final double SHOOTER_PIVOT_MAX_ACCEL = SHOOTER_PIVOT_MAX_VEL * 2;
 
     public static final double SHOOTER_PIVOT_GEAR_RATIO = 621;
     public static final double SHOOTER_PIVOT_ROTATIONS_PER_DEGREE = SHOOTER_PIVOT_GEAR_RATIO / 360.0;

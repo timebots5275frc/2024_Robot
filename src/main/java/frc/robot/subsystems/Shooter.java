@@ -32,7 +32,7 @@ public class Shooter extends SubsystemBase {
   private SparkPIDController shooterPivotPID;
   private RelativeEncoder shooterPivotEncoder;
 
-  private ShooterState currentState;
+  private ShooterState currentState = ShooterState.IDLE;
 
   private double currentPos;
   private double leftCurrentSpeed;
@@ -89,7 +89,10 @@ public class Shooter extends SubsystemBase {
     shooterPivotPID.setD(Constants.ShooterConstants.ShooterPivotPIDs.D);
     shooterPivotPID.setFF(Constants.ShooterConstants.SHOOTER_PIVOT_FF);
     shooterPivotPID.setOutputRange(-1, 1);
+    shooterPivotPID.setSmartMotionMaxVelocity(Constants.ShooterConstants.SHOOTER_PIVOT_MAX_VEL, 0);
+    shooterPivotPID.setSmartMotionMaxAccel(Constants.ShooterConstants.SHOOTER_PIVOT_MAX_ACCEL, 0);
 
+    currentState = ShooterState.IDLE;
     VisionShooterCalculator.SetShooterReference(this);
 
   }
@@ -169,6 +172,7 @@ public class Shooter extends SubsystemBase {
     // leftCurrentSpeed = leftShooterRunEncoder.getVelocity();
     // rightCurrentSpeed = rightShooterRunEncoder.getVelocity();
     SmartDashboard.putNumber("Shooter Spark Max Pos", shooterPivotEncoder.getPosition());
+    SmartDashboard.putNumber("Shooter Pivot Vel", shooterPivotEncoder.getVelocity());
     SmartDashboard.putNumber("Shooter CANCODER Pos", angleEncoder.getAbsolutePosition().getValueAsDouble() * 360);
     SmartDashboard.putNumber("SP Output Voltage", shooterPivotMotor.getOutputCurrent());
     SmartDashboard.putString("Shooter Current State", currentState.toString());
