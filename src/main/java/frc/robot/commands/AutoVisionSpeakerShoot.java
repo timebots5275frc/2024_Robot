@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.CustomTypes.Math.Vector2;
 import frc.robot.CustomTypes.Math.Vector3;
@@ -38,15 +39,14 @@ public class AutoVisionSpeakerShoot extends Command {
       Vector2 horizontalAprilTagPosition = new Vector2(aprilTagPosInTargetSpace.x, aprilTagPosInTargetSpace.z);
       double aprilTagDistance = horizontalAprilTagPosition.magnitude();
 
+
+      // ADD .until() WHEN BOOLEAN SUPPLIER IS CREATED
       if (aprilTagDistance > ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE || aprilTagDistance < ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE)
       {
-        AutoVisionDrive autoVisionDriveCommand = new AutoVisionDrive(swerveDrive, vision, Vector2.clampMagnitude(horizontalAprilTagPosition, ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE, ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE));
+        Vector2 targetPosRelativeToAprilTag = Vector2.clampMagnitude(horizontalAprilTagPosition, ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE, ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE);
+        new SequentialCommandGroup(new AutoVisionDrive(swerveDrive, vision, targetPosRelativeToAprilTag), new ShooterCommand(shooter, ShooterState.VISION_SHOOT)).schedule();
       }
-      else
-      {
-        ShooterCommand shooterCommand = new ShooterCommand(shooter, ShooterState.VISION_SHOOT);
-        shooterCommand.schedule();
-      }
+      else { new ShooterCommand(shooter, ShooterState.VISION_SHOOT).schedule(); }
     }
     else { finished = true; }
   }
