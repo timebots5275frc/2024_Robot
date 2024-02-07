@@ -21,7 +21,11 @@ public class ShooterCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    if (state == ShooterState.VISION_SHOOT) {
+      shooter.setVisionShooterAngle();
+    }
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

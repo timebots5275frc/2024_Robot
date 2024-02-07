@@ -12,7 +12,7 @@ public class VisionShooterCalculator {
     public static void SetVisionReference(Vision vision) { VisionShooterCalculator.vision = vision; }
     public static void SetShooterReference(Shooter shooter) { VisionShooterCalculator.shooter = shooter; }
 
-    public double GetSpeakerShooterAngle()
+    public static double GetSpeakerShooterAngle()
     {
         if (vision.hasValidData())
         {

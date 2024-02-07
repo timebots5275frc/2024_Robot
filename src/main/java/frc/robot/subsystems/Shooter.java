@@ -38,6 +38,8 @@ public class Shooter extends SubsystemBase {
   private double leftCurrentSpeed;
   private double rightCurrentSpeed;
 
+  private double visionShooterAngle;
+
   public enum ShooterState {
     START,
     IDLE,
@@ -92,6 +94,10 @@ public class Shooter extends SubsystemBase {
 
   }
 
+  public void setVisionShooterAngle() {
+    visionShooterAngle = VisionShooterCalculator.GetSpeakerShooterAngle() * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+  }
+
   public void shooterSetState(ShooterState state) {
     shooterPivotEncoder.setPosition(-angleEncoder.getAbsolutePosition().getValueAsDouble() * 360 * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE);
     switch(state) {
@@ -107,7 +113,7 @@ public class Shooter extends SubsystemBase {
       currentState = ShooterState.IDLE;
       break;
       case VISION_SHOOT: 
-      shooterPivotPID.setReference(shooterPivotEncoder.getPosition(), ControlType.kSmartMotion);
+      shooterPivotPID.setReference(visionShooterAngle, ControlType.kSmartMotion);
       // leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_SHOOTER_SPEED, ControlType.kVelocity);
       // rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_SHOOTER_SPEED, ControlType.kVelocity);
       currentState = ShooterState.VISION_SHOOT;
