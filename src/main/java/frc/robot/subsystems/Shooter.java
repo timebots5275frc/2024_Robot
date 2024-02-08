@@ -48,22 +48,22 @@ public class Shooter extends SubsystemBase {
   };
 
   public enum ShooterState {
+    RESET,
     START,
     IDLE,
     VISION_SHOOT,
-    AMP,
-    TEST/*,
+    AMP/*,
     TRAP,
     DEFAULT_SHOOT*/
     ;
     @Override
     public String toString() {
         switch(this) {
+          case RESET : return "Reset";
           case START: return "Start";
           case IDLE: return "Idle";
           case VISION_SHOOT: return "Shooting with vision";
           case AMP: return "Amp";
-          case TEST: return "Test";
           default: return "None";
         }
     }
@@ -94,7 +94,7 @@ public class Shooter extends SubsystemBase {
     shooterPivotPID.setP(Constants.ShooterConstants.ShooterPivotPIDs.P);
     shooterPivotPID.setI(Constants.ShooterConstants.ShooterPivotPIDs.I);
     shooterPivotPID.setD(Constants.ShooterConstants.ShooterPivotPIDs.D);
-    shooterPivotPID.setFF(Constants.ShooterConstants.SHOOTER_PIVOT_FF);
+    shooterPivotPID.setFF(Constants.ShooterConstants.ShooterPivotPIDs.kFF);
     shooterPivotPID.setOutputRange(-1, 1);
     shooterPivotPID.setSmartMotionMaxVelocity(Constants.ShooterConstants.SHOOTER_PIVOT_MAX_VEL, 0);
     shooterPivotPID.setSmartMotionMaxAccel(Constants.ShooterConstants.SHOOTER_PIVOT_MAX_ACCEL, 0);
@@ -111,6 +111,8 @@ public class Shooter extends SubsystemBase {
   public void shooterSetState(ShooterState state) {
     shooterPivotEncoder.setPosition(-angleEncoder.getAbsolutePosition().getValueAsDouble() * 360 * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE);
     switch(state) {
+      case RESET : 
+      
       case START:
       shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_START_POS, ControlType.kSmartMotion);
       // leftShooterRunPID.setReference(0, ControlType.kVelocity);
@@ -133,12 +135,6 @@ public class Shooter extends SubsystemBase {
       // leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_AMP_SPEED, ControlType.kVelocity);
       // rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_AMP_SPEED, ControlType.kVelocity);
       currentState = ShooterState.AMP;
-      break;
-      case TEST:
-      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_TEST_POS, ControlType.kSmartMotion);
-      // leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_SHOOTER_TEST_SPEED, ControlType.kVelocity);
-      // rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_SHOOTER_TEST_SPEED, ControlType.kVelocity);
-      currentState = ShooterState.TEST;
       break;
       // case TRAP:
       
