@@ -86,8 +86,8 @@ public class RobotContainer {
     //.whileTrue() calls command while button is held or until command finishes
     //.toggleOnTrue() makes a toggle which runs when pressed and then stops when presse again
 
-    new JoystickButton(driveStick, 3).whileTrue(new ShooterCommand(shooter, ShooterState.START));
-    new JoystickButton(driveStick, 4).whileTrue(new ShooterCommand(shooter, ShooterState.TEST));
+    new JoystickButton(driveStick, 3).onTrue(new RepeatCommand(new ShooterCommand(shooter, ShooterState.START)));
+    new JoystickButton(driveStick, 4).onTrue(new RepeatCommand(new ShooterCommand(shooter, ShooterState.TEST)));
     //new JoystickButton(buttonBoard, 3).onTrue(new RepeatCommand(shooterIdle));
 
     //new JoystickButton(buttonBoard, 4).onTrue(new RepeatCommand(intakeIdle));

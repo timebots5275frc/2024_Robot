@@ -21,6 +21,8 @@ public class AutoVisionSpeakerShoot extends Command {
 
   boolean finished = false;
 
+  Command subCommand;
+
   public AutoVisionSpeakerShoot(SwerveDrive swerveDrive, Shooter shooter, Vision vision) {
     this.swerveDrive = swerveDrive;
     this.shooter = shooter;
@@ -39,21 +41,27 @@ public class AutoVisionSpeakerShoot extends Command {
       Vector2 horizontalAprilTagPosition = new Vector2(aprilTagPosInTargetSpace.x, aprilTagPosInTargetSpace.z);
       double aprilTagDistance = horizontalAprilTagPosition.magnitude();
 
-
-      // ADD .until() WHEN BOOLEAN SUPPLIER IS CREATED
       if (aprilTagDistance > ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE || aprilTagDistance < ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE)
       {
         Vector2 targetPosRelativeToAprilTag = Vector2.clampMagnitude(horizontalAprilTagPosition, ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE, ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE);
-        new SequentialCommandGroup(new AutoVisionDrive(swerveDrive, vision, targetPosRelativeToAprilTag), new ShooterCommand(shooter, ShooterState.VISION_SHOOT)).schedule();
+
+        Command driveToPointInBoundsCommand = new AutoVisionDrive(swerveDrive, vision, targetPosRelativeToAprilTag);
+        Command setShooterAngleCommand = new ShooterCommand(shooter, ShooterState.VISION_SHOOT).until(shooter.ShotNote);
+        subCommand = new SequentialCommandGroup(driveToPointInBoundsCommand, setShooterAngleCommand);
       }
-      else { new ShooterCommand(shooter, ShooterState.VISION_SHOOT).schedule(); }
+      else { subCommand = new ShooterCommand(shooter, ShooterState.VISION_SHOOT).until(shooter.ShotNote); }
+
+      subCommand.schedule();
     }
     else { finished = true; }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted)
+  {
+    subCommand.cancel();
+  }
 
   // Returns true when the command should end.
   @Override

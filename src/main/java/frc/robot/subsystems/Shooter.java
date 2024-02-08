@@ -5,6 +5,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
+
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
@@ -39,6 +42,10 @@ public class Shooter extends SubsystemBase {
   private double rightCurrentSpeed;
 
   private double visionShooterAngle;
+
+  public BooleanSupplier ShotNote = new BooleanSupplier() {
+    public boolean getAsBoolean() { return false; };
+  };
 
   public enum ShooterState {
     START,
