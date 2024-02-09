@@ -200,6 +200,7 @@ import frc.robot.CustomTypes.Math.Vector3;
     public final static double LEFT_AMP_SPEED = 500;
     public final static double RIGHT_AMP_SPEED = -0.5 * LEFT_AMP_SPEED;
 
+    public final static double SHOOTER_RESET_POS = 0 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_START_POS = 10 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_IDLE_POS = 0;
     public final static double SHOOTER_DEFAULT_SHOOTING_POS = 0.0;
@@ -234,8 +235,10 @@ import frc.robot.CustomTypes.Math.Vector3;
     // Spark Max Motor ID's
     public static final int INTAKE_RUN_MOTOR_ID = 0;
     public static final int INTAKE_FLIP_MOTOR_ID = 0;
+    public static final int INTAKE_ANGLE_ENCODER_ID = 0;
     // Positions of intake in motor rotations
-    public static final double INTAKE_DEFAULT_POS = 0;
+    public static final double INTAKE_RESET_POS = 0;
+    public static final double INTAKE_START_POS = 0;
     public static final double INTAKE_COLLECT_POS = 0;
     public static final double INTAKE_FEED_POS = 0;
 

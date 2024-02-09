@@ -71,7 +71,6 @@ public class RobotContainer {
     shooterIdle = new ShooterCommand(shooter, ShooterState.IDLE);
     shooterFire = new ShooterCommand(shooter, ShooterState.VISION_SHOOT);
     shooterAmp = new ShooterCommand(shooter, ShooterState.AMP);
-    shooterTest = new ShooterCommand(shooter, ShooterState.TEST);
 
     configureBindings();
 
@@ -87,7 +86,6 @@ public class RobotContainer {
     //.toggleOnTrue() makes a toggle which runs when pressed and then stops when presse again
 
     new JoystickButton(driveStick, 3).onTrue(new ShooterCommand(shooter, ShooterState.START));
-    new JoystickButton(driveStick, 4).onTrue(new ShooterCommand(shooter, ShooterState.TEST));
     //new JoystickButton(buttonBoard, 3).onTrue(new RepeatCommand(shooterIdle));
 
     //new JoystickButton(buttonBoard, 4).onTrue(new RepeatCommand(intakeIdle));

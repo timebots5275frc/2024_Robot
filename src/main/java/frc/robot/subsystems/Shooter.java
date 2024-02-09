@@ -113,7 +113,9 @@ public class Shooter extends SubsystemBase {
     shooterPivotEncoder.setPosition(getShooterAngle() * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE);
     switch(state) {
       case RESET : 
-      
+      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_RESET_POS, ControlType.kSmartMotion);
+      // leftShooterRunPID.setReference(0, ControlType.kVelocity);
+      // rightShooterRunPID.setReference(0, ControlType.kVelocity);
       case START:
       shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_START_POS, ControlType.kSmartMotion);
       // leftShooterRunPID.setReference(0, ControlType.kVelocity);
