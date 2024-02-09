@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.CustomTypes.PID_Values;
 import frc.robot.CustomTypes.SwerveCanIDs;
 import frc.robot.CustomTypes.SwerveModuleLocations;
+import frc.robot.CustomTypes.Math.Vector2;
+import frc.robot.CustomTypes.Math.Vector3;
 
   public final class Constants {
     public static class OperatorConstants {
@@ -213,6 +215,8 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
     public final static double SHOOTER_TARGET_HEIGHT = 80; /*inches */
     public final static double LIMELIGHT_HEIGHT_WITH_OFFSET = 0;
     public final static double SHOOTER_LENGTH = 0;
+
+    public final static double SHOOTER_OFFSET_FROM_GROUND = 0;
   }
 
   public static class IntakeConstants {

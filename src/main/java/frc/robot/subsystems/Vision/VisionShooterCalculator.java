@@ -16,7 +16,7 @@ public class VisionShooterCalculator {
     {
         if (vision.hasValidData())
         {
-            double currentShooterHeight = 0;
+            double currentShooterHeight = shooter.getShooterEndHeight() + ShooterConstants.SHOOTER_OFFSET_FROM_GROUND;
             double heightDifferenceBetweenShooterAndSpeakerTargetPosition = ShooterConstants.SHOOTER_TARGET_HEIGHT - currentShooterHeight;
 
             Vector3 aprilTagInRobotSpace = vision.AprilTagPosInRobotSpace();

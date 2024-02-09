@@ -19,6 +19,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Vision.VisionShooterCalculator;
 
 public class Shooter extends SubsystemBase {
@@ -109,7 +110,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void shooterSetState(ShooterState state) {
-    shooterPivotEncoder.setPosition(-angleEncoder.getAbsolutePosition().getValueAsDouble() * 360 * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE);
+    shooterPivotEncoder.setPosition(getShooterAngle() * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE);
     switch(state) {
       case RESET : 
       
@@ -162,7 +163,11 @@ public class Shooter extends SubsystemBase {
   // }
 
   public double getShooterAngle() {
-    return -angleEncoder.getAbsolutePosition().getValueAsDouble();
+    return -angleEncoder.getAbsolutePosition().getValueAsDouble() * 360;
+  }
+
+  public double getShooterEndHeight() {
+    return Math.sin(getShooterAngle()) * ShooterConstants.SHOOTER_LENGTH;
   }
 
   public ShooterState getState() {
