@@ -167,7 +167,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getShooterEndHeight() {
-    return Math.sin(getShooterAngle()) * ShooterConstants.SHOOTER_LENGTH;
+    return Math.sin(Math.toRadians(getShooterAngle())) * ShooterConstants.SHOOTER_LENGTH;
   }
 
   public ShooterState getState() {
