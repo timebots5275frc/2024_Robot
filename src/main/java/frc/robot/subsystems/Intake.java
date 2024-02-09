@@ -9,8 +9,10 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 
+import java.util.concurrent.CancellationException;
 import java.util.function.BooleanSupplier;
 
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
@@ -27,17 +29,17 @@ public class Intake extends SubsystemBase {
   private CANSparkMax intakePivotMotor;
   private SparkPIDController intakePivotPID;
   private RelativeEncoder intakePivotEncoder;
+  private CANcoder intakeAngleEncoder;
 
   private IntakeState currentState;
-
-  private Shooter shooter;
 
   private DigitalInput limitSwitch;
 
 
   public enum IntakeState {
+    RESET,
+    START,
     IDLE,
-    REST,
     INTAKE,
     EJECT,
     READY_TO_FEED,
@@ -53,6 +55,7 @@ public class Intake extends SubsystemBase {
     intakePivotMotor = new CANSparkMax(Constants.IntakeConstants.INTAKE_FLIP_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
     intakePivotPID = intakePivotMotor.getPIDController();
     intakePivotEncoder = intakePivotMotor.getEncoder();
+    intakeAngleEncoder = new CANcoder(0);
 
     intakeRunPID.setP(Constants.IntakeConstants.IntakeRunPIDs.P);
     intakeRunPID.setI(Constants.IntakeConstants.IntakeRunPIDs.I);
@@ -62,8 +65,6 @@ public class Intake extends SubsystemBase {
     //Set Pivot PIDS here
 
     intakeSetState(IntakeState.IDLE);
-
-    this.shooter = shooter;
 
     limitSwitch = new DigitalInput(0);
   }
@@ -76,11 +77,14 @@ public class Intake extends SubsystemBase {
       intakeRunPID.setReference(0, ControlType.kVelocity);
       currentState = IntakeState.IDLE;
       break;
-      case REST:
-      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_DEFAULT_POS, ControlType.kPosition);
+      case RESET:
+      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_RESET_POS, ControlType.kPosition);
       intakeRunPID.setReference(0, ControlType.kVelocity);
-      currentState = IntakeState.REST;
-      break;
+      currentState = IntakeState.RESET;
+      case START:
+      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_START_POS, ControlType.kSmartMotion);
+      intakeRunPID.setReference(0, ControlType.kVelocity);
+      currentState = IntakeState.START;
       case INTAKE:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_COLLECT_POS, ControlType.kPosition);
       intakeRunPID.setReference(Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
