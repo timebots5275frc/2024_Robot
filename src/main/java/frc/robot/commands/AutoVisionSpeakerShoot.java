@@ -19,17 +19,15 @@ public class AutoVisionSpeakerShoot extends Command {
   Shooter shooter;
   Vision vision;
 
-  boolean finished = false;
-
   Command subCommand;
+  boolean finished = false;
 
   public AutoVisionSpeakerShoot(SwerveDrive swerveDrive, Shooter shooter, Vision vision) {
     this.swerveDrive = swerveDrive;
     this.shooter = shooter;
     this.vision = vision;
 
-    addRequirements(swerveDrive);
-    addRequirements(shooter);
+    addRequirements(swerveDrive, shooter);
   }
 
   @Override
@@ -56,14 +54,12 @@ public class AutoVisionSpeakerShoot extends Command {
     else { finished = true; }
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted)
   {
-    subCommand.cancel();
+    if (subCommand != null && !subCommand.isFinished()) { subCommand.cancel(); }
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return finished;

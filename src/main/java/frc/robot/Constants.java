@@ -130,7 +130,7 @@ import frc.robot.CustomTypes.Math.Vector3;
     public static final int VALUES_TO_AVERAGE = 3;
     public static final double TARGET_POSITION_ALLOWED_ERROR = .1;
 
-    public static enum AprilTag
+    public static enum AprilTagData
     {
       ba_source_left(1, "Source left", DriverStation.Alliance.Blue),
       ba_source_right(2, "Source right", DriverStation.Alliance.Blue),
@@ -149,10 +149,10 @@ import frc.robot.CustomTypes.Math.Vector3;
       ba_core_opp_scoring_table(15, "Core opposite scoring table side", DriverStation.Alliance.Blue),
       ba_core_scoring_table(16, "Core scoring table side", DriverStation.Alliance.Blue);
 
-      int id;
-      String name;
-      DriverStation.Alliance alliance;
-      private AprilTag(int id, String name, DriverStation.Alliance alliance)
+      public final int id;
+      public final String name;
+      public final DriverStation.Alliance alliance;
+      private AprilTagData(int id, String name, DriverStation.Alliance alliance)
       {
         this.id = id;
         this.name = name;
@@ -164,6 +164,31 @@ import frc.robot.CustomTypes.Math.Vector3;
       {
         return (alliance == DriverStation.Alliance.Blue ? "Blue " : "Red ") + name + "[" + id + "]";
       }
+
+      public static AprilTagData getTag(int id) {
+        switch(id){
+          case 1: return ba_source_left;
+          case 2: return ba_source_right;
+          case 3: return ra_speaker_aux;
+          case 4: return ra_speaker_main;
+          case 5: return ra_amplifier;
+          case 6: return ba_amplifier;
+          case 7: return ba_speaker_main;
+          case 8: return ba_speaker_aux;
+          case 9: return ra_source_right;
+          case 10: return ra_source_left;
+          case 11: return ra_core_scoring_table;
+          case 12: return ra_core_opp_scoring_table;
+          case 13: return ra_core_mid;
+          case 14: return ba_core_mid;
+          case 15: return ba_core_opp_scoring_table;
+          case 16: return ba_core_scoring_table;
+          default: return null;
+        }
+      }
+
+      public static boolean isSpeakerTag(AprilTagData tag) { return tag == AprilTagData.ra_speaker_main || tag == AprilTagData.ba_speaker_main; }
+      public static boolean isAmpTag(AprilTagData tag) { return tag == AprilTagData.ra_amplifier || tag == AprilTagData.ba_amplifier; }
     }
   }
 

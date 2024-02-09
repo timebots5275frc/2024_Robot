@@ -5,38 +5,70 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.VisionConstants.AprilTagData;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Vision.Vision;
+
+import java.util.Optional;
+
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class AutoVisionDetectAction extends Command {
   SwerveDrive swerveDrive;
   Shooter shooter;
   Vision vision;
 
+  Command subcommand;
+  boolean finished = false;
+
   public AutoVisionDetectAction(SwerveDrive swerveDrive, Shooter shooter, Vision vision) {
     this.swerveDrive = swerveDrive;
     this.shooter = shooter;
     this.vision = vision;
-    
-    addRequirements(swerveDrive, shooter, vision);
+
+    addRequirements(swerveDrive, shooter);
   }
 
-  // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() 
+  {
+    int currentAprilTagID = vision.AprilTagID();
 
-  // Called every time the scheduler runs while the command is scheduled.
+    if (currentAprilTagID != -1)
+    {
+      AprilTagData currenAprilTag = AprilTagData.getTag(currentAprilTagID);
+
+      // MAY NOT ALWAYS RETURN AN ALLIANCE
+      Optional<DriverStation.Alliance> optionalAllianceRequest = DriverStation.getAlliance();
+
+      if (!optionalAllianceRequest.isPresent() || (optionalAllianceRequest.isPresent() && currenAprilTag.alliance == optionalAllianceRequest.get()))
+      {
+        if (AprilTagData.isSpeakerTag(currenAprilTag))
+        {
+          subcommand = new AutoVisionSpeakerShoot(swerveDrive, shooter, vision);
+        }
+        else if(AprilTagData.isAmpTag(currenAprilTag))
+        {
+          // Do silly stuff
+        }
+      }
+
+      subcommand.schedule();
+    }
+
+    finished = true;
+  }
+
   @Override
-  public void execute() {}
+  public void end(boolean interrupted)
+  {
+    if (subcommand != null && !subcommand.isFinished()) { subcommand.cancel(); }
+  }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return finished;
   }
 }
