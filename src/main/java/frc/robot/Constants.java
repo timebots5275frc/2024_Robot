@@ -132,22 +132,22 @@ import frc.robot.CustomTypes.Math.Vector3;
 
     public static enum AprilTag
     {
-      ba_source_left(1, "BA Source left", DriverStation.Alliance.Blue),
-      ba_source_right(2, "BA Source right", DriverStation.Alliance.Blue),
-      ra_speaker_aux(3, "RA Speaker auxillary", DriverStation.Alliance.Red),
-      ra_speaker_main(4, "RA Speaker main", DriverStation.Alliance.Red),
-      ra_amplifier(5, "RA Amplifier", DriverStation.Alliance.Red),
-      ba_amplifier(6, "BA Amplifier", DriverStation.Alliance.Blue),
-      ba_speaker_main(7, "BA Speaker main", DriverStation.Alliance.Blue),
-      ba_speaker_aux(8, "BA Speaker auxillary", DriverStation.Alliance.Blue),
-      ra_source_right(9, "RA Source right", DriverStation.Alliance.Red),
-      ra_source_left(10, "RA Source left", DriverStation.Alliance.Red),
-      ra_core_scoring_table(11, "RA Core scoring table side", DriverStation.Alliance.Red),
-      ra_core_opp_scoring_table(12, "RA Core opposite scoring table side", DriverStation.Alliance.Red),
-      ra_core_mid(13, "RA Core middle side", DriverStation.Alliance.Red),
-      ba_core_mid(14, "BA Core middle side", DriverStation.Alliance.Blue),
-      ba_core_opp_scoring_table(15, "BA Core opposite scoring table side", DriverStation.Alliance.Blue),
-      ba_core_scoring_table(16, "BA Core scoring table side", DriverStation.Alliance.Blue);
+      ba_source_left(1, "Source left", DriverStation.Alliance.Blue),
+      ba_source_right(2, "Source right", DriverStation.Alliance.Blue),
+      ra_speaker_aux(3, "Speaker auxillary", DriverStation.Alliance.Red),
+      ra_speaker_main(4, "Speaker main", DriverStation.Alliance.Red),
+      ra_amplifier(5, "Amplifier", DriverStation.Alliance.Red),
+      ba_amplifier(6, "Amplifier", DriverStation.Alliance.Blue),
+      ba_speaker_main(7, "Speaker main", DriverStation.Alliance.Blue),
+      ba_speaker_aux(8, "Speaker auxillary", DriverStation.Alliance.Blue),
+      ra_source_right(9, "Source right", DriverStation.Alliance.Red),
+      ra_source_left(10, "Source left", DriverStation.Alliance.Red),
+      ra_core_scoring_table(11, "Core scoring table side", DriverStation.Alliance.Red),
+      ra_core_opp_scoring_table(12, "Core opposite scoring table side", DriverStation.Alliance.Red),
+      ra_core_mid(13, "Core middle side", DriverStation.Alliance.Red),
+      ba_core_mid(14, "Core middle side", DriverStation.Alliance.Blue),
+      ba_core_opp_scoring_table(15, "Core opposite scoring table side", DriverStation.Alliance.Blue),
+      ba_core_scoring_table(16, "Core scoring table side", DriverStation.Alliance.Blue);
 
       int id;
       String name;
