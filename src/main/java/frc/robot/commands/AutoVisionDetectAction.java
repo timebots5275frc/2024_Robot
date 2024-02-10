@@ -9,10 +9,7 @@ import frc.robot.Constants.VisionConstants.AprilTagData;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Vision.Vision;
-
 import java.util.Optional;
-
-import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class AutoVisionDetectAction extends Command {
@@ -27,8 +24,6 @@ public class AutoVisionDetectAction extends Command {
     this.swerveDrive = swerveDrive;
     this.shooter = shooter;
     this.vision = vision;
-
-    addRequirements(swerveDrive, shooter);
   }
 
   @Override
