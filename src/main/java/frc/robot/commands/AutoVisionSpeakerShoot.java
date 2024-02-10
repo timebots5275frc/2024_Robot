@@ -26,8 +26,6 @@ public class AutoVisionSpeakerShoot extends Command {
     this.swerveDrive = swerveDrive;
     this.shooter = shooter;
     this.vision = vision;
-
-    addRequirements(swerveDrive, shooter);
   }
 
   @Override
