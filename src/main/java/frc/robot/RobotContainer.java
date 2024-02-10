@@ -50,8 +50,8 @@ public class RobotContainer {
   SequentialCommandGroup autoCommands;
   public RobotContainer() {
     //swerveDrive = new SwerveDrive();
-    shooter = new Shooter();
-    //intake = new Intake(shooter);
+    //shooter = new Shooter();
+    intake = new Intake(shooter);
 
     driveStick = new Joystick(0);
     //buttonBoard = new GenericHID(1);
@@ -67,10 +67,10 @@ public class RobotContainer {
 
     //autoIntake = new AutoIntake(intake);
 
-    shooterStart = new ShooterCommand(shooter, ShooterState.START);
-    shooterIdle = new ShooterCommand(shooter, ShooterState.IDLE);
-    shooterFire = new ShooterCommand(shooter, ShooterState.VISION_SHOOT);
-    shooterAmp = new ShooterCommand(shooter, ShooterState.AMP);
+    // shooterStart = new ShooterCommand(shooter, ShooterState.START);
+    // shooterIdle = new ShooterCommand(shooter, ShooterState.IDLE);
+    // shooterFire = new ShooterCommand(shooter, ShooterState.VISION_SHOOT);
+    // shooterAmp = new ShooterCommand(shooter, ShooterState.AMP);
 
     configureBindings();
 
@@ -89,8 +89,8 @@ public class RobotContainer {
     //new JoystickButton(buttonBoard, 3).onTrue(new RepeatCommand(shooterIdle));
 
     //new JoystickButton(buttonBoard, 4).onTrue(new RepeatCommand(intakeIdle));
-    new JoystickButton(buttonBoard, 5).onTrue(intakeIntake);//.until(intake.autoIntake));
-    new JoystickButton(buttonBoard, 6).onTrue(intakeReady);
+    new JoystickButton(driveStick, 6).onTrue(new IntakeCommand(intake, IntakeState.INTAKE));//.until(intake.autoIntake));
+    new JoystickButton(driveStick, 5).onTrue(new IntakeCommand(intake, IntakeState.READY_TO_FEED));
     //new JoystickButton(buttonBoard, 7).onTrue(new RepeatCommand(intakeFeed));
     
   }

@@ -44,6 +44,19 @@ public class Intake extends SubsystemBase {
     EJECT,
     READY_TO_FEED,
     FEED_SHOOTER
+    ;
+    public String toString() {
+      switch(this) {
+        case RESET : return "Reset";
+        case START: return "Start";
+        case IDLE: return "Idle";
+        case INTAKE: return "Intaking: " + Constants.IntakeConstants.INTAKE_COLLECT_POS;
+        case EJECT: return "Eject";
+        case READY_TO_FEED: return "RTF";
+        case FEED_SHOOTER: return "FS";
+        default: return "None";
+      }
+  }
   }
 
 
@@ -62,10 +75,10 @@ public class Intake extends SubsystemBase {
     // intakeRunPID.setD(Constants.IntakeConstants.IntakeRunPIDs.D);
     // intakeRunPID.setFF(Constants.IntakeConstants.IntakeRunPIDs.kFF);
 
-    intakePivotPID.setP(Constants.IntakeConstants.IntakeRunPIDs.P);
-    intakePivotPID.setI(Constants.IntakeConstants.IntakeRunPIDs.I);
-    intakePivotPID.setD(Constants.IntakeConstants.IntakeRunPIDs.D);
-    intakePivotPID.setFF(Constants.IntakeConstants.IntakeRunPIDs.kFF);
+    intakePivotPID.setP(Constants.IntakeConstants.IntakePivotPIDs.P);
+    intakePivotPID.setI(Constants.IntakeConstants.IntakePivotPIDs.I);
+    intakePivotPID.setD(Constants.IntakeConstants.IntakePivotPIDs.D);
+    intakePivotPID.setFF(Constants.IntakeConstants.IntakePivotPIDs.kFF);
     intakePivotPID.setOutputRange(-1, 1);
     intakePivotPID.setSmartMotionMaxVelocity(Constants.IntakeConstants.INTAKE_PIVOT_MAX_VEL, 0);
     intakePivotPID.setSmartMotionMaxAccel(Constants.IntakeConstants.INTAKE_PIVOT_MAX_ACCEL, 0);
@@ -78,7 +91,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void intakeSetState(IntakeState state) {
-    intakePivotEncoder.setPosition((intakeAngleEncoder.getAbsolutePosition().getValueAsDouble() * 360) * Constants.IntakeConstants.INTAKE_PIVOT_ROTATIONS_PER_360);
+    intakePivotEncoder.setPosition((intakeAngleEncoder.getAbsolutePosition().getValueAsDouble() * 360) * Constants.IntakeConstants.INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
     switch(state) {
       // Moves motor to position according to rotations and starts motors
       case IDLE:
@@ -87,7 +100,7 @@ public class Intake extends SubsystemBase {
       currentState = IntakeState.IDLE;
       break;
       case RESET:
-      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_RESET_POS, ControlType.kPosition);
+      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_RESET_POS, ControlType.kSmartMotion);
       // intakeRunPID.setReference(0, ControlType.kVelocity);
       currentState = IntakeState.RESET;
       case START:
@@ -95,22 +108,22 @@ public class Intake extends SubsystemBase {
       // intakeRunPID.setReference(0, ControlType.kVelocity);
       currentState = IntakeState.START;
       case INTAKE:
-      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_COLLECT_POS, ControlType.kPosition);
+      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_COLLECT_POS, ControlType.kSmartMotion);
       // intakeRunPID.setReference(Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
       currentState = IntakeState.INTAKE;
       break;
       case EJECT:
-      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_COLLECT_POS, ControlType.kPosition);
+      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_COLLECT_POS, ControlType.kSmartMotion);
       // intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
       currentState = IntakeState.EJECT;
       break;
       case READY_TO_FEED:
-      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_FEED_POS, ControlType.kPosition);
+      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_FEED_POS, ControlType.kSmartMotion);
       // intakeRunPID.setReference(0, ControlType.kVelocity);
       currentState = IntakeState.READY_TO_FEED;
       break;
       case FEED_SHOOTER:
-      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_FEED_POS, ControlType.kPosition);
+      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_FEED_POS, ControlType.kSmartMotion);
       // intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
       currentState = IntakeState.READY_TO_FEED;
       break;
@@ -138,6 +151,8 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Intake angle", intakeAngleEncoder.getAbsolutePosition().getValueAsDouble() * 360);
     SmartDashboard.putNumber("Intake Pivot Rotations", intakePivotEncoder.getPosition());
     SmartDashboard.putNumber("Intake output current", intakePivotMotor.getOutputCurrent());
+    SmartDashboard.putNumber("Intake pivot velocity", intakePivotEncoder.getVelocity());
+    SmartDashboard.putString("Intake Current State", currentState.toString());
   }
 }
 
