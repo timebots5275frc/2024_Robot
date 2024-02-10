@@ -14,6 +14,7 @@ import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Input.Input;
 import frc.robot.subsystems.Intake.IntakeState;
 import frc.robot.subsystems.Shooter.ShooterState;
+import frc.robot.subsystems.Vision.Vision;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,6 +34,7 @@ public class RobotContainer {
   SwerveDrive swerveDrive;
   Shooter shooter;
   Intake intake;
+  Vision vision;
 
   Joystick driveStick;
   GenericHID buttonBoard;
@@ -56,6 +58,7 @@ public class RobotContainer {
     driveStick = new Joystick(0);
     //buttonBoard = new GenericHID(1);
     input = new Input(driveStick);
+    vision = new Vision();
 
     //joyDrive = new TeleopJoystickDrive(swerveDrive, driveStick, input, true);
     //intakeIdle = new IntakeCommand(intake, IntakeState.IDLE);
