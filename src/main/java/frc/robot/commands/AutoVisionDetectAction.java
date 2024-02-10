@@ -4,20 +4,19 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.VisionConstants.AprilTagData;
+import frc.robot.CustomTypes.ManagerCommand;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Vision.Vision;
 import java.util.Optional;
 import edu.wpi.first.wpilibj.DriverStation;
 
-public class AutoVisionDetectAction extends Command {
+public class AutoVisionDetectAction extends ManagerCommand {
   SwerveDrive swerveDrive;
   Shooter shooter;
   Vision vision;
 
-  Command subcommand;
   boolean finished = false;
 
   public AutoVisionDetectAction(SwerveDrive swerveDrive, Shooter shooter, Vision vision) {
@@ -42,7 +41,7 @@ public class AutoVisionDetectAction extends Command {
       {
         if (AprilTagData.isSpeakerTag(currenAprilTag))
         {
-          subcommand = new AutoVisionSpeakerShoot(swerveDrive, shooter, vision);
+          subCommand = new AutoVisionSpeakerShoot(swerveDrive, shooter, vision);
         }
         else if(AprilTagData.isAmpTag(currenAprilTag))
         {
@@ -50,16 +49,10 @@ public class AutoVisionDetectAction extends Command {
         }
       }
 
-      subcommand.schedule();
+      subCommand.schedule();
     }
 
     finished = true;
-  }
-
-  @Override
-  public void end(boolean interrupted)
-  {
-    if (subcommand != null && !subcommand.isFinished()) { subcommand.cancel(); }
   }
 
   @Override

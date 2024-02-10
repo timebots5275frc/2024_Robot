@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.CustomTypes.ManagerCommand;
 import frc.robot.CustomTypes.Math.Vector2;
 import frc.robot.CustomTypes.Math.Vector3;
 import frc.robot.subsystems.Shooter;
@@ -14,12 +15,11 @@ import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Shooter.ShooterState;
 import frc.robot.subsystems.Vision.Vision;
 
-public class AutoVisionSpeakerShoot extends Command {
+public class AutoVisionSpeakerShoot extends ManagerCommand {
   SwerveDrive swerveDrive;
   Shooter shooter;
   Vision vision;
 
-  Command subCommand;
   boolean finished = false;
 
   public AutoVisionSpeakerShoot(SwerveDrive swerveDrive, Shooter shooter, Vision vision) {
@@ -50,12 +50,6 @@ public class AutoVisionSpeakerShoot extends Command {
       subCommand.schedule();
     }
     else { finished = true; }
-  }
-
-  @Override
-  public void end(boolean interrupted)
-  {
-    if (subCommand != null && !subCommand.isFinished()) { subCommand.cancel(); }
   }
 
   @Override
