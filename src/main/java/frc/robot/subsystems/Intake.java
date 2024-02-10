@@ -17,13 +17,14 @@ import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
 
-  private CANSparkMax intakeRunMotor;
-  private SparkPIDController intakeRunPID;
+  // private CANSparkMax intakeRunMotor;
+  // private SparkPIDController intakeRunPID;
   // private RelativeEncoder intakeRunEncoder;
 
   private CANSparkMax intakePivotMotor;
@@ -33,8 +34,7 @@ public class Intake extends SubsystemBase {
 
   private IntakeState currentState;
 
-  private DigitalInput limitSwitch;
-
+  // private DigitalInput limitSwitch;
 
   public enum IntakeState {
     RESET,
@@ -48,61 +48,70 @@ public class Intake extends SubsystemBase {
 
 
   public Intake(Shooter shooter) {
-    intakeRunMotor = new CANSparkMax(Constants.IntakeConstants.INTAKE_RUN_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
-    intakeRunPID = intakeRunMotor.getPIDController();
+    // intakeRunMotor = new CANSparkMax(Constants.IntakeConstants.INTAKE_RUN_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+    // intakeRunPID = intakeRunMotor.getPIDController();
     // intakeRunEncoder = intakeRunMotor.getEncoder();
 
-    intakePivotMotor = new CANSparkMax(Constants.IntakeConstants.INTAKE_FLIP_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+    intakePivotMotor = new CANSparkMax(Constants.IntakeConstants.INTAKE_PIVOT_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
     intakePivotPID = intakePivotMotor.getPIDController();
     intakePivotEncoder = intakePivotMotor.getEncoder();
-    intakeAngleEncoder = new CANcoder(0);
+    intakeAngleEncoder = new CANcoder(Constants.IntakeConstants.INTAKE_ANGLE_ENCODER_ID);
 
-    intakeRunPID.setP(Constants.IntakeConstants.IntakeRunPIDs.P);
-    intakeRunPID.setI(Constants.IntakeConstants.IntakeRunPIDs.I);
-    intakeRunPID.setD(Constants.IntakeConstants.IntakeRunPIDs.D);
-    intakeRunPID.setFF(Constants.IntakeConstants.IntakeRunPIDs.kFF);
+    // intakeRunPID.setP(Constants.IntakeConstants.IntakeRunPIDs.P);
+    // intakeRunPID.setI(Constants.IntakeConstants.IntakeRunPIDs.I);
+    // intakeRunPID.setD(Constants.IntakeConstants.IntakeRunPIDs.D);
+    // intakeRunPID.setFF(Constants.IntakeConstants.IntakeRunPIDs.kFF);
+
+    intakePivotPID.setP(Constants.IntakeConstants.IntakeRunPIDs.P);
+    intakePivotPID.setI(Constants.IntakeConstants.IntakeRunPIDs.I);
+    intakePivotPID.setD(Constants.IntakeConstants.IntakeRunPIDs.D);
+    intakePivotPID.setFF(Constants.IntakeConstants.IntakeRunPIDs.kFF);
+    intakePivotPID.setOutputRange(-1, 1);
+    intakePivotPID.setSmartMotionMaxVelocity(Constants.IntakeConstants.INTAKE_PIVOT_MAX_VEL, 0);
+    intakePivotPID.setSmartMotionMaxAccel(Constants.IntakeConstants.INTAKE_PIVOT_MAX_ACCEL, 0);
 
     //Set Pivot PIDS here
 
     intakeSetState(IntakeState.IDLE);
 
-    limitSwitch = new DigitalInput(0);
+    // limitSwitch = new DigitalInput(0);
   }
 
   public void intakeSetState(IntakeState state) {
+    intakePivotEncoder.setPosition((intakeAngleEncoder.getAbsolutePosition().getValueAsDouble() * 360) * Constants.IntakeConstants.INTAKE_PIVOT_ROTATIONS_PER_360);
     switch(state) {
       // Moves motor to position according to rotations and starts motors
       case IDLE:
       intakePivotPID.setReference(intakePivotEncoder.getPosition(), ControlType.kPosition);
-      intakeRunPID.setReference(0, ControlType.kVelocity);
+      // intakeRunPID.setReference(0, ControlType.kVelocity);
       currentState = IntakeState.IDLE;
       break;
       case RESET:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_RESET_POS, ControlType.kPosition);
-      intakeRunPID.setReference(0, ControlType.kVelocity);
+      // intakeRunPID.setReference(0, ControlType.kVelocity);
       currentState = IntakeState.RESET;
       case START:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_START_POS, ControlType.kSmartMotion);
-      intakeRunPID.setReference(0, ControlType.kVelocity);
+      // intakeRunPID.setReference(0, ControlType.kVelocity);
       currentState = IntakeState.START;
       case INTAKE:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_COLLECT_POS, ControlType.kPosition);
-      intakeRunPID.setReference(Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
+      // intakeRunPID.setReference(Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
       currentState = IntakeState.INTAKE;
       break;
       case EJECT:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_COLLECT_POS, ControlType.kPosition);
-      intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
+      // intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
       currentState = IntakeState.EJECT;
       break;
       case READY_TO_FEED:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_FEED_POS, ControlType.kPosition);
-      intakeRunPID.setReference(0, ControlType.kVelocity);
+      // intakeRunPID.setReference(0, ControlType.kVelocity);
       currentState = IntakeState.READY_TO_FEED;
       break;
       case FEED_SHOOTER:
       intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_FEED_POS, ControlType.kPosition);
-      intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
+      // intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
       currentState = IntakeState.READY_TO_FEED;
       break;
     }
@@ -114,19 +123,21 @@ public class Intake extends SubsystemBase {
   //   }
   // }
 
-  public void autoReady() {
-    if (currentState == IntakeState.INTAKE && limitSwitch.get()) {
-      intakeSetState(IntakeState.READY_TO_FEED);
-    }
-  }
+  // public void autoReady() {
+  //   if (currentState == IntakeState.INTAKE && limitSwitch.get()) {
+  //     intakeSetState(IntakeState.READY_TO_FEED);
+  //   }
+  // }
 
-  public BooleanSupplier autoIntake = new BooleanSupplier() {
-    public boolean getAsBoolean() {return limitSwitch.get();}
-  };
+  // public BooleanSupplier autoIntake = new BooleanSupplier() {
+  //   public boolean getAsBoolean() {return limitSwitch.get();}
+  // };
 
   @Override
   public void periodic() {
-
+    SmartDashboard.putNumber("Intake angle", intakeAngleEncoder.getAbsolutePosition().getValueAsDouble() * 360);
+    SmartDashboard.putNumber("Intake Pivot Rotations", intakePivotEncoder.getPosition());
+    SmartDashboard.putNumber("Intake output current", intakePivotMotor.getOutputCurrent());
   }
 }
 
