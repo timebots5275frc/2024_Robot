@@ -253,18 +253,24 @@ import frc.robot.CustomTypes.Math.Vector3;
     0.0,
     0.001);
 
-    public static final PID_Values IntakeFlipPIDs = new PID_Values(
+    public static final PID_Values IntakePivotPIDs = new PID_Values(
     0.12, 
     0.0,
-    0.001);
+    0.001,
+    0.0,
+    0.0);
+    public static final double INTAKE_PIVOT_MAX_VEL = 1.0 / 3.0;
+    public static final double INTAKE_PIVOT_MAX_ACCEL = INTAKE_PIVOT_MAX_VEL * 2;
     // Spark Max Motor ID's
     public static final int INTAKE_RUN_MOTOR_ID = 0;
-    public static final int INTAKE_FLIP_MOTOR_ID = 0;
+    public static final int INTAKE_PIVOT_MOTOR_ID = 0;
     public static final int INTAKE_ANGLE_ENCODER_ID = 0;
+    public static final double INTAKE_PIVOT_GEAR_RATIO = 3;
+    public static final double INTAKE_PIVOT_ROTATIONS_PER_360 = INTAKE_PIVOT_GEAR_RATIO / 360;
     // Positions of intake in motor rotations
     public static final double INTAKE_RESET_POS = 0;
     public static final double INTAKE_START_POS = 0;
-    public static final double INTAKE_COLLECT_POS = 0;
+    public static final double INTAKE_COLLECT_POS = 40 * INTAKE_PIVOT_ROTATIONS_PER_360;
     public static final double INTAKE_FEED_POS = 0;
 
     public static final double INTAKE_RUN_SPEED = 1200;
