@@ -259,7 +259,7 @@ import frc.robot.CustomTypes.Math.Vector3;
     0.001,
     0.0,
     0.0);
-    public static final double INTAKE_PIVOT_MAX_VEL = 1.0 / 3.0;
+    public static final double INTAKE_PIVOT_MAX_VEL = (1.0 / 3.0) * 60;
     public static final double INTAKE_PIVOT_MAX_ACCEL = INTAKE_PIVOT_MAX_VEL * 2;
     // Spark Max Motor ID's
     public static final int INTAKE_RUN_MOTOR_ID = 0;
