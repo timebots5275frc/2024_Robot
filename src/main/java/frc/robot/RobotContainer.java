@@ -6,7 +6,7 @@ package frc.robot;
 
 import frc.robot.commands.AutoIntake;
 import frc.robot.commands.IntakePivotCommand;
-import frc.robot.commands.IntakeRunCommand;
+//import frc.robot.commands.IntakeRunCommand;
 import frc.robot.commands.TeleopJoystickDrive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -17,7 +17,7 @@ import frc.robot.subsystems.Vision.Vision;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
+//import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 

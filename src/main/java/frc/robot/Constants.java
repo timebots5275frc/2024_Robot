@@ -1,13 +1,9 @@
 package frc.robot;
 
-import javax.xml.namespace.QName;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.CustomTypes.PID_Values;
 import frc.robot.CustomTypes.SwerveCanIDs;
 import frc.robot.CustomTypes.SwerveModuleLocations;
-import frc.robot.CustomTypes.Math.Vector2;
-import frc.robot.CustomTypes.Math.Vector3;
 
   public final class Constants {
     public static class OperatorConstants {

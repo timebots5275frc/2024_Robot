@@ -9,12 +9,6 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 
-import java.util.concurrent.CancellationException;
-import java.util.function.BooleanSupplier;
-
-import javax.swing.JComboBox.KeySelectionManager;
-
-import org.ejml.dense.block.TriangularSolver_FDRB;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkLowLevel;
