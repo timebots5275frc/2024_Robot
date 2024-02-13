@@ -82,6 +82,7 @@ public class Intake extends SubsystemBase {
     intakePivotPID.setOutputRange(-1, 1);
     intakePivotPID.setSmartMotionMaxVelocity(Constants.IntakeConstants.INTAKE_PIVOT_MAX_VEL, 0);
     intakePivotPID.setSmartMotionMaxAccel(Constants.IntakeConstants.INTAKE_PIVOT_MAX_ACCEL, 0);
+    intakePivotPID.setSmartMotionMinOutputVelocity(Constants.IntakeConstants.INTAKE_PIVOT_MIN_VEL, 0);
 
     //Set Pivot PIDS here
 
