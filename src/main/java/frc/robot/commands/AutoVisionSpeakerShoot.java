@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.CustomTypes.ManagerCommand;
@@ -12,7 +13,8 @@ import frc.robot.CustomTypes.Math.Vector2;
 import frc.robot.CustomTypes.Math.Vector3;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
-import frc.robot.subsystems.Shooter.ShooterState;
+import frc.robot.subsystems.Shooter.ShooterPivotState;
+import frc.robot.subsystems.Shooter.ShooterRunState;
 import frc.robot.subsystems.Vision.Vision;
 
 public class AutoVisionSpeakerShoot extends ManagerCommand {
@@ -42,10 +44,10 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
         Vector2 targetPosRelativeToAprilTag = Vector2.clampMagnitude(horizontalAprilTagPosition, ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE, ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE);
 
         Command driveToPointInBoundsCommand = new AutoVisionDrive(swerveDrive, vision, targetPosRelativeToAprilTag);
-        Command setShooterAngleCommand = new ShooterCommand(shooter, ShooterState.VISION_SHOOT).until(shooter.ShotNote);
+        Command setShooterAngleCommand = new ParallelCommandGroup(new ShooterRunCommand(shooter, ShooterRunState.SHOOT), new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT)).until(shooter.ShotNote);
         subCommand = new SequentialCommandGroup(driveToPointInBoundsCommand, setShooterAngleCommand);
       }
-      else { subCommand = new ShooterCommand(shooter, ShooterState.VISION_SHOOT).until(shooter.ShotNote); }
+      else { subCommand = new ParallelCommandGroup(new ShooterRunCommand(shooter, ShooterRunState.SHOOT), new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT)).until(shooter.ShotNote); }
 
       subCommand.schedule();
     }
