@@ -64,6 +64,12 @@ public class AutoVisionDrive extends Command {
   }
 
   @Override
+  public void end(boolean interrupted)
+  {
+    swerveDrive.drive(0, 0, 0, false);
+  }
+
+  @Override
   public boolean isFinished() {
     return madeItToTarget;
   }

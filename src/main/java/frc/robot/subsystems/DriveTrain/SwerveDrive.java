@@ -97,7 +97,8 @@ public final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(leftFr
 
     public Vector2 getOdometryPosition()
     {
-        return Vector2.zero;
+        Pose2d pose = m_odometry.getPoseMeters();
+        return new Vector2(pose.getX(), pose.getY());
     }
 
     /** Updates the field relative position of the robot. */
@@ -144,6 +145,8 @@ public final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(leftFr
         return heading; // TODO Lucas //.minus(new Rotation2d(this.autoTurnOffsetRadians)); // radians
 
     }
+
+    public double getGyroYawInDegrees() { return pigeon2Gyro.getYaw().getValueAsDouble(); }
 
     /**
      * Sets the swerve ModuleStates.

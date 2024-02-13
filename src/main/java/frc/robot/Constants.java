@@ -123,6 +123,11 @@ import frc.robot.CustomTypes.Math.Vector3;
       public static final PID_Values PID_Encoder_Steer = new PID_Values(20, 10, 0);
       public static final PID_Values PID_SparkMax_Drive = new PID_Values(0.0003, 0, 0, 0, 0.00016);
       // #endregion
+
+      public static final double AUTO_ODOMETRY_DRIVE_MIN_SPEED = .1;
+      public static final double AUTO_ODOMETRY_DRIVE_MAX_SPEED = 2;
+      public static final double AUTO_ODOMETRY_DRIVE_TARGET_ALLOWED_ERROR = .1; // in meters
+      public static final double AUTO_ODOMETRY_DRIVE_SLOWDOWN_DISTANCE = .6; // in meters
   }
 
   public static final class VisionConstants {
