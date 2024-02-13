@@ -6,14 +6,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Intake.IntakeState;
+import frc.robot.subsystems.Intake.IntakeRunState;
 
-public class IntakeCommand extends Command {
+public class IntakeRunCommand extends Command {
 
   Intake intake;
-  IntakeState state;
+  IntakeRunState state;
 
-  public IntakeCommand(Intake intake, IntakeState state) {
+  public IntakeRunCommand(Intake intake, IntakeRunState state) {
     this.intake = intake;
     this.state = state;
     addRequirements(this.intake);
@@ -26,7 +26,7 @@ public class IntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.intakeSetState(state);
+    intake.intakeSetRunState(state);
   }
 
   // Called once the command ends or is interrupted.

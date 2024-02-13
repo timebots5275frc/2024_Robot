@@ -227,7 +227,6 @@ import frc.robot.CustomTypes.Math.Vector3;
 
     public final static double SHOOTER_RESET_POS = 0 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_START_POS = 10 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
-    public final static double SHOOTER_IDLE_POS = 0;
     public final static double SHOOTER_DEFAULT_SHOOTING_POS = 0.0;
     public final static double SHOOTER_DEFAULT_AMP_POS = 0;
 
@@ -268,10 +267,10 @@ import frc.robot.CustomTypes.Math.Vector3;
     public static final double INTAKE_PIVOT_GEAR_RATIO = 96;
     public static final double INTAKE_PIVOT_ROTATIONS_PER_DEGREE = INTAKE_PIVOT_GEAR_RATIO / 360;
     // Positions of intake in motor rotations
-    public static final double INTAKE_RESET_POS = 0;
-    public static final double INTAKE_START_POS = 36 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
-    public static final double INTAKE_COLLECT_POS = 180 /*231.5*/ * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
-    public static final double INTAKE_FEED_POS = 36 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
+
+    public static final double INTAKE_IN_POS = 36 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
+    public static final double INTAKE_OUT_POS = 180 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
+    public static final double INTAKE_PIVOT_ALLOWED_OFFSET = 1 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
 
     public static final double INTAKE_RUN_SPEED = 1200;
 

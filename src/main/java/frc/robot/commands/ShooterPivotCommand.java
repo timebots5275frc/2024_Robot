@@ -6,14 +6,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Shooter.ShooterState;
+import frc.robot.subsystems.Shooter.ShooterPivotState;
 
-public class ShooterCommand extends Command {
+public class ShooterPivotCommand extends Command {
 
   Shooter shooter;
-  ShooterState state;
+  ShooterPivotState state;
 
-  public ShooterCommand(Shooter shooter, ShooterState state) {
+  public ShooterPivotCommand(Shooter shooter, ShooterPivotState state) {
     this.shooter = shooter;
     this.state = state;
     addRequirements(this.shooter);
@@ -22,15 +22,12 @@ public class ShooterCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (state == ShooterState.VISION_SHOOT) {
-      shooter.setVisionShooterAngle();
-    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.shooterSetState(state);
+    shooter.shooterSetPivotState(state);
   }
 
   // Called once the command ends or is interrupted.

@@ -5,15 +5,14 @@
 package frc.robot;
 
 import frc.robot.commands.AutoIntake;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.IntakePivotCommand;
+import frc.robot.commands.IntakeRunCommand;
 import frc.robot.commands.TeleopJoystickDrive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Input.Input;
-import frc.robot.subsystems.Intake.IntakeState;
-import frc.robot.subsystems.Shooter.ShooterState;
+import frc.robot.subsystems.Intake.IntakePivotState;
 import frc.robot.subsystems.Vision.Vision;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -44,10 +43,6 @@ public class RobotContainer {
   TeleopJoystickDrive joyDrive;
 
   AutoIntake autoIntake;
-
-  IntakeCommand intakeIdle, intakeRest, intakeIntake, intakeEject, intakeReady, intakeFeed;
-
-  ShooterCommand shooterStart, shooterIdle, shooterFire, shooterAmp, shooterTest;
   
   SequentialCommandGroup autoCommands;
   public RobotContainer() {
@@ -92,8 +87,8 @@ public class RobotContainer {
     //new JoystickButton(buttonBoard, 3).onTrue(new RepeatCommand(shooterIdle));
 
     //new JoystickButton(buttonBoard, 4).onTrue(new RepeatCommand(intakeIdle));
-    new JoystickButton(driveStick, 6).onTrue(new IntakeCommand(intake, IntakeState.INTAKE));//.until(intake.autoIntake));
-    new JoystickButton(driveStick, 5).onTrue(new IntakeCommand(intake, IntakeState.READY_TO_FEED));
+    new JoystickButton(driveStick, 6).onTrue(new IntakePivotCommand(intake, IntakePivotState.IN));//.until(intake.autoIntake));
+    new JoystickButton(driveStick, 5).onTrue(new IntakePivotCommand(intake, IntakePivotState.OUT));
     //new JoystickButton(buttonBoard, 7).onTrue(new RepeatCommand(intakeFeed));
     
   }

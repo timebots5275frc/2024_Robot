@@ -14,6 +14,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
+import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,61 +37,47 @@ public class Shooter extends SubsystemBase {
   private SparkPIDController shooterPivotPID;
   private RelativeEncoder shooterPivotEncoder;
 
-  private ShooterState currentState = ShooterState.IDLE;
-
-  private double currentPos;
-  private double leftCurrentSpeed;
-  private double rightCurrentSpeed;
-
   private double visionShooterAngle;
 
   public BooleanSupplier ShotNote = new BooleanSupplier() {
     public boolean getAsBoolean() { return false; };
   };
 
-  public enum ShooterState {
-    RESET,
+  public enum ShooterPivotState {
     START,
-    IDLE,
-    VISION_SHOOT,
-    AMP/*,
-    TRAP,
-    DEFAULT_SHOOT*/
-    ;
-    @Override
-    public String toString() {
-        switch(this) {
-          case RESET : return "Reset";
-          case START: return "Start";
-          case IDLE: return "Idle";
-          case VISION_SHOOT: return "Shooting with vision";
-          case AMP: return "Amp";
-          default: return "None";
-        }
-    }
+    AMP,
+    DEFAULT_SHOOT,
+    VISION_SHOOT;
+    //TRAP,
+  }
+
+  public enum ShooterRunState {
+    NONE,
+    AMP,
+    SHOOT,
   }
 
   public Shooter() {
-    // leftShooterRunMotor = new CANSparkMax(Constants.ShooterConstants.LEFT_SHOOTER_ID, CANSparkLowLevel.MotorType.kBrushless);
-    // rightShooterRunMotor = new CANSparkMax(Constants.ShooterConstants.RIGHT_SHOOTER_ID, CANSparkLowLevel.MotorType.kBrushless);
+    leftShooterRunMotor = new CANSparkMax(Constants.ShooterConstants.LEFT_SHOOTER_ID, CANSparkLowLevel.MotorType.kBrushless);
+    rightShooterRunMotor = new CANSparkMax(Constants.ShooterConstants.RIGHT_SHOOTER_ID, CANSparkLowLevel.MotorType.kBrushless);
     shooterPivotMotor = new CANSparkMax(Constants.ShooterConstants.PIVOT_SHOOTER_ID, CANSparkLowLevel.MotorType.kBrushless);
     angleEncoder = new CANcoder(Constants.ShooterConstants.PIVOT_SHOOTER_CANCODER_ID);
-    // leftShooterRunPID = leftShooterRunMotor.getPIDController();
-    // rightShooterRunPID = rightShooterRunMotor.getPIDController();
-    // leftShooterRunEncoder = leftShooterRunMotor.getEncoder();
-    // rightShooterRunEncoder = rightShooterRunMotor.getEncoder();
+    leftShooterRunPID = leftShooterRunMotor.getPIDController();
+    rightShooterRunPID = rightShooterRunMotor.getPIDController();
+    leftShooterRunEncoder = leftShooterRunMotor.getEncoder();
+    rightShooterRunEncoder = rightShooterRunMotor.getEncoder();
     shooterPivotPID = shooterPivotMotor.getPIDController();
     shooterPivotEncoder = shooterPivotMotor.getEncoder();
 
-    // leftShooterRunPID.setP(Constants.ShooterConstants.ShooterRunPIDs.P);
-    // leftShooterRunPID.setI(Constants.ShooterConstants.ShooterRunPIDs.I);
-    // leftShooterRunPID.setD(Constants.ShooterConstants.ShooterRunPIDs.D);
-    // leftShooterRunPID.setFF(Constants.ShooterConstants.ShooterRunPIDs.kFF);
+    leftShooterRunPID.setP(Constants.ShooterConstants.ShooterRunPIDs.P);
+    leftShooterRunPID.setI(Constants.ShooterConstants.ShooterRunPIDs.I);
+    leftShooterRunPID.setD(Constants.ShooterConstants.ShooterRunPIDs.D);
+    leftShooterRunPID.setFF(Constants.ShooterConstants.ShooterRunPIDs.kFF);
 
-    // rightShooterRunPID.setP(Constants.ShooterConstants.ShooterRunPIDs.P);
-    // rightShooterRunPID.setI(Constants.ShooterConstants.ShooterRunPIDs.I);
-    // rightShooterRunPID.setD(Constants.ShooterConstants.ShooterRunPIDs.D);
-    // rightShooterRunPID.setFF(Constants.ShooterConstants.ShooterRunPIDs.kFF);
+    rightShooterRunPID.setP(Constants.ShooterConstants.ShooterRunPIDs.P);
+    rightShooterRunPID.setI(Constants.ShooterConstants.ShooterRunPIDs.I);
+    rightShooterRunPID.setD(Constants.ShooterConstants.ShooterRunPIDs.D);
+    rightShooterRunPID.setFF(Constants.ShooterConstants.ShooterRunPIDs.kFF);
 
     shooterPivotPID.setP(Constants.ShooterConstants.ShooterPivotPIDs.P);
     shooterPivotPID.setI(Constants.ShooterConstants.ShooterPivotPIDs.I);
@@ -99,8 +86,6 @@ public class Shooter extends SubsystemBase {
     shooterPivotPID.setOutputRange(-1, 1);
     shooterPivotPID.setSmartMotionMaxVelocity(Constants.ShooterConstants.SHOOTER_PIVOT_MAX_VEL, 0);
     shooterPivotPID.setSmartMotionMaxAccel(Constants.ShooterConstants.SHOOTER_PIVOT_MAX_ACCEL, 0);
-
-    currentState = ShooterState.IDLE;
     VisionShooterCalculator.SetShooterReference(this);
 
   }
@@ -109,40 +94,38 @@ public class Shooter extends SubsystemBase {
     visionShooterAngle = VisionShooterCalculator.GetSpeakerShooterAngle() * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
   }
 
-  public void shooterSetState(ShooterState state) {
+  public void shooterSetPivotState(ShooterPivotState state) {
     shooterPivotEncoder.setPosition(getShooterAngle() * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE);
     switch(state) {
-      case RESET : 
-      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_RESET_POS, ControlType.kSmartMotion);
-      // leftShooterRunPID.setReference(0, ControlType.kVelocity);
-      // rightShooterRunPID.setReference(0, ControlType.kVelocity);
       case START:
       shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_START_POS, ControlType.kSmartMotion);
-      // leftShooterRunPID.setReference(0, ControlType.kVelocity);
-      // rightShooterRunPID.setReference(0, ControlType.kVelocity);
-      break;
-      case IDLE:
-      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_IDLE_POS, ControlType.kSmartMotion);
-      // leftShooterRunPID.setReference(0, ControlType.kVelocity);
-      // rightShooterRunPID.setReference(0, ControlType.kVelocity);
-      currentState = ShooterState.IDLE;
       break;
       case VISION_SHOOT: 
       shooterPivotPID.setReference(visionShooterAngle, ControlType.kSmartMotion);
-      // leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_SHOOTER_SPEED, ControlType.kVelocity);
-      // rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_SHOOTER_SPEED, ControlType.kVelocity);
-      currentState = ShooterState.VISION_SHOOT;
       break;
       case AMP:
       shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_DEFAULT_AMP_POS, ControlType.kSmartMotion);
-      // leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_AMP_SPEED, ControlType.kVelocity);
-      // rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_AMP_SPEED, ControlType.kVelocity);
-      currentState = ShooterState.AMP;
       break;
+      case DEFAULT_SHOOT: 
+      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_DEFAULT_SHOOTING_POS, ControlType.kSmartMotion);
       // case TRAP:
-      
-      // case DEFAULT_SHOOT: 
-      
+    }
+  }
+
+    public void shooterSetRunState(ShooterRunState state) {
+    switch(state) {
+      case NONE:
+      leftShooterRunPID.setReference(0, ControlType.kVelocity);
+      rightShooterRunPID.setReference(0, ControlType.kVelocity);
+      break;
+      case AMP: 
+      leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_AMP_SPEED, ControlType.kVelocity);
+      rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_AMP_SPEED, ControlType.kVelocity);
+      break;
+      case SHOOT:
+      leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_SHOOTER_SPEED, ControlType.kVelocity);
+      rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_SHOOTER_SPEED, ControlType.kVelocity);
+      // case TRAP:
     }
   }
 
@@ -172,20 +155,11 @@ public class Shooter extends SubsystemBase {
     return Math.sin(Math.toRadians(getShooterAngle())) * ShooterConstants.SHOOTER_LENGTH;
   }
 
-  public ShooterState getState() {
-    return currentState;
-  }
-
   @Override
   public void periodic() {
-    currentPos = shooterPivotEncoder.getPosition();
-    // leftCurrentSpeed = leftShooterRunEncoder.getVelocity();
-    // rightCurrentSpeed = rightShooterRunEncoder.getVelocity();
     SmartDashboard.putNumber("Shooter Spark Max Pos", shooterPivotEncoder.getPosition());
     SmartDashboard.putNumber("Shooter Pivot Vel", shooterPivotEncoder.getVelocity());
     SmartDashboard.putNumber("Shooter CANCODER Pos", angleEncoder.getAbsolutePosition().getValueAsDouble() * 360);
     SmartDashboard.putNumber("SP Output Current", shooterPivotMotor.getOutputCurrent());
-
-    SmartDashboard.putString("Shooter Current State", currentState.toString());
   }
 }
