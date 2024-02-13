@@ -231,9 +231,9 @@ import frc.robot.CustomTypes.Math.Vector3;
     public final static double SHOOTER_DEFAULT_SHOOTING_POS = 0.0;
     public final static double SHOOTER_DEFAULT_AMP_POS = 0;
 
-    public final static double SHOOTER_PIVOT_ALLOWED_OFFSET = 0;
-    public final static double LEFT_SHOOTER_ALLOWED_OFFSET = 0;
-    public final static double RIGHT_SHOOTER_ALLOWED_OFFSET = 0;
+    public final static double SHOOTER_PIVOT_ALLOWED_OFFSET = 1;
+    public final static double LEFT_SHOOTER_ALLOWED_DIFFERENTIAL = 0;
+    public final static double RIGHT_SHOOTER_ALLOWED_DIFFERENTIAL = 0;
 
     public final static double SPEAKER_MIN_SHOT_DISTANCE = .8; // Meters
     public final static double SPEAKER_MAX_SHOT_DISTANCE = 5; // Meters
@@ -251,21 +251,21 @@ import frc.robot.CustomTypes.Math.Vector3;
     0.0,
     0.0,
     0.0,
-    0.001);
+    0.005);
 
     public static final PID_Values IntakePivotPIDs = new PID_Values(
-    0.0, 
+    0.0003, 
     0.0,
+    0.00,
     0.0,
-    0.0,
-    0.004);
-    public static final double INTAKE_PIVOT_MAX_VEL = (2.0 / 3.0) * 60;
+    0.00018 * 0.9);
+    public static final double INTAKE_PIVOT_MAX_VEL = 150;
     public static final double INTAKE_PIVOT_MAX_ACCEL = INTAKE_PIVOT_MAX_VEL * 2;
     // Spark Max Motor ID's
     public static final int INTAKE_RUN_MOTOR_ID = 0;
     public static final int INTAKE_PIVOT_MOTOR_ID = 1;
     public static final int INTAKE_ANGLE_ENCODER_ID = 30;
-    public static final double INTAKE_PIVOT_GEAR_RATIO = 6;
+    public static final double INTAKE_PIVOT_GEAR_RATIO = 96;
     public static final double INTAKE_PIVOT_ROTATIONS_PER_DEGREE = INTAKE_PIVOT_GEAR_RATIO / 360;
     // Positions of intake in motor rotations
     public static final double INTAKE_RESET_POS = 0;
