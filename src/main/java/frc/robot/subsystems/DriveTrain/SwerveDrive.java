@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 
+import frc.robot.CustomTypes.Math.Vector2;
+
 public class SwerveDrive extends SubsystemBase {
 
   private final Translation2d leftFrontWheelLocation = new Translation2d(DriveConstants.ROBOT_SWERVE_LOCATIONS.LEFT_FRONT_WHEEL_X, DriveConstants.ROBOT_SWERVE_LOCATIONS.LEFT_FRONT_WHEEL_Y);
@@ -91,6 +93,11 @@ public final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(leftFr
      */
     public Pose2d getPose() {
         return m_odometry.getPoseMeters();
+    }
+
+    public Vector2 getOdometryPosition()
+    {
+        return Vector2.zero;
     }
 
     /** Updates the field relative position of the robot. */
