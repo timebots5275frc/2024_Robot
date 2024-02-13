@@ -3,20 +3,14 @@ package frc.robot.CustomTypes.Math;
 public class Vector3 {
     public double x, y, z;
 
-    public static Vector3 zero = new Vector3();
+    public static Vector3 zero = new Vector3(0, 0, 0);
 
+    // Vector3's should be declarative and only have the values you set to them
     public Vector3(double x, double y, double z)
     {
         this.x = x;
         this.y = y;
         this.z = z;
-    }
-
-    public Vector3()
-    { 
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
     }
 
     public static double distance(Vector3 a, Vector3 b)

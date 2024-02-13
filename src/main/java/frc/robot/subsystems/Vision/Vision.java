@@ -27,6 +27,7 @@ public class Vision extends SubsystemBase {
   public Vision() 
   {
     VisionDriveCalculator.SetVisionReference(this);
+    VisionShooterCalculator.SetVisionReference(this);
   }
 
   public void onRobotDisable()

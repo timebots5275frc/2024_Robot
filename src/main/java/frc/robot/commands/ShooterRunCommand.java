@@ -5,26 +5,29 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.ShooterRunState;
 
-public class AutoIntake extends Command {
+public class ShooterRunCommand extends Command {
 
-  private Intake intake;
+  Shooter shooter;
+  ShooterRunState state;
 
-  public AutoIntake(Intake intake) {
-    this.intake = intake;
-    addRequirements(this.intake);
+  public ShooterRunCommand(Shooter shooter, ShooterRunState state) {
+    this.shooter = shooter;
+    this.state = state;
+    addRequirements(this.shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // intake.autoReady();
-    // intake.feedShooter();
+    shooter.shooterSetRunState(state);
   }
 
   // Called once the command ends or is interrupted.

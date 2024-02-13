@@ -5,15 +5,15 @@
 package frc.robot;
 
 import frc.robot.commands.AutoIntake;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.IntakePivotCommand;
+import frc.robot.commands.IntakeRunCommand;
 import frc.robot.commands.TeleopJoystickDrive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Input.Input;
-import frc.robot.subsystems.Intake.IntakeState;
-import frc.robot.subsystems.Shooter.ShooterState;
+import frc.robot.subsystems.Intake.IntakePivotState;
+import frc.robot.subsystems.Vision.Vision;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,6 +33,7 @@ public class RobotContainer {
   SwerveDrive swerveDrive;
   Shooter shooter;
   Intake intake;
+  Vision vision;
 
   Joystick driveStick;
   GenericHID buttonBoard;
@@ -42,36 +43,32 @@ public class RobotContainer {
   TeleopJoystickDrive joyDrive;
 
   AutoIntake autoIntake;
-
-  IntakeCommand intakeIdle, intakeRest, intakeIntake, intakeEject, intakeReady, intakeFeed;
-
-  ShooterCommand shooterStart, shooterIdle, shooterFire, shooterAmp, shooterTest;
   
   SequentialCommandGroup autoCommands;
   public RobotContainer() {
-    swerveDrive = new SwerveDrive();
-    shooter = new Shooter();
+    //swerveDrive = new SwerveDrive();
+    //shooter = new Shooter();
     intake = new Intake(shooter);
 
     driveStick = new Joystick(0);
-    buttonBoard = new GenericHID(1);
+    //buttonBoard = new GenericHID(1);
     input = new Input(driveStick);
+    vision = new Vision();
 
-    joyDrive = new TeleopJoystickDrive(swerveDrive, driveStick, input, true);
-    intakeIdle = new IntakeCommand(intake, IntakeState.IDLE);
-    intakeRest = new IntakeCommand(intake, IntakeState.REST);
-    intakeIntake = new IntakeCommand(intake, IntakeState.INTAKE);
-    intakeEject = new IntakeCommand(intake, IntakeState.EJECT);
-    intakeReady = new IntakeCommand(intake, IntakeState.READY_TO_FEED);
-    intakeFeed = new IntakeCommand(intake, IntakeState.FEED_SHOOTER);
+    //joyDrive = new TeleopJoystickDrive(swerveDrive, driveStick, input, true);
+    //intakeIdle = new IntakeCommand(intake, IntakeState.IDLE);
+    //intakeRest = new IntakeCommand(intake, IntakeState.REST);
+    //intakeIntake = new IntakeCommand(intake, IntakeState.INTAKE);
+    //intakeEject = new IntakeCommand(intake, IntakeState.EJECT);
+    //intakeReady = new IntakeCommand(intake, IntakeState.READY_TO_FEED);
+    //intakeFeed = new IntakeCommand(intake, IntakeState.FEED_SHOOTER);
 
-    autoIntake = new AutoIntake(intake);
+    //autoIntake = new AutoIntake(intake);
 
-    shooterStart = new ShooterCommand(shooter, ShooterState.START);
-    shooterIdle = new ShooterCommand(shooter, ShooterState.IDLE);
-    shooterFire = new ShooterCommand(shooter, ShooterState.VISION_SHOOT);
-    shooterAmp = new ShooterCommand(shooter, ShooterState.AMP);
-    shooterTest = new ShooterCommand(shooter, ShooterState.TEST);
+    // shooterStart = new ShooterCommand(shooter, ShooterState.START);
+    // shooterIdle = new ShooterCommand(shooter, ShooterState.IDLE);
+    // shooterFire = new ShooterCommand(shooter, ShooterState.VISION_SHOOT);
+    // shooterAmp = new ShooterCommand(shooter, ShooterState.AMP);
 
     configureBindings();
 
@@ -86,14 +83,13 @@ public class RobotContainer {
     //.whileTrue() calls command while button is held or until command finishes
     //.toggleOnTrue() makes a toggle which runs when pressed and then stops when presse again
 
-    new JoystickButton(buttonBoard, 1).onTrue(new RepeatCommand(shooterTest));
-    new JoystickButton(buttonBoard, 2).onTrue(new RepeatCommand(shooterStart));
-    new JoystickButton(buttonBoard, 3).onTrue(new RepeatCommand(shooterIdle));
+    //new JoystickButton(driveStick, 3).onTrue(new ShooterCommand(shooter, ShooterState.START));
+    //new JoystickButton(buttonBoard, 3).onTrue(new RepeatCommand(shooterIdle));
 
-    new JoystickButton(buttonBoard, 4).onTrue(new RepeatCommand(intakeIdle));
-    new JoystickButton(buttonBoard, 5).onTrue(new RepeatCommand(intakeIntake).until(intake.autoIntake));
-    new JoystickButton(buttonBoard, 6).onTrue(new RepeatCommand(intakeReady));
-    new JoystickButton(buttonBoard, 7).onTrue(new RepeatCommand(intakeFeed));
+    //new JoystickButton(buttonBoard, 4).onTrue(new RepeatCommand(intakeIdle));
+    new JoystickButton(driveStick, 6).onTrue(new IntakePivotCommand(intake, IntakePivotState.IN));//.until(intake.autoIntake));
+    new JoystickButton(driveStick, 5).onTrue(new IntakePivotCommand(intake, IntakePivotState.OUT));
+    //new JoystickButton(buttonBoard, 7).onTrue(new RepeatCommand(intakeFeed));
     
   }
 

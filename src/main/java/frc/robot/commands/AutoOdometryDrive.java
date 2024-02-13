@@ -5,15 +5,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Intake;
+import frc.robot.CustomTypes.Math.Vector2;
+import frc.robot.subsystems.DriveTrain.SwerveDrive;
 
-public class AutoIntake extends Command {
+public class AutoOdometryDrive extends Command {
+  SwerveDrive swerveDrive;
+  Vector2 relativeTargetPosition;
 
-  private Intake intake;
+  Vector2 startingPosition;
 
-  public AutoIntake(Intake intake) {
-    this.intake = intake;
-    addRequirements(this.intake);
+  public AutoOdometryDrive(SwerveDrive swerveDrive, Vector2 relativeTargetPosition) {
+    this.swerveDrive = swerveDrive;
+    this.relativeTargetPosition = relativeTargetPosition;
+
+    // startingPosition = swerveDrive.getAbsolutePosition();
   }
 
   // Called when the command is initially scheduled.
@@ -22,10 +27,7 @@ public class AutoIntake extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    // intake.autoReady();
-    // intake.feedShooter();
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

@@ -5,28 +5,29 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Intake.IntakeState;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.ShooterPivotState;
 
-public class IntakeCommand extends Command {
+public class ShooterPivotCommand extends Command {
 
-  Intake intake;
-  IntakeState state;
+  Shooter shooter;
+  ShooterPivotState state;
 
-  public IntakeCommand(Intake intake, IntakeState state) {
-    this.intake = intake;
+  public ShooterPivotCommand(Shooter shooter, ShooterPivotState state) {
+    this.shooter = shooter;
     this.state = state;
-    addRequirements(this.intake);
+    addRequirements(this.shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.intakeSetState(state);
+    shooter.shooterSetPivotState(state);
   }
 
   // Called once the command ends or is interrupted.

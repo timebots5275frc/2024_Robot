@@ -5,18 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Shooter.ShooterState;
 
-public class ShooterCommand extends Command {
-
+public class StartCommand extends Command {
   Shooter shooter;
-  ShooterState state;
+  Intake intake;
 
-  public ShooterCommand(Shooter shooter, ShooterState state) {
+  public StartCommand(Shooter shooter, Intake intake) {
     this.shooter = shooter;
-    this.state = state;
-    addRequirements(this.shooter);
+    this.intake = intake;
+    addRequirements(shooter);
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
@@ -25,9 +25,7 @@ public class ShooterCommand extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    shooter.shooterSetState(state);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

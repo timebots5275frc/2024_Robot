@@ -6,13 +6,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake.IntakePivotState;
 
-public class AutoIntake extends Command {
+public class IntakePivotCommand extends Command {
 
-  private Intake intake;
+  Intake intake;
+  IntakePivotState state;
 
-  public AutoIntake(Intake intake) {
+  public IntakePivotCommand(Intake intake, IntakePivotState state) {
     this.intake = intake;
+    this.state = state;
     addRequirements(this.intake);
   }
 
@@ -23,8 +26,7 @@ public class AutoIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // intake.autoReady();
-    // intake.feedShooter();
+    intake.intakeSetPivotState(state);
   }
 
   // Called once the command ends or is interrupted.

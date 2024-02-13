@@ -36,7 +36,18 @@ public class Vector2{
     public static Vector2 clampMagnitude(Vector2 vector2, double max)
     {
         Vector2 out = vector2;
-        if (vector2.magnitude() > max) { out = vector2.normalized().times((max));}
+        if (vector2.magnitude() > max) { out = vector2.normalized().times((max)); }
+
+        return out;
+    }
+
+    public static Vector2 clampMagnitude(Vector2 vector2, double min, double max)
+    {
+        Vector2 out = vector2;
+        double magnitude = vector2.magnitude();
+
+        if (magnitude > max) { out = vector2.normalized().times((max)); }
+        else if (magnitude < min) {out = vector2.normalized().times(min); }
 
         return out;
     }
