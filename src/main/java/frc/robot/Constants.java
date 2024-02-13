@@ -269,9 +269,9 @@ import frc.robot.CustomTypes.Math.Vector3;
     public static final double INTAKE_PIVOT_ROTATIONS_PER_DEGREE = INTAKE_PIVOT_GEAR_RATIO / 360;
     // Positions of intake in motor rotations
 
-    public static final double INTAKE_IN_POS = 36 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
-    public static final double INTAKE_OUT_POS = 180 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
-    public static final double INTAKE_PIVOT_ALLOWED_OFFSET = 1 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
+    public static final double INTAKE_IN_POS = 37.8 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
+    public static final double INTAKE_OUT_POS = 267 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
+    public static final double INTAKE_PIVOT_ALLOWED_OFFSET = 5 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
 
     public static final double INTAKE_RUN_SPEED = 1200;
 

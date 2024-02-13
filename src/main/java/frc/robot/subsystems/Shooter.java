@@ -108,6 +108,7 @@ public class Shooter extends SubsystemBase {
       break;
       case DEFAULT_SHOOT: 
       shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_DEFAULT_SHOOTING_POS, ControlType.kSmartMotion);
+      break;
       // case TRAP:
     }
   }
@@ -125,6 +126,7 @@ public class Shooter extends SubsystemBase {
       case SHOOT:
       leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_SHOOTER_SPEED, ControlType.kVelocity);
       rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_SHOOTER_SPEED, ControlType.kVelocity);
+      break;
       // case TRAP:
     }
   }
