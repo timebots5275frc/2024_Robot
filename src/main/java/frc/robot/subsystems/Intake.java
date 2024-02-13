@@ -95,8 +95,7 @@ public class Intake extends SubsystemBase {
     switch(state) {
       // Moves motor to position according to rotations and starts motors
       case IDLE:
-      // intakePivotPID.setReference(intakePivotEncoder.getPosition(), ControlType.kSmartMotion);
-      intakePivotPID.setReference(0, ControlType.kVelocity);
+      intakePivotPID.setReference(intakePivotEncoder.getPosition(), ControlType.kSmartMotion);
       // intakeRunPID.setReference(0, ControlType.kVelocity);
       currentState = IntakeState.IDLE;
       break;
@@ -109,7 +108,7 @@ public class Intake extends SubsystemBase {
       // intakeRunPID.setReference(0, ControlType.kVelocity);
       currentState = IntakeState.START;
       case INTAKE:
-      intakePivotPID.setReference(500/*Constants.IntakeConstants.INTAKE_COLLECT_POS*/, ControlType.kVelocity);
+      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_COLLECT_POS, ControlType.kSmartMotion);
       // intakeRunPID.setReference(Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
       currentState = IntakeState.INTAKE;
       break;
@@ -119,7 +118,7 @@ public class Intake extends SubsystemBase {
       currentState = IntakeState.EJECT;
       break;
       case READY_TO_FEED:
-      intakePivotPID.setReference(-500/*Constants.IntakeConstants.INTAKE_FEED_POS*/, ControlType.kVelocity);
+      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_FEED_POS, ControlType.kSmartMotion);
       // intakeRunPID.setReference(0, ControlType.kVelocity);
       currentState = IntakeState.READY_TO_FEED;
       break;
