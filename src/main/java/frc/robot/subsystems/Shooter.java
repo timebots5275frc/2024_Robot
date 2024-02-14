@@ -37,6 +37,10 @@ public class Shooter extends SubsystemBase {
 
   private double visionShooterAngle;
 
+  private double targetAngle;
+  private double lTargetSpeed;
+  private double rTargetSpeed;
+
   public BooleanSupplier ShotNote = new BooleanSupplier() {
     public boolean getAsBoolean() { return false; };
   };
@@ -97,15 +101,20 @@ public class Shooter extends SubsystemBase {
     switch(state) {
       case START:
       shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_START_POS, ControlType.kSmartMotion);
+      targetAngle = Constants.ShooterConstants.SHOOTER_START_POS;
       break;
       case VISION_SHOOT: 
+      setVisionShooterAngle();
       shooterPivotPID.setReference(visionShooterAngle, ControlType.kSmartMotion);
+      targetAngle = visionShooterAngle;
       break;
       case AMP:
       shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_DEFAULT_AMP_POS, ControlType.kSmartMotion);
+      targetAngle = Constants.ShooterConstants.SHOOTER_DEFAULT_AMP_POS;
       break;
       case DEFAULT_SHOOT: 
       shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_DEFAULT_SHOOTING_POS, ControlType.kSmartMotion);
+      targetAngle = Constants.ShooterConstants.SHOOTER_DEFAULT_SHOOTING_POS;
       break;
       // case TRAP:
     }
@@ -116,36 +125,31 @@ public class Shooter extends SubsystemBase {
       case NONE:
       leftShooterRunPID.setReference(0, ControlType.kVelocity);
       rightShooterRunPID.setReference(0, ControlType.kVelocity);
+      lTargetSpeed = 0;
+      rTargetSpeed = 0;
       break;
       case AMP: 
       leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_AMP_SPEED, ControlType.kVelocity);
       rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_AMP_SPEED, ControlType.kVelocity);
+      lTargetSpeed = Constants.ShooterConstants.LEFT_AMP_SPEED;
+      rTargetSpeed = Constants.ShooterConstants.RIGHT_AMP_SPEED;
       break;
       case SHOOT:
       leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_SHOOTER_SPEED, ControlType.kVelocity);
       rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_SHOOTER_SPEED, ControlType.kVelocity);
+      lTargetSpeed = Constants.ShooterConstants.LEFT_SHOOTER_SPEED;
+      rTargetSpeed = Constants.ShooterConstants.RIGHT_SHOOTER_SPEED;
       break;
       // case TRAP:
     }
   }
 
-  // public boolean shooterReady() {
-  //   // Change pivotready bool to work with vision value in future
-  //   boolean pivotReady = ((currentPos > Constants.ShooterConstants.SHOOTER_DEFAULT_SHOOTING_POS - Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET)
-  //     && (currentPos < Constants.ShooterConstants.SHOOTER_DEFAULT_SHOOTING_POS + Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET))
-  //     || ((currentPos > Constants.ShooterConstants.SHOOTER_DEFAULT_AMP_POS - Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET)
-  //     && (currentPos < Constants.ShooterConstants.SHOOTER_DEFAULT_AMP_POS + Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET));
-  //   boolean leftReady = ((leftCurrentSpeed > Constants.ShooterConstants.LEFT_SHOOTER_SPEED - Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET)
-  //     && (leftCurrentSpeed < Constants.ShooterConstants.LEFT_SHOOTER_SPEED + Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET))
-  //     || ((leftCurrentSpeed > Constants.ShooterConstants.LEFT_AMP_SPEED - Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET)
-  //     && (leftCurrentSpeed < Constants.ShooterConstants.LEFT_AMP_SPEED + Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_OFFSET));
-  //   boolean rightReady = ((rightCurrentSpeed > Constants.ShooterConstants.RIGHT_SHOOTER_SPEED - Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET)
-  //     && (rightCurrentSpeed < Constants.ShooterConstants.RIGHT_SHOOTER_SPEED + Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET))
-  //     || ((rightCurrentSpeed > Constants.ShooterConstants.RIGHT_AMP_SPEED- Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET)
-  //     && (rightCurrentSpeed < Constants.ShooterConstants.RIGHT_AMP_SPEED + Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_OFFSET));
-    
-  //   return (pivotReady && leftReady && rightReady);
-  // }
+  public boolean readyToShoot() {
+    boolean pivotReached = (Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET > Math.abs(targetAngle - shooterPivotEncoder.getPosition()));
+    boolean lSpeedReached = (lTargetSpeed > 0 && Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_DIFFERENTIAL > Math.abs(lTargetSpeed - leftShooterRunEncoder.getVelocity()));
+    boolean rSpeedReached = (rTargetSpeed > 0 && Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_DIFFERENTIAL > Math.abs(rTargetSpeed - rightShooterRunEncoder.getVelocity()));
+    return pivotReached && lSpeedReached && rSpeedReached;
+  }
 
   public boolean shooterOutOfWay() {
     if (shooterPivotEncoder.getPosition() > 0) {

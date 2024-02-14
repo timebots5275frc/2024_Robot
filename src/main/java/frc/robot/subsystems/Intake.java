@@ -138,7 +138,7 @@ public class Intake extends SubsystemBase {
 
 
   public void autoFeedShooter() {
-    if (shooter.shooterReady() && intakePivotEncoder.getPosition() > 0) {
+    if (shooter.readyToShoot() && intakePivotEncoder.getPosition() > 0) {
       intakeSetRunState(IntakeRunState.FORWARD);
     }
   }
