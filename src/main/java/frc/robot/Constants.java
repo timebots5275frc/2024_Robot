@@ -192,7 +192,20 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
       public static boolean isAmpTag(AprilTagData tag) { return tag == AprilTagData.ra_amplifier || tag == AprilTagData.ba_amplifier; }
     }
   }
-
+  public static class ClimberConstants {
+    public static final int CLIMBER_MOTOR_L_ID  = 30000;
+    public static final int CLIMBER_MOTOR_R_ID  = 30001;
+    public static final int CLIMBER_MAX       = 320;
+    public static final int CLIMBER_MIN       = 0;
+    public static final double CLIMBER_MAX_VEL   = 120f;
+    public static final PID_Values ClimberMotorPIDs = new PID_Values(
+      0.0, 
+    0.0,
+    0.0,
+    0.0,
+    0.005
+    );
+  }
   public static class ShooterConstants {
     public static final PID_Values ShooterRunPIDs = new PID_Values(
     0.00005,
