@@ -147,6 +147,13 @@ public class Shooter extends SubsystemBase {
   //   return (pivotReady && leftReady && rightReady);
   // }
 
+  public boolean shooterOutOfWay() {
+    if (shooterPivotEncoder.getPosition() > 0) {
+      return true;
+    }
+    return false;
+  }
+
   public double getShooterAngle() {
     return -angleEncoder.getAbsolutePosition().getValueAsDouble() * 360;
   }

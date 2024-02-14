@@ -36,7 +36,7 @@ public class Intake extends SubsystemBase {
 
   private IntakePivotState actualPivotState;
 
-  boolean called;
+  Shooter shooter;
 
   public enum IntakePivotState {
     NONE,
@@ -62,19 +62,19 @@ public class Intake extends SubsystemBase {
 
 
   public Intake(Shooter shooter) {
-    // intakeRunMotor = new CANSparkMax(Constants.IntakeConstants.INTAKE_RUN_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
-    // intakeRunPID = intakeRunMotor.getPIDController();
-    // intakeRunEncoder = intakeRunMotor.getEncoder();
+    intakeRunMotor = new CANSparkMax(Constants.IntakeConstants.INTAKE_RUN_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+    intakeRunPID = intakeRunMotor.getPIDController();
+    intakeRunEncoder = intakeRunMotor.getEncoder();
 
     intakePivotMotor = new CANSparkMax(Constants.IntakeConstants.INTAKE_PIVOT_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
     intakePivotPID = intakePivotMotor.getPIDController();
     intakePivotEncoder = intakePivotMotor.getEncoder();
     intakeAngleEncoder = new CANcoder(Constants.IntakeConstants.INTAKE_ANGLE_ENCODER_ID);
 
-    // intakeRunPID.setP(Constants.IntakeConstants.IntakeRunPIDs.P);
-    // intakeRunPID.setI(Constants.IntakeConstants.IntakeRunPIDs.I);
-    // intakeRunPID.setD(Constants.IntakeConstants.IntakeRunPIDs.D);
-    // intakeRunPID.setFF(Constants.IntakeConstants.IntakeRunPIDs.kFF);
+    intakeRunPID.setP(Constants.IntakeConstants.IntakeRunPIDs.P);
+    intakeRunPID.setI(Constants.IntakeConstants.IntakeRunPIDs.I);
+    intakeRunPID.setD(Constants.IntakeConstants.IntakeRunPIDs.D);
+    intakeRunPID.setFF(Constants.IntakeConstants.IntakeRunPIDs.kFF);
 
     intakePivotPID.setP(Constants.IntakeConstants.IntakePivotPIDs.P, 0);
     intakePivotPID.setI(Constants.IntakeConstants.IntakePivotPIDs.I, 0);
@@ -87,42 +87,45 @@ public class Intake extends SubsystemBase {
 
     actualPivotState = IntakePivotState.NONE;
 
-    // limitSwitch = new DigitalInput(0);
+    limitSwitch = new DigitalInput(0);
+
+    this.shooter = shooter;
   }
 
   public void intakeSetPivotState(IntakePivotState state) {
-    called = false;
-    intakePivotEncoder.setPosition((intakeAngleEncoder.getAbsolutePosition().getValueAsDouble() * 360) * Constants.IntakeConstants.INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
-    switch(state) {
-      case NONE:
-      intakePivotPID.setReference(0, ControlType.kCurrent, 1);
-      actualPivotState = state;
-      break;
-      case OUT:
-      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_OUT_POS, ControlType.kSmartMotion);
-      actualPivotState = state;
-      break;
-      case IN: 
-      intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_IN_POS, ControlType.kSmartMotion);
-      actualPivotState = state;
-      break;
+    if (shooter.shooterOutOfWay()) {
+      intakePivotEncoder.setPosition((intakeAngleEncoder.getAbsolutePosition().getValueAsDouble() * 360) * Constants.IntakeConstants.INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
+      switch(state) {
+        case NONE:
+        intakePivotPID.setReference(0, ControlType.kCurrent, 1);
+        actualPivotState = state;
+        break;
+        case OUT:
+        intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_OUT_POS, ControlType.kSmartMotion);
+        actualPivotState = state;
+        break;
+        case IN: 
+        intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_IN_POS, ControlType.kSmartMotion);
+        actualPivotState = state;
+        break;
+      }
     }
   }
 
-  // public void intakeSetRunState(IntakeRunState state) {
-  //   intakePivotEncoder.setPosition((intakeAngleEncoder.getAbsolutePosition().getValueAsDouble() * 360) * Constants.IntakeConstants.INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
-  //   switch(state) {
-  //     case NONE:
-  //     intakeRunPID.setReference(0, ControlType.kVelocity);
-  //     break;
-  //     case FORWARD: 
-  //     intakeRunPID.setReference(Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
-  //     break;
-  //     case REVERSE: 
-  //     intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
-  //     break;
-  //   }
-  // }
+  public void intakeSetRunState(IntakeRunState state) {
+    intakePivotEncoder.setPosition((intakeAngleEncoder.getAbsolutePosition().getValueAsDouble() * 360) * Constants.IntakeConstants.INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
+    switch(state) {
+      case NONE:
+      intakeRunPID.setReference(0, ControlType.kVelocity);
+      break;
+      case FORWARD: 
+      intakeRunPID.setReference(Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
+      break;
+      case REVERSE: 
+      intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
+      break;
+    }
+  }
 
   public boolean targetPosReached() {
     if (actualPivotState == IntakePivotState.IN && Constants.IntakeConstants.INTAKE_PIVOT_ALLOWED_OFFSET > Math.abs(intakePivotEncoder.getPosition() - Constants.IntakeConstants.INTAKE_IN_POS)) {
@@ -134,17 +137,18 @@ public class Intake extends SubsystemBase {
   }
 
 
-  // public void feedShooter() {
-  //   if (shooter.shooterReady()) {
-  //     intakeSetState(IntakeState.FEED_SHOOTER);
-  //   }
-  // }
+  public void autoFeedShooter() {
+    if (shooter.shooterReady() && intakePivotEncoder.getPosition() > 0) {
+      intakeSetRunState(IntakeRunState.FORWARD);
+    }
+  }
 
-  // public void autoReady() {
-  //   if (currentState == IntakeState.INTAKE && limitSwitch.get()) {
-  //     intakeSetState(IntakeState.READY_TO_FEED);
-  //   }
-  // }
+  public void autoReady() {
+    if (actualPivotState == IntakePivotState.NONE && limitSwitch.get() && intakePivotEncoder.getPosition() < 0) {
+      intakeSetPivotState(IntakePivotState.IN);
+      intakeSetRunState(IntakeRunState.NONE);
+    }
+  }
 
   // public BooleanSupplier autoIntake = new BooleanSupplier() {
   //   public boolean getAsBoolean() {return limitSwitch.get();}
@@ -161,6 +165,8 @@ public class Intake extends SubsystemBase {
     if (targetReached) {
       intakeSetPivotState(IntakePivotState.NONE);
     }
+    autoReady();
+    autoFeedShooter();
   }
 }
 
