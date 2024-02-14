@@ -1,9 +1,13 @@
 package frc.robot;
 
+import javax.xml.namespace.QName;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.CustomTypes.PID_Values;
 import frc.robot.CustomTypes.SwerveCanIDs;
 import frc.robot.CustomTypes.SwerveModuleLocations;
+import frc.robot.CustomTypes.Math.Vector2;
+import frc.robot.CustomTypes.Math.Vector3;
 
   public final class Constants {
     public static class OperatorConstants {
@@ -22,6 +26,32 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
     public static final class DriveConstants {
       // Drivetrain Motor and Encoder IDs
 
+      // #region <Robot 2024 Constants>
+      public static final SwerveCanIDs Robot2024Can = new SwerveCanIDs(
+          1, // LEFT_FRONT_DRIVE_MOTOR_ID 
+          2, // LEFT_FRONT_STEER_MOTOR_ID 
+          3, // RIGHT_FRONT_DRIVE_MOTOR_ID 
+          4, // RIGHT_FRONT_STEER_MOTOR_ID 
+          5, // LEFT_REAR_DRIVE_MOTOR_ID 
+          6, // LEFT_REAR_STEER_MOTOR_ID 
+          7, // RIGHT_REAR_DRIVE_MOTOR_ID 
+          8, // RIGHT_REAR_STEER_MOTOR_ID 
+          10, // LEFT_FRONT_STEER_ENCODER_ID 
+          11, // RIGHT_FRONT_STEER_ENCODER_ID 
+          12, // LEFT_REAR_STEER_ENCODER_ID 
+          13); // RIGHT_REAR_STEER_ENCODER_ID 
+
+      public static final SwerveModuleLocations Robot2024SwerveLocations = new SwerveModuleLocations(
+          ((29 / 2) - 3.25) * MathConstants.INCH_TO_METER, // LEFT_FRONT_WHEEL_X
+          ((30 / 2) - 3.25) * MathConstants.INCH_TO_METER, // LEFT_FRONT_WHEEL_Y
+          ((29 / 2) - 3.25) * MathConstants.INCH_TO_METER, // RIGHT_FRONT_WHEEL_X
+          (-(30 / 2) + 3.25) * MathConstants.INCH_TO_METER, // RIGHT_FRONT_WHEEL_Y
+          (-(29 / 2) + 3.25) * MathConstants.INCH_TO_METER, // RIGHT_REAR_WHEEL_X
+          (-(30 / 2) + 3.25) * MathConstants.INCH_TO_METER, // RIGHT_REAR_WHEEL_Y
+          (-(29 / 2) + 3.25) * MathConstants.INCH_TO_METER, // LEFT_REAR_WHEEL_X
+          ((30 / 2) - 3.25) * MathConstants.INCH_TO_METER); //LEFT_REAR_WHEEL_Y
+      // #endregion
+
       // #region <Robot 2023 Constants>
         public static final SwerveCanIDs Robot2023SwerveCAN = new SwerveCanIDs(
           1, // LEFT_FRONT_DRIVE_MOTOR_ID 
@@ -38,14 +68,14 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
           13); // RIGHT_REAR_STEER_ENCODER_ID 
 
         public static final SwerveModuleLocations Robot2023SwerveLocations = new SwerveModuleLocations(
-          (11 - 2.25) * 0.0254, // LEFT_FRONT_WHEEL_X
-          (14 - 2.25) * 0.0254, // LEFT_FRONT_WHEEL_Y
-          (11 - 2.25) * 0.0254, // RIGHT_FRONT_WHEEL_X
-          (-14 + 2.25) * 0.0254, // RIGHT_FRONT_WHEEL_Y
-          (-11 + 2.25) * 0.0254, // RIGHT_REAR_WHEEL_X
-          (-14 + 2.25) * 0.0254, // RIGHT_REAR_WHEEL_Y
-          (-11 + 2.25) * 0.0254, // LEFT_REAR_WHEEL_X
-          (14 - 2.25) * 0.0254); //LEFT_REAR_WHEEL_Y
+          (11 - 2.25) * MathConstants.INCH_TO_METER, // LEFT_FRONT_WHEEL_X
+          (14 - 2.25) * MathConstants.INCH_TO_METER, // LEFT_FRONT_WHEEL_Y
+          (11 - 2.25) * MathConstants.INCH_TO_METER, // RIGHT_FRONT_WHEEL_X
+          (-14 + 2.25) * MathConstants.INCH_TO_METER, // RIGHT_FRONT_WHEEL_Y
+          (-11 + 2.25) * MathConstants.INCH_TO_METER, // RIGHT_REAR_WHEEL_X
+          (-14 + 2.25) * MathConstants.INCH_TO_METER, // RIGHT_REAR_WHEEL_Y
+          (-11 + 2.25) * MathConstants.INCH_TO_METER, // LEFT_REAR_WHEEL_X
+          (14 - 2.25) * MathConstants.INCH_TO_METER); //LEFT_REAR_WHEEL_Y
       // #endregion
 
       // #region <CaidBot Constants>
@@ -64,14 +94,14 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
            13); // // RIGHT_REAR_STEER_ENCODER_ID
 
         public static final SwerveModuleLocations CaidBotSwerveLocations = new SwerveModuleLocations(
-          11.75 * 0.0254, // LEFT_FRONT_WHEEL_X
-          11.75 * 0.0254, // LEFT_FRONT_WHEEL_Y
-          11.75 * 0.0254, // RIGHT_FRONT_WHEEL_X
-          -11.75 * 0.0254, // RIGHT_FRONT_WHEEL_Y
-          -11.75 * 0.0254, // RIGHT_REAR_WHEEL_X
-          -11.75 * 0.0254, // RIGHT_REAR_WHEEL_Y
-          -11.75 * 0.0254, // LEFT_REAR_WHEEL_X
-          11.75 * 0.0254); //LEFT_REAR_WHEEL_Y
+          11.75 * MathConstants.INCH_TO_METER, // LEFT_FRONT_WHEEL_X
+          11.75 * MathConstants.INCH_TO_METER, // LEFT_FRONT_WHEEL_Y
+          11.75 * MathConstants.INCH_TO_METER, // RIGHT_FRONT_WHEEL_X
+          -11.75 * MathConstants.INCH_TO_METER, // RIGHT_FRONT_WHEEL_Y
+          -11.75 * MathConstants.INCH_TO_METER, // RIGHT_REAR_WHEEL_X
+          -11.75 * MathConstants.INCH_TO_METER, // RIGHT_REAR_WHEEL_Y
+          -11.75 * MathConstants.INCH_TO_METER, // LEFT_REAR_WHEEL_X
+          11.75 * MathConstants.INCH_TO_METER); //LEFT_REAR_WHEEL_Y
       // #endregion
 
       // CHANGE TO SET CURRENT ROBOT INFO //
@@ -192,6 +222,7 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
       public static boolean isAmpTag(AprilTagData tag) { return tag == AprilTagData.ra_amplifier || tag == AprilTagData.ba_amplifier; }
     }
   }
+
   public static class ClimberConstants {
     public static final int CLIMBER_MOTOR_L_ID  = 30000;
     public static final int CLIMBER_MOTOR_R_ID  = 30001;
@@ -289,5 +320,10 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
 
     public static final double INTAKE_RUN_SPEED = 1200;
 
+  }
+
+  public static final class MathConstants
+  {
+    public static final double INCH_TO_METER = 0.0254;
   }
 }
