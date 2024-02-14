@@ -95,9 +95,9 @@ public class RobotContainer {
     new JoystickButton(driveStick, 6).onTrue(new IntakePivotCommand(intake, IntakePivotState.IN));//.until(intake.autoIntake));
     new JoystickButton(driveStick, 5).onTrue(new IntakePivotCommand(intake, IntakePivotState.OUT));
     //new JoystickButton(buttonBoard, 7).onTrue(new RepeatCommand(intakeFeed));
-    new JoystickButton(driveStick, 9).onTrue(new ClimberCommand(climber, ClimberMode.EX));
-    new JoystickButton(driveStick, 10).onTrue(new ClimberCommand(climber, ClimberMode.RET));
-    new JoystickButton(driveStick, 8).whileTrue(new ClimberCommand(climber, ClimberMode.RES));
+    new JoystickButton(driveStick, 9).onTrue(new ClimberCommand(climber, ClimberMode.EXTEND));
+    new JoystickButton(driveStick, 10).onTrue(new ClimberCommand(climber, ClimberMode.RETRACT));
+    new JoystickButton(driveStick, 8).whileTrue(new ClimberCommand(climber, ClimberMode.RESET));
 
   }
 
