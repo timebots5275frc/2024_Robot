@@ -39,7 +39,11 @@ public class Climber extends SubsystemBase {
     motorRpid.setSmartMotionMaxVelocity(Constants.ClimberConstants.CLIMBER_MAX_VEL, 0);
 
   }
-
+  public enum ClimberMode {
+    EX,
+    RET,
+    RES
+  };
   public void extend() {
     motorLpid.setReference(Constants.ClimberConstants.CLIMBER_MAX, ControlType.kSmartMotion);
     motorRpid.setReference(Constants.ClimberConstants.CLIMBER_MAX, ControlType.kSmartMotion);
@@ -48,7 +52,10 @@ public class Climber extends SubsystemBase {
         motorLpid.setReference(Constants.ClimberConstants.CLIMBER_MIN, ControlType.kSmartMotion);
         motorRpid.setReference(Constants.ClimberConstants.CLIMBER_MIN, ControlType.kSmartMotion);
   }
-
+  public void reset() {
+    motorLpid.setReference(0, ControlType.kCurrent);
+    motorRpid.setReference(0, ControlType.kCurrent);
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

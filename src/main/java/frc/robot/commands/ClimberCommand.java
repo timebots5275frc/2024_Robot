@@ -4,17 +4,19 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Climber.ClimberMode;
 
 public class ClimberCommand extends Command {
   /** Creates a new ClimberCommand. */
   private Climber cl;
-  private Joystick joyL;
-  public ClimberCommand(Climber _cl, Joystick _joyL) {
+  private Boolean done;
+  private  ClimberMode mode;
+  public ClimberCommand(Climber _cl, ClimberMode _mode) {
     cl = _cl;
-    joyL = _joyL;
+    mode = _mode;
+    done = false;
     addRequirements(cl);
   }
 
@@ -25,10 +27,16 @@ public class ClimberCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (joyL.getRawButton(9)) {
+    if (mode == ClimberMode.EX) {
+      done = false;
       cl.extend();
-    } else if (joyL.getRawButton(10)) {
+      done = true;
+    } else if (mode == ClimberMode.RET) {
+      done = false;
       cl.retract();
+      done = true;
+    } else if (mode == ClimberMode.RES) {
+      cl.reset();
     }
   }
 
@@ -39,6 +47,6 @@ public class ClimberCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return done;
   }
 }

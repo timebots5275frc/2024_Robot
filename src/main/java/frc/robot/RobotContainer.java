@@ -5,11 +5,14 @@
 package frc.robot;
 
 import frc.robot.commands.AutoIntake;
+import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.IntakePivotCommand;
 //import frc.robot.commands.IntakeRunCommand;
 import frc.robot.commands.TeleopJoystickDrive;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Climber.ClimberMode;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Input.Input;
 import frc.robot.subsystems.Intake.IntakePivotState;
@@ -44,6 +47,8 @@ public class RobotContainer {
 
   AutoIntake autoIntake;
   
+  private Climber climber;
+
   SequentialCommandGroup autoCommands;
   public RobotContainer() {
     //swerveDrive = new SwerveDrive();
@@ -54,7 +59,7 @@ public class RobotContainer {
     //buttonBoard = new GenericHID(1);
     input = new Input(driveStick);
     vision = new Vision();
-
+    climber = new Climber();
     //joyDrive = new TeleopJoystickDrive(swerveDrive, driveStick, input, true);
     //intakeIdle = new IntakeCommand(intake, IntakeState.IDLE);
     //intakeRest = new IntakeCommand(intake, IntakeState.REST);
@@ -90,7 +95,10 @@ public class RobotContainer {
     new JoystickButton(driveStick, 6).onTrue(new IntakePivotCommand(intake, IntakePivotState.IN));//.until(intake.autoIntake));
     new JoystickButton(driveStick, 5).onTrue(new IntakePivotCommand(intake, IntakePivotState.OUT));
     //new JoystickButton(buttonBoard, 7).onTrue(new RepeatCommand(intakeFeed));
-    
+    new JoystickButton(driveStick, 9).onTrue(new ClimberCommand(climber, ClimberMode.EX));
+    new JoystickButton(driveStick, 10).onTrue(new ClimberCommand(climber, ClimberMode.RET));
+    new JoystickButton(driveStick, 8).whileTrue(new ClimberCommand(climber, ClimberMode.RES));
+
   }
 
   /**
