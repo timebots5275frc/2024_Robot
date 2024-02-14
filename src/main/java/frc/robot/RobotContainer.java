@@ -7,6 +7,8 @@ package frc.robot;
 import frc.robot.commands.AutoIntake;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.IntakePivotCommand;
+import frc.robot.commands.ShooterPivotCommand;
+import frc.robot.commands.ShooterRunCommand;
 //import frc.robot.commands.IntakeRunCommand;
 import frc.robot.commands.TeleopJoystickDrive;
 import frc.robot.subsystems.Climber;
@@ -16,10 +18,13 @@ import frc.robot.subsystems.Climber.ClimberMode;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Input.Input;
 import frc.robot.subsystems.Intake.IntakePivotState;
+import frc.robot.subsystems.Shooter.ShooterPivotState;
+import frc.robot.subsystems.Shooter.ShooterRunState;
 import frc.robot.subsystems.Vision.Vision;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 //import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -60,41 +65,27 @@ public class RobotContainer {
     input = new Input(driveStick);
     vision = new Vision();
     climber = new Climber();
-    //joyDrive = new TeleopJoystickDrive(swerveDrive, driveStick, input, true);
-    //intakeIdle = new IntakeCommand(intake, IntakeState.IDLE);
-    //intakeRest = new IntakeCommand(intake, IntakeState.REST);
-    //intakeIntake = new IntakeCommand(intake, IntakeState.INTAKE);
-    //intakeEject = new IntakeCommand(intake, IntakeState.EJECT);
-    //intakeReady = new IntakeCommand(intake, IntakeState.READY_TO_FEED);
-    //intakeFeed = new IntakeCommand(intake, IntakeState.FEED_SHOOTER);
-
-    //autoIntake = new AutoIntake(intake);
-
-    // shooterStart = new ShooterCommand(shooter, ShooterState.START);
-    // shooterIdle = new ShooterCommand(shooter, ShooterState.IDLE);
-    // shooterFire = new ShooterCommand(shooter, ShooterState.VISION_SHOOT);
-    // shooterAmp = new ShooterCommand(shooter, ShooterState.AMP);
+    joyDrive = new TeleopJoystickDrive(swerveDrive, driveStick, input, true);
 
     configureBindings();
-
-    //autoCommands = new SequentialCommandGroup(null);
   }
 
   private void configureBindings() {
     //swerveDrive.setDefaultCommand(joyDrive);
-    //intake.setDefaultCommand(autoIntake);
 
     //.onTrue() calls command once per button press
     //.whileTrue() calls command while button is held or until command finishes
     //.toggleOnTrue() makes a toggle which runs when pressed and then stops when presse again
 
-    //new JoystickButton(driveStick, 3).onTrue(new ShooterCommand(shooter, ShooterState.START));
-    //new JoystickButton(buttonBoard, 3).onTrue(new RepeatCommand(shooterIdle));
 
     //new JoystickButton(buttonBoard, 4).onTrue(new RepeatCommand(intakeIdle));
-    new JoystickButton(driveStick, 6).onTrue(new IntakePivotCommand(intake, IntakePivotState.IN));//.until(intake.autoIntake));
+    new JoystickButton(driveStick, 6).onTrue(new IntakePivotCommand(intake, IntakePivotState.IN));
     new JoystickButton(driveStick, 5).onTrue(new IntakePivotCommand(intake, IntakePivotState.OUT));
-    //new JoystickButton(buttonBoard, 7).onTrue(new RepeatCommand(intakeFeed));
+
+    new JoystickButton(driveStick, 1).onTrue(new ParallelCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.DEFAULT_SHOOT), new ShooterRunCommand(shooter, ShooterRunState.SHOOT)));
+    new JoystickButton(driveStick, 2).onTrue(new ParallelCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.START), new ShooterRunCommand(shooter, ShooterRunState.NONE)));
+
+
     new JoystickButton(driveStick, 9).onTrue(new ClimberCommand(climber, ClimberMode.EXTEND));
     new JoystickButton(driveStick, 10).onTrue(new ClimberCommand(climber, ClimberMode.RETRACT));
     new JoystickButton(driveStick, 8).whileTrue(new ClimberCommand(climber, ClimberMode.RESET));
