@@ -22,7 +22,7 @@ public class Climber extends SubsystemBase {
   private RelativeEncoder motorLEncoder;
   private RelativeEncoder motorREndcoder;
   public Climber() {
-    motorL = new CANSparkMax(Constants.ClimberConstants.CLIMBER_MOTOR_R_ID, MotorType.kBrushless);
+    motorL = new CANSparkMax(Constants.ClimberConstants.CLIMBER_MOTOR_L_ID, MotorType.kBrushless);
     motorLpid = motorL.getPIDController();
     motorLEncoder = motorL.getEncoder();
     motorLpid.setP(Constants.ClimberConstants.ClimberMotorPIDs.P);

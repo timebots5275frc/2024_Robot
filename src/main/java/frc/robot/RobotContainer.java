@@ -56,8 +56,8 @@ public class RobotContainer {
 
   SequentialCommandGroup autoCommands;
   public RobotContainer() {
-    //swerveDrive = new SwerveDrive();
-    //shooter = new Shooter();
+    swerveDrive = new SwerveDrive();
+    shooter = new Shooter();
     intake = new Intake(shooter);
 
     driveStick = new Joystick(0);
@@ -90,7 +90,7 @@ public class RobotContainer {
     // new JoystickButton(driveStick, 8).whileTrue(new ClimberCommand(climber, ClimberMode.RESET));
 
 
-    
+
   }
 
   /**
