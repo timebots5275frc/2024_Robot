@@ -121,10 +121,10 @@ public class Intake extends SubsystemBase {
       intakeRunPID.setReference(0, ControlType.kVelocity);
       break;
       case FORWARD: 
-      intakeRunPID.setReference(Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
+      intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
       break;
       case REVERSE: 
-      intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
+      intakeRunPID.setReference(Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
       break;
     }
   }
@@ -140,13 +140,13 @@ public class Intake extends SubsystemBase {
 
 
   public void autoFeedShooter() {
-    if (shooter.readyToShoot() && intakePivotEncoder.getPosition() < Constants.IntakeConstants.INTAKE_UP_POS) {
+    if (shooter.readyToShoot() && intakePivotEncoder.getPosition() > Constants.IntakeConstants.INTAKE_UP_POS) {
       intakeSetRunState(IntakeRunState.FORWARD);
     }
   }
 
   public void autoFlip() {
-    if (actualPivotState == IntakePivotState.NONE && limitSwitchPressed() && intakePivotEncoder.getPosition() > Constants.IntakeConstants.INTAKE_UP_POS) {
+    if (actualPivotState == IntakePivotState.NONE && limitSwitchPressed() && intakePivotEncoder.getPosition() < Constants.IntakeConstants.INTAKE_UP_POS) {
       intakeSetPivotState(IntakePivotState.IN);
       intakeSetRunState(IntakeRunState.NONE);
     }

@@ -264,7 +264,7 @@ import frc.robot.CustomTypes.Math.Vector3;
     public final static int PIVOT_SHOOTER_ID = 30;
     public final static int PIVOT_SHOOTER_CANCODER_ID = 33;
 
-    public final static double LEFT_SHOOTER_SPEED = 2100;
+    public final static double LEFT_SHOOTER_SPEED = -2100;
     public final static double RIGHT_SHOOTER_SPEED = -0.5 * LEFT_SHOOTER_SPEED;
 
     public final static double LEFT_AMP_SPEED = 500;
