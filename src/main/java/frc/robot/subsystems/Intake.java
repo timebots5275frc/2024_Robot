@@ -33,6 +33,7 @@ public class Intake extends SubsystemBase {
   private IntakePivotState currentPivotState;
 
   private DigitalInput limitSwitch;
+  private DigitalInput limitSwitch2;
 
   private IntakePivotState actualPivotState;
 
@@ -88,6 +89,7 @@ public class Intake extends SubsystemBase {
     actualPivotState = IntakePivotState.NONE;
 
     limitSwitch = new DigitalInput(0);
+    limitSwitch2 = new DigitalInput(1);
 
     this.shooter = shooter;
   }
@@ -138,16 +140,20 @@ public class Intake extends SubsystemBase {
 
 
   public void autoFeedShooter() {
-    if (shooter.readyToShoot() && intakePivotEncoder.getPosition() > 0) {
+    if (shooter.readyToShoot() && intakePivotEncoder.getPosition() < Constants.IntakeConstants.INTAKE_UP_POS) {
       intakeSetRunState(IntakeRunState.FORWARD);
     }
   }
 
-  public void autoReady() {
-    if (actualPivotState == IntakePivotState.NONE && limitSwitch.get() && intakePivotEncoder.getPosition() < 0) {
+  public void autoFlip() {
+    if (actualPivotState == IntakePivotState.NONE && limitSwitchPressed() && intakePivotEncoder.getPosition() > Constants.IntakeConstants.INTAKE_UP_POS) {
       intakeSetPivotState(IntakePivotState.IN);
       intakeSetRunState(IntakeRunState.NONE);
     }
+  }
+
+  public boolean limitSwitchPressed() {
+    return limitSwitch.get() || limitSwitch2.get();
   }
 
   // public BooleanSupplier autoIntake = new BooleanSupplier() {
@@ -159,13 +165,12 @@ public class Intake extends SubsystemBase {
     boolean targetReached = targetPosReached();
     SmartDashboard.putNumber("Intake angle", intakeAngleEncoder.getAbsolutePosition().getValueAsDouble() * 360);
     SmartDashboard.putNumber("Intake Pivot Rotations", intakePivotEncoder.getPosition());
-    SmartDashboard.putNumber("Intake output current", intakePivotMotor.getOutputCurrent());
-    SmartDashboard.putNumber("Intake pivot velocity", intakePivotEncoder.getVelocity());
+    SmartDashboard.putNumber("Intake run speed", intakeRunEncoder.getVelocity());
     SmartDashboard.putBoolean("Inside threshold", targetReached);
     if (targetReached) {
       intakeSetPivotState(IntakePivotState.NONE);
     }
-    autoReady();
+    autoFlip();
     autoFeedShooter();
   }
 }

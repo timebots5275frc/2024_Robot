@@ -105,8 +105,8 @@ import frc.robot.CustomTypes.Math.Vector3;
       // #endregion
 
       // CHANGE TO SET CURRENT ROBOT INFO //
-      public static final SwerveCanIDs ROBOT_SWERVE_CAN = CaidBotSwerveCAN;
-      public static final SwerveModuleLocations ROBOT_SWERVE_LOCATIONS = CaidBotSwerveLocations;
+      public static final SwerveCanIDs ROBOT_SWERVE_CAN = Robot2024Can;
+      public static final SwerveModuleLocations ROBOT_SWERVE_LOCATIONS = Robot2024SwerveLocations;
       //////////////////////////////////////
 
       public static final double WHEEL_RADIUS = 2.0 * 0.0254; // meters * 0.98
@@ -224,8 +224,8 @@ import frc.robot.CustomTypes.Math.Vector3;
   }
 
   public static class ClimberConstants {
-    public static final int CLIMBER_MOTOR_L_ID  = 30000;
-    public static final int CLIMBER_MOTOR_R_ID  = 30001;
+    public static final int CLIMBER_MOTOR_L_ID  = 40;
+    public static final int CLIMBER_MOTOR_R_ID  = 41;
     public static final int CLIMBER_MAX       = 320;
     public static final int CLIMBER_MIN       = 0;
     public static final double CLIMBER_MAX_VEL   = 120f;
@@ -261,8 +261,8 @@ import frc.robot.CustomTypes.Math.Vector3;
 
     public final static int LEFT_SHOOTER_ID = 32;
     public final static int RIGHT_SHOOTER_ID = 31;
-    public final static int PIVOT_SHOOTER_ID = 20;
-    public final static int PIVOT_SHOOTER_CANCODER_ID = 21;
+    public final static int PIVOT_SHOOTER_ID = 30;
+    public final static int PIVOT_SHOOTER_CANCODER_ID = 33;
 
     public final static double LEFT_SHOOTER_SPEED = 2100;
     public final static double RIGHT_SHOOTER_SPEED = -0.5 * LEFT_SHOOTER_SPEED;
@@ -307,15 +307,16 @@ import frc.robot.CustomTypes.Math.Vector3;
     public static final double INTAKE_PIVOT_MAX_ACCEL = 4000;
     public static final double INTAKE_PIVOT_MIN_VEL = 5;
     // Spark Max Motor ID's5
-    public static final int INTAKE_RUN_MOTOR_ID = 0;
-    public static final int INTAKE_PIVOT_MOTOR_ID = 1;
-    public static final int INTAKE_ANGLE_ENCODER_ID = 30;
+    public static final int INTAKE_RUN_MOTOR_ID = 21;
+    public static final int INTAKE_PIVOT_MOTOR_ID = 20;
+    public static final int INTAKE_ANGLE_ENCODER_ID = 22;
     public static final double INTAKE_PIVOT_GEAR_RATIO = 96;
     public static final double INTAKE_PIVOT_ROTATIONS_PER_DEGREE = INTAKE_PIVOT_GEAR_RATIO / 360;
     // Positions of intake in motor rotations
 
     public static final double INTAKE_IN_POS = 37.8 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
     public static final double INTAKE_OUT_POS = 267 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
+    public static final double INTAKE_UP_POS = 0 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
     public static final double INTAKE_PIVOT_ALLOWED_OFFSET = 5 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
 
     public static final double INTAKE_RUN_SPEED = 1200;

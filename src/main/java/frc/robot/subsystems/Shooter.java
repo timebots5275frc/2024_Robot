@@ -152,10 +152,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean shooterOutOfWay() {
-    if (shooterPivotEncoder.getPosition() > 0) {
-      return true;
-    }
-    return false;
+    return shooterPivotEncoder.getPosition() > 0;
   }
 
   public double getShooterAngle() {
@@ -169,8 +166,8 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Shooter Spark Max Pos", shooterPivotEncoder.getPosition());
-    SmartDashboard.putNumber("Shooter Pivot Vel", shooterPivotEncoder.getVelocity());
     SmartDashboard.putNumber("Shooter CANCODER Pos", angleEncoder.getAbsolutePosition().getValueAsDouble() * 360);
-    SmartDashboard.putNumber("SP Output Current", shooterPivotMotor.getOutputCurrent());
+    SmartDashboard.putNumber("Left shooter velocity", leftShooterRunEncoder.getVelocity());
+    SmartDashboard.putNumber("Right shooter vleocity", rightShooterRunEncoder.getVelocity());
   }
 }
