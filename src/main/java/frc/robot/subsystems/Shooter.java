@@ -70,6 +70,8 @@ public class Shooter extends SubsystemBase {
     rightShooterRunEncoder = rightShooterRunMotor.getEncoder();
     shooterPivotPID = shooterPivotMotor.getPIDController();
     shooterPivotEncoder = shooterPivotMotor.getEncoder();
+    shooterPivotMotor.setInverted(true);
+    leftShooterRunMotor.setInverted(true);
 
     leftShooterRunPID.setP(Constants.ShooterConstants.ShooterRunPIDs.P);
     leftShooterRunPID.setI(Constants.ShooterConstants.ShooterRunPIDs.I);
