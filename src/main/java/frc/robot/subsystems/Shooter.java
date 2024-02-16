@@ -42,6 +42,9 @@ public class Shooter extends SubsystemBase {
   private double lTargetSpeed;
   private double rTargetSpeed;
 
+  public static boolean intakeCanMove = true;
+  public static boolean readyToShoot = false;
+
   public BooleanSupplier ShotNote = new BooleanSupplier() {
     public boolean getAsBoolean() { return false; };
   };
@@ -172,7 +175,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter CANCODER Pos", angleEncoder.getAbsolutePosition().getValueAsDouble() * 360);
     SmartDashboard.putNumber("Left shooter velocity", leftShooterRunEncoder.getVelocity());
     SmartDashboard.putNumber("Right shooter vleocity", rightShooterRunEncoder.getVelocity());
-    RobotContainer.intakeCanMove = shooterOutOfWay();
-    RobotContainer.shooterReadyToShoot = readyToShoot();
+    Shooter.intakeCanMove = shooterOutOfWay();
+    Shooter.readyToShoot = readyToShoot();
   }
 }

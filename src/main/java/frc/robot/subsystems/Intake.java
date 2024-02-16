@@ -89,7 +89,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void intakeSetPivotState(IntakePivotState state) {
-    if (RobotContainer.intakeCanMove) {
+    if (Shooter.intakeCanMove) {
       intakePivotEncoder.setPosition((intakeAngleEncoder.getAbsolutePosition().getValueAsDouble() * 360) * Constants.IntakeConstants.INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
       switch(state) {
         case NONE:

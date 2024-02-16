@@ -59,10 +59,6 @@ public class RobotContainer {
   
   //private Climber climber;
 
-  public static boolean intakeCanMove;
-
-  public static boolean shooterReadyToShoot;
-
   SequentialCommandGroup autoCommands;
 
   public RobotContainer() {
@@ -77,9 +73,6 @@ public class RobotContainer {
     vision = new Vision();
     //climber = new Climber();
     joyDrive = new TeleopJoystickDrive(swerveDrive, driveStick, input, true);
-
-    intakeCanMove = true;
-    shooterReadyToShoot = false;
 
     configureBindings();
   }
