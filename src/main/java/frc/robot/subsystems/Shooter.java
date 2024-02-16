@@ -53,7 +53,8 @@ public class Shooter extends SubsystemBase {
     START,
     AMP,
     DEFAULT_SHOOT,
-    VISION_SHOOT;
+    VISION_SHOOT,
+    SHOOTER_NONE;
     //TRAP,
   }
 
@@ -122,6 +123,9 @@ public class Shooter extends SubsystemBase {
       shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_DEFAULT_SHOOTING_POS, ControlType.kSmartMotion);
       targetAngle = Constants.ShooterConstants.SHOOTER_DEFAULT_SHOOTING_POS;
       break;
+      case SHOOTER_NONE:
+      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_NONE_POS, ControlType.kSmartMotion);
+      targetAngle = Constants.ShooterConstants.SHOOTER_NONE_POS;
       // case TRAP:
     }
   }

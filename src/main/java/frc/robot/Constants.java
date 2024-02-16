@@ -273,6 +273,7 @@ import frc.robot.CustomTypes.Math.Vector3;
     public final static double SHOOTER_START_POS = 65 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_DEFAULT_SHOOTING_POS = 45 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_DEFAULT_AMP_POS = 55 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+    public final static double SHOOTER_NONE_POS = 45 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
 
     public final static double SHOOTER_PIVOT_ALLOWED_OFFSET = 1;
     public final static double LEFT_SHOOTER_ALLOWED_DIFFERENTIAL = 0;
