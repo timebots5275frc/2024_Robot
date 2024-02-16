@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.CustomTypes.ManagerCommand;
 import frc.robot.CustomTypes.Math.Vector2;
 import frc.robot.CustomTypes.Math.Vector3;
@@ -38,17 +39,19 @@ public class AutoVisionAmpShoot extends ManagerCommand {
       Vector2 horizontalAprilTagPosition = new Vector2(aprilTagPosInTargetSpace.x, aprilTagPosInTargetSpace.z);
       double aprilTagDistance = horizontalAprilTagPosition.magnitude();
 
-      if (aprilTagDistance > ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE || aprilTagDistance < ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE)
+      if (aprilTagDistance < VisionConstants.MAX_AMP_TARGET_DISTANCE)
       {
-        Vector2 targetPosRelativeToAprilTag = Vector2.clampMagnitude(horizontalAprilTagPosition, ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE, ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE);
+        Command driveToPointInFrontOfAmpCommand = new AutoVisionDrive(swerveDrive, vision, VisionConstants.AMP_VISION_DRIVE_TARGET);
 
-        Command driveToPointInBoundsCommand = new AutoVisionDrive(swerveDrive, vision, targetPosRelativeToAprilTag);
-        Command setShooterAngleCommand = new ParallelCommandGroup(new ShooterRunCommand(shooter, ShooterRunState.SHOOT), new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT)).until(shooter.ShotNote);
-        subCommand = new SequentialCommandGroup(driveToPointInBoundsCommand, setShooterAngleCommand);
+        Vector2 driveIntoAmpDistance = VisionConstants.AMP_VISION_DRIVE_TARGET;
+        driveIntoAmpDistance.y -= .1;
+        Command driveIntoAmpCommand = new AutoOdometryDrive(swerveDrive, driveIntoAmpDistance, .5);
+
+        Command setShooterAngleCommand = new ShooterPivotCommand(shooter, ShooterPivotState.AMP);
+        Command shootNoteCommand = new ShooterRunCommand(shooter, ShooterRunState.AMP);
+        subCommand = new SequentialCommandGroup(driveToPointInFrontOfAmpCommand, setShooterAngleCommand, driveIntoAmpCommand, shootNoteCommand);
       }
-      else { subCommand = new ParallelCommandGroup(new ShooterRunCommand(shooter, ShooterRunState.SHOOT), new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT)).until(shooter.ShotNote); }
-
-      subCommand.schedule();
+      else { finished = true; }
     }
     else { finished = true; }
   }

@@ -162,6 +162,7 @@ import frc.robot.CustomTypes.Math.Vector3;
     public static final double TARGET_POSITION_ALLOWED_ERROR = .1;
 
     public static final double MAX_AMP_TARGET_DISTANCE = 3;
+    public static final Vector2 AMP_VISION_DRIVE_TARGET = new Vector2(0, .5);
 
     public static enum AprilTagData
     {
