@@ -43,7 +43,7 @@ public class RobotContainer {
   
   SwerveDrive swerveDrive;
   Shooter shooter;
-  //Intake intake;
+  Intake intake;
   Vision vision;
 
   Joystick driveStick;
@@ -66,7 +66,7 @@ public class RobotContainer {
   public RobotContainer() {
     swerveDrive = new SwerveDrive();
     shooter = new Shooter();
-    //intake = new Intake();
+    intake = new Intake();
 
     driveStick = new Joystick(0);
     //buttonBoard = new GenericHID(1);
@@ -103,18 +103,18 @@ public class RobotContainer {
   
     // Test Buttons
 
-    //new JoystickButton(driveStick, 3).onTrue(new IntakePivotCommand(intake, IntakePivotState.IN));
-    //new JoystickButton(driveStick, 4).onTrue(new IntakePivotCommand(intake, IntakePivotState.OUT));
+    new JoystickButton(driveStick, 3).onTrue(new IntakePivotCommand(intake, IntakePivotState.IN));
+    new JoystickButton(driveStick, 4).onTrue(new IntakePivotCommand(intake, IntakePivotState.OUT));
 
-    //new JoystickButton(driveStick, 5).onTrue(new IntakeRunCommand(intake, IntakeRunState.FORWARD));
-    //new JoystickButton(driveStick, 6).onTrue(new IntakeRunCommand(intake, IntakeRunState.REVERSE));
-    //new JoystickButton(driveStick, 2).onTrue(new IntakeRunCommand(intake, IntakeRunState.NONE));
+    new JoystickButton(driveStick, 5).onTrue(new IntakeRunCommand(intake, IntakeRunState.FORWARD));
+    new JoystickButton(driveStick, 6).onTrue(new IntakeRunCommand(intake, IntakeRunState.REVERSE));
+    new JoystickButton(driveStick, 2).onTrue(new IntakeRunCommand(intake, IntakeRunState.NONE));
 
-    new JoystickButton(driveStick,3).onTrue(new ShooterRunCommand(shooter, ShooterRunState.NONE));
-    new JoystickButton(driveStick, 4).onTrue(new ShooterRunCommand(shooter, ShooterRunState.SHOOT));
+    new JoystickButton(driveStick,11).onTrue(new ShooterRunCommand(shooter, ShooterRunState.NONE));
+    new JoystickButton(driveStick, 12).onTrue(new ShooterRunCommand(shooter, ShooterRunState.SHOOT));
 
-    new JoystickButton(driveStick, 5).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.DEFAULT_SHOOT));
-    new JoystickButton(driveStick, 6).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.AMP));
+    // new JoystickButton(driveStick, 5).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.DEFAULT_SHOOT));
+    // new JoystickButton(driveStick, 6).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.AMP));
 
 
   }

@@ -226,9 +226,8 @@ import frc.robot.CustomTypes.Math.Vector3;
   public static class ClimberConstants {
     public static final int CLIMBER_MOTOR_L_ID  = 40;
     public static final int CLIMBER_MOTOR_R_ID  = 41;
-    public static final int CLIMBER_MAX       = 320;
-    public static final int CLIMBER_MIN       = 0;
-    public static final double CLIMBER_MAX_VEL   = 120f;
+    public static final double CLIMBER_MAX_POS = 0;
+    public static final double CLIMBER_SPEED = 7500;
     public static final PID_Values ClimberMotorPIDs = new PID_Values(
       0.0, 
     0.0,
@@ -264,7 +263,7 @@ import frc.robot.CustomTypes.Math.Vector3;
     public final static int PIVOT_SHOOTER_ID = 30;
     public final static int PIVOT_SHOOTER_CANCODER_ID = 33;
 
-    public final static double LEFT_SHOOTER_SPEED = 2100;
+    public final static double LEFT_SHOOTER_SPEED = 4000;
     public final static double RIGHT_SHOOTER_SPEED = 0.5 * LEFT_SHOOTER_SPEED;
 
     public final static double LEFT_AMP_SPEED = 500;

@@ -23,6 +23,7 @@ public class Climber extends SubsystemBase {
   private RelativeEncoder motorREndcoder;
   public Climber() {
     motorL = new CANSparkMax(Constants.ClimberConstants.CLIMBER_MOTOR_L_ID, MotorType.kBrushless);
+    motorL.setInverted(true);
     motorLpid = motorL.getPIDController();
     motorLEncoder = motorL.getEncoder();
     motorLpid.setP(Constants.ClimberConstants.ClimberMotorPIDs.P);
@@ -30,7 +31,7 @@ public class Climber extends SubsystemBase {
     motorLpid.setD(Constants.ClimberConstants.ClimberMotorPIDs.D);
     motorLpid.setFF(Constants.ClimberConstants.ClimberMotorPIDs.kFF);
     motorLpid.setIZone(Constants.ClimberConstants.ClimberMotorPIDs.IZ);
-    motorLpid.setSmartMotionMaxVelocity(Constants.ClimberConstants.CLIMBER_MAX_VEL,0);
+    motorLpid.setSmartMotionMaxVelocity(Constants.ClimberConstants.CLIMBER_SPEED,0);
 
     motorR = new CANSparkMax(Constants.ClimberConstants.CLIMBER_MOTOR_R_ID, MotorType.kBrushless);
     motorRpid = motorR.getPIDController();
@@ -40,7 +41,7 @@ public class Climber extends SubsystemBase {
     motorRpid.setD(Constants.ClimberConstants.ClimberMotorPIDs.D);
     motorRpid.setFF(Constants.ClimberConstants.ClimberMotorPIDs.kFF);
     motorRpid.setIZone(Constants.ClimberConstants.ClimberMotorPIDs.IZ);
-    motorRpid.setSmartMotionMaxVelocity(Constants.ClimberConstants.CLIMBER_MAX_VEL, 0);
+    motorRpid.setSmartMotionMaxVelocity(Constants.ClimberConstants.CLIMBER_SPEED, 0);
 
   }
   public enum ClimberMode {
@@ -52,15 +53,17 @@ public class Climber extends SubsystemBase {
   public void setClimberState(ClimberMode mode) {
     switch(mode) {
       case EXTEND: 
-      motorLpid.setReference(Constants.ClimberConstants.CLIMBER_MAX, ControlType.kSmartMotion);
-      motorRpid.setReference(Constants.ClimberConstants.CLIMBER_MAX, ControlType.kSmartMotion);
+      motorLpid.setReference(Constants.ClimberConstants.CLIMBER_SPEED, ControlType.kVelocity);
+      motorRpid.setReference(Constants.ClimberConstants.CLIMBER_SPEED, ControlType.kVelocity);
       break;
       case RETRACT:
-      motorLpid.setReference(Constants.ClimberConstants.CLIMBER_MIN, ControlType.kSmartMotion);
-      motorRpid.setReference(Constants.ClimberConstants.CLIMBER_MIN, ControlType.kSmartMotion);
+
+      motorLpid.setReference(-Constants.ClimberConstants.CLIMBER_SPEED, ControlType.kVelocity);
+      motorRpid.setReference(-Constants.ClimberConstants.CLIMBER_SPEED, ControlType.kVelocity);
+      break;
       case RESET:
-      motorLpid.setReference(0, ControlType.kCurrent);
-      motorRpid.setReference(0, ControlType.kCurrent);
+      motorLpid.setReference(-12, ControlType.kCurrent);
+      motorRpid.setReference(-12, ControlType.kCurrent);
       motorLEncoder.setPosition(0);
       motorREndcoder.setPosition(0);
     }
@@ -70,6 +73,6 @@ public class Climber extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    
+
   }
 }

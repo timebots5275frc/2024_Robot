@@ -32,10 +32,7 @@ public class Intake extends SubsystemBase {
   private RelativeEncoder intakePivotEncoder;
   private CANcoder intakeAngleEncoder;
 
-  private IntakePivotState currentPivotState;
-
   private DigitalInput limitSwitch;
-  private DigitalInput limitSwitch2;
 
   private IntakePivotState actualPivotState;
 
@@ -88,8 +85,7 @@ public class Intake extends SubsystemBase {
 
     actualPivotState = IntakePivotState.NONE;
 
-    limitSwitch = new DigitalInput(0);
-    limitSwitch2 = new DigitalInput(1);
+    limitSwitch = new DigitalInput(9);
   }
 
   public void intakeSetPivotState(IntakePivotState state) {
@@ -143,15 +139,15 @@ public class Intake extends SubsystemBase {
   //   }
   // }
 
-  // public void autoFlip() {
-  //   if (actualPivotState == IntakePivotState.NONE && limitSwitchPressed() && intakePivotEncoder.getPosition() < Constants.IntakeConstants.INTAKE_UP_POS) {
-  //     intakeSetPivotState(IntakePivotState.IN);
-  //     intakeSetRunState(IntakeRunState.NONE);
-  //   }
-  // }
+  public void autoFlip() {
+    if (actualPivotState == IntakePivotState.NONE && limitSwitchPressed() && intakePivotEncoder.getPosition() < Constants.IntakeConstants.INTAKE_UP_POS) {
+      // intakeSetPivotState(IntakePivotState.IN);
+      intakeSetRunState(IntakeRunState.NONE);
+    }
+  }
 
   public boolean limitSwitchPressed() {
-    return limitSwitch.get() || limitSwitch2.get();
+    return limitSwitch.get();
   }
 
   // public BooleanSupplier autoIntake = new BooleanSupplier() {
@@ -168,7 +164,7 @@ public class Intake extends SubsystemBase {
     if (targetReached) {
       intakeSetPivotState(IntakePivotState.NONE);
     }
-    // autoFlip();
+    autoFlip();
     // autoFeedShooter();
   }
 }
