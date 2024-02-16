@@ -45,6 +45,9 @@ public class Shooter extends SubsystemBase {
   public static boolean intakeCanMove = true;
   public static boolean readyToShoot = false;
 
+  private ShooterPivotState currentPivotState;
+  private ShooterRunState currentRunState;
+
   public BooleanSupplier ShotNote = new BooleanSupplier() {
     public boolean getAsBoolean() { return false; };
   };
@@ -104,6 +107,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public void shooterSetPivotState(ShooterPivotState state) {
+    currentPivotState = state;
+
     shooterPivotEncoder.setPosition(getShooterAngle() * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE);
     switch(state) {
       case START:
@@ -131,6 +136,8 @@ public class Shooter extends SubsystemBase {
   }
 
     public void shooterSetRunState(ShooterRunState state) {
+      currentRunState = state;
+
     switch(state) {
       case NONE:
       leftShooterRunPID.setReference(0, ControlType.kVelocity);
@@ -172,6 +179,9 @@ public class Shooter extends SubsystemBase {
   public double getShooterEndHeight() {
     return Math.sin(Math.toRadians(getShooterAngle())) * ShooterConstants.SHOOTER_LENGTH;
   }
+
+  public ShooterPivotState getCurrentPivotState() { return currentPivotState; }
+  public ShooterRunState getCurrentRunState() { return currentRunState; }
 
   @Override
   public void periodic() {
