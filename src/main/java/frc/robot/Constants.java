@@ -270,10 +270,10 @@ import frc.robot.CustomTypes.Math.Vector3;
     public final static double LEFT_AMP_SPEED = 500;
     public final static double RIGHT_AMP_SPEED = -0.5 * LEFT_AMP_SPEED;
 
-    public final static double SHOOTER_RESET_POS = 0 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
-    public final static double SHOOTER_START_POS = 10 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
-    public final static double SHOOTER_DEFAULT_SHOOTING_POS = 0.0;
-    public final static double SHOOTER_DEFAULT_AMP_POS = 0;
+    public final static double SHOOTER_RESET_POS = 65 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+    public final static double SHOOTER_START_POS = 65 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+    public final static double SHOOTER_DEFAULT_SHOOTING_POS = 45 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+    public final static double SHOOTER_DEFAULT_AMP_POS = 55 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
 
     public final static double SHOOTER_PIVOT_ALLOWED_OFFSET = 1;
     public final static double LEFT_SHOOTER_ALLOWED_DIFFERENTIAL = 0;
@@ -287,6 +287,8 @@ import frc.robot.CustomTypes.Math.Vector3;
     public final static double SHOOTER_LENGTH = 0;
 
     public final static double SHOOTER_OFFSET_FROM_GROUND = 0;
+
+    public final static double SHOOTER_MAX_INTAKE_ANGLE = 56;
   }
 
   public static class IntakeConstants {
@@ -314,9 +316,9 @@ import frc.robot.CustomTypes.Math.Vector3;
     public static final double INTAKE_PIVOT_ROTATIONS_PER_DEGREE = INTAKE_PIVOT_GEAR_RATIO / 360;
     // Positions of intake in motor rotations
 
-    public static final double INTAKE_IN_POS = 37.8 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
-    public static final double INTAKE_OUT_POS = 267 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
-    public static final double INTAKE_UP_POS = 0 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
+    public static final double INTAKE_IN_POS = 224.5 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
+    public static final double INTAKE_OUT_POS = 5.4 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
+    public static final double INTAKE_UP_POS = 32 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
     public static final double INTAKE_PIVOT_ALLOWED_OFFSET = 5 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
 
     public static final double INTAKE_RUN_SPEED = 1200;

@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
 
@@ -36,8 +38,6 @@ public class Intake extends SubsystemBase {
   private DigitalInput limitSwitch2;
 
   private IntakePivotState actualPivotState;
-
-  Shooter shooter;
 
   public enum IntakePivotState {
     NONE,
@@ -62,7 +62,7 @@ public class Intake extends SubsystemBase {
   }
 
 
-  public Intake(Shooter shooter) {
+  public Intake() {
     intakeRunMotor = new CANSparkMax(Constants.IntakeConstants.INTAKE_RUN_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
     intakeRunPID = intakeRunMotor.getPIDController();
     intakeRunEncoder = intakeRunMotor.getEncoder();
@@ -90,12 +90,10 @@ public class Intake extends SubsystemBase {
 
     limitSwitch = new DigitalInput(0);
     limitSwitch2 = new DigitalInput(1);
-
-    this.shooter = shooter;
   }
 
   public void intakeSetPivotState(IntakePivotState state) {
-    if (shooter.shooterOutOfWay()) {
+    if (RobotContainer.intakeCanMove) {
       intakePivotEncoder.setPosition((intakeAngleEncoder.getAbsolutePosition().getValueAsDouble() * 360) * Constants.IntakeConstants.INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
       switch(state) {
         case NONE:
@@ -139,18 +137,18 @@ public class Intake extends SubsystemBase {
   }
 
 
-  public void autoFeedShooter() {
-    if (shooter.readyToShoot() && intakePivotEncoder.getPosition() > Constants.IntakeConstants.INTAKE_UP_POS) {
-      intakeSetRunState(IntakeRunState.FORWARD);
-    }
-  }
+  // public void autoFeedShooter() {
+  //   if (RobotContainer.shooterReadyToShoot && intakePivotEncoder.getPosition() > Constants.IntakeConstants.INTAKE_UP_POS) {
+  //     intakeSetRunState(IntakeRunState.FORWARD);
+  //   }
+  // }
 
-  public void autoFlip() {
-    if (actualPivotState == IntakePivotState.NONE && limitSwitchPressed() && intakePivotEncoder.getPosition() < Constants.IntakeConstants.INTAKE_UP_POS) {
-      intakeSetPivotState(IntakePivotState.IN);
-      intakeSetRunState(IntakeRunState.NONE);
-    }
-  }
+  // public void autoFlip() {
+  //   if (actualPivotState == IntakePivotState.NONE && limitSwitchPressed() && intakePivotEncoder.getPosition() < Constants.IntakeConstants.INTAKE_UP_POS) {
+  //     intakeSetPivotState(IntakePivotState.IN);
+  //     intakeSetRunState(IntakeRunState.NONE);
+  //   }
+  // }
 
   public boolean limitSwitchPressed() {
     return limitSwitch.get() || limitSwitch2.get();
@@ -170,8 +168,8 @@ public class Intake extends SubsystemBase {
     if (targetReached) {
       intakeSetPivotState(IntakePivotState.NONE);
     }
-    autoFlip();
-    autoFeedShooter();
+    // autoFlip();
+    // autoFeedShooter();
   }
 }
 

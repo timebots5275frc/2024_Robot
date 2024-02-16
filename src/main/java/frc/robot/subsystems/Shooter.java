@@ -18,6 +18,7 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Vision.VisionShooterCalculator;
 
@@ -153,12 +154,12 @@ public class Shooter extends SubsystemBase {
     return pivotReached && lSpeedReached && rSpeedReached;
   }
 
-  public boolean shooterOutOfWay() {
-    return shooterPivotEncoder.getPosition() > 0;
+  private boolean shooterOutOfWay() {
+    return shooterPivotEncoder.getPosition() < ShooterConstants.SHOOTER_MAX_INTAKE_ANGLE;
   }
 
   public double getShooterAngle() {
-    return -angleEncoder.getAbsolutePosition().getValueAsDouble() * 360;
+    return angleEncoder.getAbsolutePosition().getValueAsDouble() * 360;
   }
 
   public double getShooterEndHeight() {
@@ -171,5 +172,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter CANCODER Pos", angleEncoder.getAbsolutePosition().getValueAsDouble() * 360);
     SmartDashboard.putNumber("Left shooter velocity", leftShooterRunEncoder.getVelocity());
     SmartDashboard.putNumber("Right shooter vleocity", rightShooterRunEncoder.getVelocity());
+    RobotContainer.intakeCanMove = shooterOutOfWay();
+    RobotContainer.shooterReadyToShoot = readyToShoot();
   }
 }
