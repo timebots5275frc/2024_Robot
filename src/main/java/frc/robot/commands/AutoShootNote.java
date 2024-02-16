@@ -21,6 +21,7 @@ public class AutoShootNote extends ManagerCommand {
   ShooterPivotState shooterPivot;
   ShooterRunState shooterRun;
 
+  boolean setAngle;
   boolean finished = false;
 
   public AutoShootNote(Shooter shooter, Intake intake, ShooterPivotState shooterPivot, ShooterRunState shooterRun) {
@@ -28,6 +29,17 @@ public class AutoShootNote extends ManagerCommand {
     this.intake = intake;
     this.shooterPivot = shooterPivot;
     this.shooterRun = shooterRun;
+
+    this.setAngle = true;
+  }
+
+  public AutoShootNote(Shooter shooter, Intake intake, ShooterRunState shooterRun) {
+    this.shooter = shooter;
+    this.intake = intake;
+    this.shooterPivot = ShooterPivotState.SHOOTER_NONE;
+    this.shooterRun = shooterRun;
+
+    this.setAngle = false;
   }
 
   @Override
@@ -39,8 +51,11 @@ public class AutoShootNote extends ManagerCommand {
       Command shootNoteIntoShooterCommand = new IntakeRunCommand(intake, IntakeRunState.FORWARD).until(intake.LimitSwitchIsNotPressed).andThen(new IntakeRunCommand(intake, IntakeRunState.NONE));
       Command resetShooterCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE), new ShooterRunCommand(shooter, ShooterRunState.NONE));
       Command shootNoteCommand = new ShooterRunCommand(shooter, shooterRun).until(shooter.ShotNote).andThen(resetShooterCommand);
-      
-      SequentialCommandGroup seqCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, shooterPivot), new IntakePivotCommand(intake, IntakePivotState.IN), new ParallelCommandGroup(shootNoteIntoShooterCommand, shootNoteCommand));
+
+      SequentialCommandGroup seqCommand = new SequentialCommandGroup();
+
+      if (setAngle) { seqCommand.addCommands(new ShooterPivotCommand(shooter, shooterPivot)); }
+      seqCommand.addCommands(new IntakePivotCommand(intake, IntakePivotState.IN), new ParallelCommandGroup(shootNoteIntoShooterCommand, shootNoteCommand));
 
       subCommand = seqCommand;
       subCommand.schedule();
@@ -48,7 +63,6 @@ public class AutoShootNote extends ManagerCommand {
     else { finished = true; }
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return finished;

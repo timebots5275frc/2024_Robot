@@ -12,6 +12,7 @@ import frc.robot.Constants.VisionConstants;
 import frc.robot.CustomTypes.ManagerCommand;
 import frc.robot.CustomTypes.Math.Vector2;
 import frc.robot.CustomTypes.Math.Vector3;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterPivotState;
 import frc.robot.subsystems.Shooter.ShooterRunState;
@@ -22,10 +23,11 @@ public class AutoVisionAmpShoot extends ManagerCommand {
   SwerveDrive swerveDrive;
   Vision vision;
   Shooter shooter;
+  Intake intake;
 
   boolean finished = false;
 
-  public AutoVisionAmpShoot(SwerveDrive swerveDrive, Vision vision, Shooter shooter) {
+  public AutoVisionAmpShoot(SwerveDrive swerveDrive, Vision vision, Shooter shooter, Intake intake) {
     this.swerveDrive = swerveDrive;
     this.vision = vision;
     this.shooter = shooter;
@@ -48,7 +50,7 @@ public class AutoVisionAmpShoot extends ManagerCommand {
         Command driveIntoAmpCommand = new AutoOdometryDrive(swerveDrive, driveIntoAmpDistance, .5);
 
         Command setShooterAngleCommand = new ShooterPivotCommand(shooter, ShooterPivotState.AMP);
-        Command shootNoteCommand = new ShooterRunCommand(shooter, ShooterRunState.AMP);
+        Command shootNoteCommand = new AutoShootNote(shooter, intake, ShooterPivotState.AMP, ShooterRunState.AMP);
         subCommand = new SequentialCommandGroup(driveToPointInFrontOfAmpCommand, setShooterAngleCommand, driveIntoAmpCommand, shootNoteCommand);
       }
       else { finished = true; }
