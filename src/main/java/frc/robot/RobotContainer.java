@@ -8,6 +8,7 @@ import frc.robot.commands.AutoIntake;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.IntakePivotCommand;
 import frc.robot.commands.IntakeRunCommand;
+import frc.robot.commands.ResetClimberCommand;
 import frc.robot.commands.ShooterPivotCommand;
 import frc.robot.commands.ShooterRunCommand;
 //import frc.robot.commands.IntakeRunCommand;
@@ -45,6 +46,7 @@ public class RobotContainer {
   Shooter shooter;
   Intake intake;
   Vision vision;
+  Climber climber;
 
   Joystick driveStick;
   //GenericHID buttonBoard;
@@ -67,6 +69,7 @@ public class RobotContainer {
     swerveDrive = new SwerveDrive();
     shooter = new Shooter();
     intake = new Intake();
+    climber = new Climber();
 
     driveStick = new Joystick(0);
     //buttonBoard = new GenericHID(1);
@@ -112,6 +115,10 @@ public class RobotContainer {
 
     new JoystickButton(driveStick,11).onTrue(new ShooterRunCommand(shooter, ShooterRunState.NONE));
     new JoystickButton(driveStick, 12).onTrue(new ShooterRunCommand(shooter, ShooterRunState.SHOOT));
+
+    new JoystickButton(driveStick, 0).whileTrue(new ClimberCommand(climber, ClimberMode.EXTEND));
+    new JoystickButton(driveStick, 0).whileTrue(new ClimberCommand(climber, ClimberMode.RETRACT));
+    new JoystickButton(driveStick, 0).whileTrue(new ResetClimberCommand(climber));
 
     // new JoystickButton(driveStick, 5).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.DEFAULT_SHOOT));
     // new JoystickButton(driveStick, 6).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.AMP));

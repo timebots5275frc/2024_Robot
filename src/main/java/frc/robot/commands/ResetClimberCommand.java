@@ -8,14 +8,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Climber.ClimberMode;
 
-public class ClimberCommand extends Command {
-  /** Creates a new ClimberCommand. */
-  private Climber cl;
-  private  ClimberMode mode;
-  public ClimberCommand(Climber _cl, ClimberMode _mode) {
-    cl = _cl;
-    mode = _mode;
-    addRequirements(cl);
+public class ResetClimberCommand extends Command {
+
+  Climber climber;
+
+  public ResetClimberCommand(Climber climber) {
+    this.climber = climber;
+    addRequirements(this.climber);
   }
 
   // Called when the command is initially scheduled.
@@ -25,18 +24,18 @@ public class ClimberCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    cl.setClimberState(mode);
+    climber.setClimberState(ClimberMode.RESET);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    cl.setClimberState(ClimberMode.NONE);
+    climber.setClimberState(ClimberMode.NONE);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
-  } 
+  }
 }
