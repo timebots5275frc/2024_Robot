@@ -9,6 +9,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 
+import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkLowLevel;
@@ -36,6 +37,14 @@ public class Intake extends SubsystemBase {
 
   private IntakePivotState currentPivotState;
   private IntakeRunState currentRunState;
+
+  public BooleanSupplier LimitSwitchIsPressed = new BooleanSupplier() {
+    public boolean getAsBoolean() { return limitSwitchPressed(); };
+  };
+
+  public BooleanSupplier LimitSwitchIsNotPressed = new BooleanSupplier() {
+    public boolean getAsBoolean() { return !limitSwitchPressed(); };
+  };
 
   public enum IntakePivotState {
     NONE,

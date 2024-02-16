@@ -5,11 +5,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.CustomTypes.ManagerCommand;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Intake.IntakePivotState;
+import frc.robot.subsystems.Intake.IntakeRunState;
 import frc.robot.subsystems.Shooter.ShooterPivotState;
 import frc.robot.subsystems.Shooter.ShooterRunState;
 
@@ -34,12 +36,11 @@ public class AutoShootNote extends ManagerCommand {
     
     if (intake.limitSwitchPressed())
     {
-      SequentialCommandGroup seqCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, shooterPivot), new IntakePivotCommand(intake, IntakePivotState.IN));
-
+      Command shootNoteIntoShooterCommand = new IntakeRunCommand(intake, IntakeRunState.FORWARD).until(intake.LimitSwitchIsNotPressed).andThen(new IntakeRunCommand(intake, IntakeRunState.NONE));
       Command resetShooterCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE), new ShooterRunCommand(shooter, ShooterRunState.NONE));
       Command shootNoteCommand = new ShooterRunCommand(shooter, shooterRun).until(shooter.ShotNote).andThen(resetShooterCommand);
-
-      seqCommand.addCommands(shootNoteCommand);
+      
+      SequentialCommandGroup seqCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, shooterPivot), new IntakePivotCommand(intake, IntakePivotState.IN), new ParallelCommandGroup(shootNoteIntoShooterCommand, shootNoteCommand));
 
       subCommand = seqCommand;
       subCommand.schedule();
