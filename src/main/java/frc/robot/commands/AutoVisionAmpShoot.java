@@ -50,7 +50,7 @@ public class AutoVisionAmpShoot extends ManagerCommand {
         Command driveIntoAmpCommand = new AutoOdometryDrive(swerveDrive, driveIntoAmpDistance, .5);
 
         Command setShooterAngleCommand = new ShooterPivotCommand(shooter, ShooterPivotState.AMP);
-        Command shootNoteCommand = new AutoShootNote(shooter, intake, ShooterRunState.AMP);
+        Command shootNoteCommand = new AutoShootNote(shooter, intake, ShooterPivotState.AMP, ShooterRunState.AMP);
         subCommand = new SequentialCommandGroup(driveToPointInFrontOfAmpCommand, setShooterAngleCommand, driveIntoAmpCommand, shootNoteCommand);
       }
       else { finished = true; }
