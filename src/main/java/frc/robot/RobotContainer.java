@@ -29,7 +29,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-//import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -83,7 +82,7 @@ public class RobotContainer {
 
     //.onTrue() calls command once per button press
     //.whileTrue() calls command while button is held or until command finishes
-    //.toggleOnTrue() makes a toggle which runs when pressed and then stops when presse again
+    //.toggleOnTrue() makes a toggle which runs when pressed and then stops when pressed again
 
 
     // new JoystickButton(driveStick, 6).onTrue(new IntakePivotCommand(intake, IntakePivotState.IN));
@@ -119,11 +118,6 @@ public class RobotContainer {
 
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
   public Command getAutonomousCommand() {
     
     return null;
