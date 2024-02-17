@@ -57,7 +57,8 @@ public class Shooter extends SubsystemBase {
     AMP,
     DEFAULT_SHOOT,
     VISION_SHOOT,
-    SHOOTER_NONE;
+    SHOOTER_NONE,
+    STUPID_POS;
     //TRAP,
   }
 
@@ -131,6 +132,10 @@ public class Shooter extends SubsystemBase {
       case SHOOTER_NONE:
       shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_NONE_POS, ControlType.kSmartMotion);
       targetAngle = Constants.ShooterConstants.SHOOTER_NONE_POS;
+      break;
+      case STUPID_POS: 
+      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_STUPID_POS, ControlType.kSmartMotion);
+      targetAngle = Constants.ShooterConstants.SHOOTER_STUPID_POS;
       // case TRAP:
     }
   }
@@ -190,6 +195,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Left shooter velocity", leftShooterRunEncoder.getVelocity());
     SmartDashboard.putNumber("Right shooter vleocity", rightShooterRunEncoder.getVelocity());
     Shooter.intakeCanMove = shooterOutOfWay();
+    SmartDashboard.putBoolean("Shooter Out of way", intakeCanMove);
     Shooter.readyToShoot = readyToShoot();
   }
 }

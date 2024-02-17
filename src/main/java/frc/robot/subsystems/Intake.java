@@ -149,7 +149,7 @@ public class Intake extends SubsystemBase {
 
   public void autoFlip() {
     if (currentPivotState == IntakePivotState.NONE && limitSwitchPressed() && intakePivotEncoder.getPosition() < Constants.IntakeConstants.INTAKE_UP_POS) {
-      // intakeSetPivotState(IntakePivotState.IN);
+      intakeSetPivotState(IntakePivotState.IN);
       intakeSetRunState(IntakeRunState.NONE);
     }
   }

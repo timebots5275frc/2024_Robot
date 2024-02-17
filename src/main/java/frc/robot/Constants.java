@@ -229,8 +229,8 @@ import frc.robot.CustomTypes.Math.Vector3;
   public static class ClimberConstants {
     public static final int CLIMBER_MOTOR_L_ID  = 40;
     public static final int CLIMBER_MOTOR_R_ID  = 41;
-    public static final double CLIMBER_MAX_POS = 230;
-    public static final double CLIMBER_SPEED = 6000;
+    public static final double CLIMBER_MAX_POS = 230 * 2.25;
+    public static final double CLIMBER_SPEED = 9000;
     public static final PID_Values ClimberMotorPIDs = new PID_Values(
       0.00016, 
     0.0,
@@ -269,14 +269,15 @@ import frc.robot.CustomTypes.Math.Vector3;
     public final static double LEFT_SHOOTER_SPEED = 4000;
     public final static double RIGHT_SHOOTER_SPEED = 0.5 * LEFT_SHOOTER_SPEED;
 
-    public final static double LEFT_AMP_SPEED = 500;
-    public final static double RIGHT_AMP_SPEED = -0.5 * LEFT_AMP_SPEED;
+    public final static double LEFT_AMP_SPEED = 731;
+    public final static double RIGHT_AMP_SPEED = LEFT_AMP_SPEED;
 
     public final static double SHOOTER_RESET_POS = 65 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_START_POS = 65 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
-    public final static double SHOOTER_DEFAULT_SHOOTING_POS = 45 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
-    public final static double SHOOTER_DEFAULT_AMP_POS = 55 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
-    public final static double SHOOTER_NONE_POS = 45 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+    public final static double SHOOTER_DEFAULT_SHOOTING_POS = 58 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+    public final static double SHOOTER_DEFAULT_AMP_POS = 56 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+    public final static double SHOOTER_NONE_POS = 55 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+    public final static double SHOOTER_STUPID_POS = 78 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
 
     public final static double SHOOTER_PIVOT_ALLOWED_OFFSET = 1;
     public final static double LEFT_SHOOTER_ALLOWED_DIFFERENTIAL = 0;
@@ -291,7 +292,7 @@ import frc.robot.CustomTypes.Math.Vector3;
 
     public final static double SHOOTER_OFFSET_FROM_GROUND = 0;
 
-    public final static double SHOOTER_MAX_INTAKE_ANGLE = 60;
+    public final static double SHOOTER_MAX_INTAKE_ANGLE = 59 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
   }
 
   public static class IntakeConstants {
@@ -300,7 +301,7 @@ import frc.robot.CustomTypes.Math.Vector3;
     0.0,
     0.0,
     0.0,
-    0.005);
+    0.003);
 
     public static final PID_Values IntakePivotPIDs = new PID_Values(
     0.000085, 
@@ -324,7 +325,7 @@ import frc.robot.CustomTypes.Math.Vector3;
     public static final double INTAKE_UP_POS = 32 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
     public static final double INTAKE_PIVOT_ALLOWED_OFFSET = 5 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
 
-    public static final double INTAKE_RUN_SPEED = 1200;
+    public static final double INTAKE_RUN_SPEED = 400;
 
   }
 

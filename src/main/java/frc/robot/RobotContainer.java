@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import frc.robot.CustomTypes.Math.Vector2;
 import frc.robot.commands.AutoIntake;
+import frc.robot.commands.AutoVisionDrive;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.IntakePivotCommand;
 import frc.robot.commands.IntakeRunCommand;
@@ -98,19 +100,30 @@ public class RobotContainer {
   
     // Test Buttons
 
-    new JoystickButton(driveStick, 3).onTrue(new IntakePivotCommand(intake, IntakePivotState.IN));
-    new JoystickButton(driveStick, 4).onTrue(new IntakePivotCommand(intake, IntakePivotState.OUT));
+    new JoystickButton(driveStick, 5).onTrue(new IntakePivotCommand(intake, IntakePivotState.IN));
+    new JoystickButton(driveStick, 6).onTrue(new IntakePivotCommand(intake, IntakePivotState.OUT));
 
-    new JoystickButton(driveStick, 5).onTrue(new IntakeRunCommand(intake, IntakeRunState.FORWARD));
-    new JoystickButton(driveStick, 6).onTrue(new IntakeRunCommand(intake, IntakeRunState.REVERSE));
-    new JoystickButton(driveStick, 2).onTrue(new IntakeRunCommand(intake, IntakeRunState.NONE));
+    new JoystickButton(buttonBoard, 6).onTrue(new IntakeRunCommand(intake, IntakeRunState.FORWARD));
+    new JoystickButton(driveStick, 3).onTrue(new IntakeRunCommand(intake, IntakeRunState.REVERSE));
+    new JoystickButton(driveStick, 4).onTrue(new IntakeRunCommand(intake, IntakeRunState.NONE));
 
-    new JoystickButton(driveStick,11).onTrue(new ShooterRunCommand(shooter, ShooterRunState.NONE));
-    new JoystickButton(driveStick, 12).onTrue(new ShooterRunCommand(shooter, ShooterRunState.SHOOT));
+    new JoystickButton(buttonBoard,9).onTrue(new ShooterRunCommand(shooter, ShooterRunState.NONE));
+    new JoystickButton(buttonBoard, 11).onTrue(new ShooterRunCommand(shooter, ShooterRunState.SHOOT));
+    new JoystickButton(buttonBoard, 7).onTrue(new ShooterRunCommand(shooter, ShooterRunState.AMP));
+
+
+    //new JoystickButton(buttonBoard, 0).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.START));
+    new JoystickButton(buttonBoard, 4).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE));
+    new JoystickButton(buttonBoard, 3).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.DEFAULT_SHOOT));
+    new JoystickButton(buttonBoard, 5).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.STUPID_POS));
+    //new JoystickButton(buttonBoard, 0).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.AMP));
+    //new JoystickButton(buttonBoard, 0).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT));
 
     new JoystickButton(buttonBoard, 12).whileTrue(new ClimberCommand(climber, ClimberMode.EXTEND));
     new JoystickButton(buttonBoard, 10).whileTrue(new ClimberCommand(climber, ClimberMode.RETRACT));
-    new JoystickButton(buttonBoard, 9).whileTrue(new ResetClimberCommand(climber));
+    new JoystickButton(driveStick, 12).whileTrue(new ResetClimberCommand(climber));
+
+    new JoystickButton(buttonBoard, 8).onTrue(new AutoVisionDrive(swerveDrive, vision, new Vector2(0, 2)));
 
     // new JoystickButton(driveStick, 5).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.DEFAULT_SHOOT));
     // new JoystickButton(driveStick, 6).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.AMP));

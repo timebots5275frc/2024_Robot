@@ -97,8 +97,8 @@ public class Climber extends SubsystemBase {
       }
       break;
       case RESET:
-      motorLpid.setReference(-12, ControlType.kCurrent, 1);
-      motorRpid.setReference(-12, ControlType.kCurrent, 1);
+      motorLpid.setReference(-8, ControlType.kCurrent, 1);
+      motorRpid.setReference(-8, ControlType.kCurrent, 1);
       motorLEncoder.setPosition(0);
       motorREndcoder.setPosition(0);
       break;
