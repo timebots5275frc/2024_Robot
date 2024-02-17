@@ -48,7 +48,7 @@ public class RobotContainer {
   Climber climber;
 
   Joystick driveStick;
-  //GenericHID buttonBoard;
+  GenericHID buttonBoard;
 
   Input input;
 
@@ -67,7 +67,7 @@ public class RobotContainer {
     climber = new Climber();
 
     driveStick = new Joystick(0);
-    //buttonBoard = new GenericHID(1);
+    buttonBoard = new GenericHID(1);
     input = new Input(driveStick);
     vision = new Vision();
     //climber = new Climber();
@@ -108,9 +108,9 @@ public class RobotContainer {
     new JoystickButton(driveStick,11).onTrue(new ShooterRunCommand(shooter, ShooterRunState.NONE));
     new JoystickButton(driveStick, 12).onTrue(new ShooterRunCommand(shooter, ShooterRunState.SHOOT));
 
-    new JoystickButton(driveStick, 0).whileTrue(new ClimberCommand(climber, ClimberMode.EXTEND));
-    new JoystickButton(driveStick, 0).whileTrue(new ClimberCommand(climber, ClimberMode.RETRACT));
-    new JoystickButton(driveStick, 0).whileTrue(new ResetClimberCommand(climber));
+    new JoystickButton(buttonBoard, 12).whileTrue(new ClimberCommand(climber, ClimberMode.EXTEND));
+    new JoystickButton(buttonBoard, 10).whileTrue(new ClimberCommand(climber, ClimberMode.RETRACT));
+    new JoystickButton(buttonBoard, 9).whileTrue(new ResetClimberCommand(climber));
 
     // new JoystickButton(driveStick, 5).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.DEFAULT_SHOOT));
     // new JoystickButton(driveStick, 6).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.AMP));
