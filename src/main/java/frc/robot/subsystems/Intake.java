@@ -9,6 +9,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 
+import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkLowLevel;
@@ -34,7 +35,16 @@ public class Intake extends SubsystemBase {
 
   private DigitalInput limitSwitch;
 
-  private IntakePivotState actualPivotState;
+  private IntakePivotState currentPivotState;
+  private IntakeRunState currentRunState;
+
+  public BooleanSupplier LimitSwitchIsPressed = new BooleanSupplier() {
+    public boolean getAsBoolean() { return limitSwitchPressed(); };
+  };
+
+  public BooleanSupplier LimitSwitchIsNotPressed = new BooleanSupplier() {
+    public boolean getAsBoolean() { return !limitSwitchPressed(); };
+  };
 
   public enum IntakePivotState {
     NONE,
@@ -83,26 +93,24 @@ public class Intake extends SubsystemBase {
     intakePivotPID.setSmartMotionMaxAccel(Constants.IntakeConstants.INTAKE_PIVOT_MAX_ACCEL, 0);
     intakePivotPID.setSmartMotionMinOutputVelocity(Constants.IntakeConstants.INTAKE_PIVOT_MIN_VEL, 0);
 
-    actualPivotState = IntakePivotState.NONE;
+    currentPivotState = IntakePivotState.NONE;
 
     limitSwitch = new DigitalInput(9);
   }
 
   public void intakeSetPivotState(IntakePivotState state) {
     if (Shooter.intakeCanMove) {
+      currentPivotState = state;
       intakePivotEncoder.setPosition((intakeAngleEncoder.getAbsolutePosition().getValueAsDouble() * 360) * Constants.IntakeConstants.INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
       switch(state) {
         case NONE:
         intakePivotPID.setReference(0, ControlType.kCurrent, 1);
-        actualPivotState = state;
         break;
         case OUT:
         intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_OUT_POS, ControlType.kSmartMotion);
-        actualPivotState = state;
         break;
         case IN: 
         intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_IN_POS, ControlType.kSmartMotion);
-        actualPivotState = state;
         break;
       }
     }
@@ -124,9 +132,9 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean targetPosReached() {
-    if (actualPivotState == IntakePivotState.IN && Constants.IntakeConstants.INTAKE_PIVOT_ALLOWED_OFFSET > Math.abs(intakePivotEncoder.getPosition() - Constants.IntakeConstants.INTAKE_IN_POS)) {
+    if (currentPivotState == IntakePivotState.IN && Constants.IntakeConstants.INTAKE_PIVOT_ALLOWED_OFFSET > Math.abs(intakePivotEncoder.getPosition() - Constants.IntakeConstants.INTAKE_IN_POS)) {
       return true;
-    } else if (actualPivotState == IntakePivotState.OUT && Constants.IntakeConstants.INTAKE_PIVOT_ALLOWED_OFFSET > Math.abs(intakePivotEncoder.getPosition() - Constants.IntakeConstants.INTAKE_OUT_POS)) {
+    } else if (currentPivotState == IntakePivotState.OUT && Constants.IntakeConstants.INTAKE_PIVOT_ALLOWED_OFFSET > Math.abs(intakePivotEncoder.getPosition() - Constants.IntakeConstants.INTAKE_OUT_POS)) {
       return true;
     }
     return false;
@@ -140,7 +148,7 @@ public class Intake extends SubsystemBase {
   // }
 
   public void autoFlip() {
-    if (actualPivotState == IntakePivotState.NONE && limitSwitchPressed() && intakePivotEncoder.getPosition() < Constants.IntakeConstants.INTAKE_UP_POS) {
+    if (currentPivotState == IntakePivotState.NONE && limitSwitchPressed() && intakePivotEncoder.getPosition() < Constants.IntakeConstants.INTAKE_UP_POS) {
       // intakeSetPivotState(IntakePivotState.IN);
       intakeSetRunState(IntakeRunState.NONE);
     }
@@ -153,6 +161,9 @@ public class Intake extends SubsystemBase {
   // public BooleanSupplier autoIntake = new BooleanSupplier() {
   //   public boolean getAsBoolean() {return limitSwitch.get();}
   // };
+
+  public IntakePivotState getCurrentPivotState() { return currentPivotState; }
+  public IntakeRunState getCurrentRunState() { return currentRunState; }
 
   @Override
   public void periodic() {
