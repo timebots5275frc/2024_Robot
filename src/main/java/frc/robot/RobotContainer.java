@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -126,7 +127,7 @@ public class RobotContainer {
     new JoystickButton(buttonBoard, 10).whileTrue(new ClimberCommand(climber, ClimberMode.RETRACT));
     new JoystickButton(driveStick, 12).whileTrue(new ResetClimberCommand(climber));
 
-    //new JoystickButton(buttonBoard, 8).onTrue(new AutoVisionDrive(swerveDrive, vision, new Vector2(0, 2)));
+    new JoystickButton(buttonBoard, 8).onTrue(new RepeatCommand(new AutoVisionDrive(swerveDrive, vision, new Vector2(0, 2))).until(input.receivingJoystickInput));
 
     // new JoystickButton(driveStick, 5).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.DEFAULT_SHOOT));
     // new JoystickButton(driveStick, 6).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.AMP));
