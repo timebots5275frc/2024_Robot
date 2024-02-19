@@ -266,22 +266,22 @@ import frc.robot.CustomTypes.Math.Vector3;
     public final static int PIVOT_SHOOTER_ID = 30;
     public final static int PIVOT_SHOOTER_CANCODER_ID = 33;
 
-    public final static double LEFT_SHOOTER_SPEED = 4000;
-    public final static double RIGHT_SHOOTER_SPEED = 0.5 * LEFT_SHOOTER_SPEED;
+    public final static double LEFT_SHOOTER_SPEED = 4800;
+    public final static double RIGHT_SHOOTER_SPEED = 0.75 * LEFT_SHOOTER_SPEED;
 
     public final static double LEFT_AMP_SPEED = 731;
     public final static double RIGHT_AMP_SPEED = LEFT_AMP_SPEED;
 
     public final static double SHOOTER_RESET_POS = 65 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_START_POS = 65 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
-    public final static double SHOOTER_DEFAULT_SHOOTING_POS = 58 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+    public final static double SHOOTER_DEFAULT_SHOOTING_POS = 60 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_DEFAULT_AMP_POS = 56 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
-    public final static double SHOOTER_NONE_POS = 55 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+    public final static double SHOOTER_NONE_POS = 45 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_STUPID_POS = 78 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
 
     public final static double SHOOTER_PIVOT_ALLOWED_OFFSET = 1;
-    public final static double LEFT_SHOOTER_ALLOWED_DIFFERENTIAL = 0;
-    public final static double RIGHT_SHOOTER_ALLOWED_DIFFERENTIAL = 0;
+    public final static double LEFT_SHOOTER_ALLOWED_DIFFERENTIAL = 100;
+    public final static double RIGHT_SHOOTER_ALLOWED_DIFFERENTIAL = 100;
 
     public final static double SPEAKER_MIN_SHOT_DISTANCE = .8; // Meters
     public final static double SPEAKER_MAX_SHOT_DISTANCE = 5; // Meters
@@ -292,7 +292,7 @@ import frc.robot.CustomTypes.Math.Vector3;
 
     public final static double SHOOTER_OFFSET_FROM_GROUND = 0;
 
-    public final static double SHOOTER_MAX_INTAKE_ANGLE = 59 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+    public final static double SHOOTER_MAX_INTAKE_ANGLE = 60.5 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
   }
 
   public static class IntakeConstants {

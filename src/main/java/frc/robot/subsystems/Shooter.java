@@ -52,6 +52,10 @@ public class Shooter extends SubsystemBase {
     public boolean getAsBoolean() { return false; };
   };
 
+  public BooleanSupplier ShooterAtAngle = new BooleanSupplier() {
+    public boolean getAsBoolean() { return readyToShoot(); }
+  };
+
   public enum ShooterPivotState {
     START,
     AMP,
@@ -118,8 +122,8 @@ public class Shooter extends SubsystemBase {
       break;
       case VISION_SHOOT: 
       setVisionShooterAngle();
-      shooterPivotPID.setReference(visionShooterAngle, ControlType.kSmartMotion);
-      targetAngle = visionShooterAngle;
+      shooterPivotPID.setReference(visionShooterAngle * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE, ControlType.kSmartMotion);
+      targetAngle = visionShooterAngle * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
       break;
       case AMP:
       shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_DEFAULT_AMP_POS, ControlType.kSmartMotion);
@@ -194,8 +198,12 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter CANCODER Pos", angleEncoder.getAbsolutePosition().getValueAsDouble() * 360);
     SmartDashboard.putNumber("Left shooter velocity", leftShooterRunEncoder.getVelocity());
     SmartDashboard.putNumber("Right shooter vleocity", rightShooterRunEncoder.getVelocity());
+    SmartDashboard.putNumber("Right shooter Current", rightShooterRunMotor.getOutputCurrent());
+    SmartDashboard.putNumber("Left Shooter Current", leftShooterRunMotor.getOutputCurrent());
     Shooter.intakeCanMove = shooterOutOfWay();
     SmartDashboard.putBoolean("Shooter Out of way", intakeCanMove);
     Shooter.readyToShoot = readyToShoot();
+    SmartDashboard.putBoolean("Shooter Ready", readyToShoot());
+    SmartDashboard.putNumber("Target Shooter Pivot angle", VisionShooterCalculator.GetSpeakerShooterAngle());
   }
 }

@@ -41,7 +41,7 @@ public class SwerveDrive extends SubsystemBase {
   
   Pigeon2 pigeon2Gyro = new Pigeon2(DriveConstants.PIGEON_2_ID);
 
-public final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(leftFrontWheelLocation, rightFrontWheelLocation, rightRearWheelLocation, leftRearWheelLocation);
+    public final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(leftFrontWheelLocation, rightFrontWheelLocation, rightRearWheelLocation, leftRearWheelLocation);
     
     public final SwerveModulePosition[] modulePositions = new SwerveModulePosition[] {leftFrontSwerveModule.getPosition(), rightFrontSwerveModule.getPosition(), rightRearSwerveModule.getPosition(), leftFrontSwerveModule.getPosition()};
 
@@ -125,7 +125,7 @@ public final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(leftFr
     }
 
     public void resetPigeon() {
-        pigeon2Gyro.setYaw(0);
+        pigeon2Gyro.setYaw(180);
     }
 
     /**
