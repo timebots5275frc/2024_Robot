@@ -16,13 +16,13 @@ public class VisionShooterCalculator {
     {
         if (vision.hasValidData())
         {
-            double currentShooterHeight = shooter.getShooterEndHeight() + ShooterConstants.SHOOTER_OFFSET_FROM_GROUND;
-            double heightDifferenceBetweenShooterAndSpeakerTargetPosition = ShooterConstants.SHOOTER_TARGET_HEIGHT - currentShooterHeight;
+            //double currentShooterHeight = shooter.getShooterEndHeight() + ShooterConstants.SHOOTER_OFFSET_FROM_GROUND;
+            double heightDifferenceBetweenShooterAndSpeakerTargetPosition = ShooterConstants.SHOOTER_TARGET_HEIGHT - 9.5;
 
             Vector3 aprilTagInRobotSpace = vision.AprilTagPosInRobotSpace();
-            double horizontalDistanceToAprilTag = new Vector2(aprilTagInRobotSpace.x, aprilTagInRobotSpace.z).magnitude();
+            double horizontalDistanceToAprilTag = (new Vector2(aprilTagInRobotSpace.x, aprilTagInRobotSpace.z).magnitude() - 7) * 39.37;
 
-            double C = 0.0;
+            double C = 0.13;
 
             return Math.toDegrees(Math.atan2(heightDifferenceBetweenShooterAndSpeakerTargetPosition, horizontalDistanceToAprilTag)) + horizontalDistanceToAprilTag * C;
         }

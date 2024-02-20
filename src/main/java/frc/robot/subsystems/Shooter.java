@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionShooterCalculator;
 
 public class Shooter extends SubsystemBase {
@@ -108,7 +109,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setVisionShooterAngle() {
-    visionShooterAngle = VisionShooterCalculator.GetSpeakerShooterAngle() * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+    visionShooterAngle = VisionShooterCalculator.GetSpeakerShooterAngle();
   }
 
   public void shooterSetPivotState(ShooterPivotState state) {
@@ -204,6 +205,6 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putBoolean("Shooter Out of way", intakeCanMove);
     Shooter.readyToShoot = readyToShoot();
     SmartDashboard.putBoolean("Shooter Ready", readyToShoot());
-    SmartDashboard.putNumber("Target Shooter Pivot angle", VisionShooterCalculator.GetSpeakerShooterAngle());
+    SmartDashboard.putNumber("Target angle", visionShooterAngle);
   }
 }
