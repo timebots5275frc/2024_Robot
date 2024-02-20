@@ -5,9 +5,7 @@
 package frc.robot;
 
 import frc.robot.CustomTypes.Math.Vector2;
-import frc.robot.commands.AutoIntake;
 import frc.robot.commands.AutoOdometryDrive;
-import frc.robot.commands.AutoShootNote;
 import frc.robot.commands.AutoVisionDrive;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.IntakePivotCommand;
@@ -15,7 +13,6 @@ import frc.robot.commands.IntakeRunCommand;
 import frc.robot.commands.ResetClimberCommand;
 import frc.robot.commands.ShooterPivotCommand;
 import frc.robot.commands.ShooterRunCommand;
-//import frc.robot.commands.IntakeRunCommand;
 import frc.robot.commands.TeleopJoystickDrive;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
@@ -32,7 +29,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
