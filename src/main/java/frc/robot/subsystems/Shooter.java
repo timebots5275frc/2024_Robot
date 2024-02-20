@@ -145,13 +145,13 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-    public void shooterSetRunState(ShooterRunState state) {
-      currentRunState = state;
+  public void shooterSetRunState(ShooterRunState state) {
+    currentRunState = state;
 
     switch(state) {
       case NONE:
-      leftShooterRunPID.setReference(0, ControlType.kVelocity);
-      rightShooterRunPID.setReference(0, ControlType.kVelocity);
+      leftShooterRunPID.setReference(0, ControlType.kCurrent, 1);
+      rightShooterRunPID.setReference(0, ControlType.kCurrent, 1);
       lTargetSpeed = 0;
       rTargetSpeed = 0;
       break;
@@ -189,6 +189,14 @@ public class Shooter extends SubsystemBase {
   public double getShooterEndHeight() {
     return Math.sin(Math.toRadians(getShooterAngle())) * ShooterConstants.SHOOTER_LENGTH;
   }
+
+  public boolean targetAngleReached() {
+    return Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET > Math.abs(targetAngle - shooterPivotEncoder.getPosition());
+  }
+
+  public BooleanSupplier reachedTargetAngle = new BooleanSupplier(){
+    public boolean getAsBoolean() {return targetAngleReached();}
+  };
 
   public ShooterPivotState getCurrentPivotState() { return currentPivotState; }
   public ShooterRunState getCurrentRunState() { return currentRunState; }

@@ -106,20 +106,21 @@ public class RobotContainer {
     new JoystickButton(driveStick, 5).onTrue(new IntakePivotCommand(intake, IntakePivotState.IN));
     new JoystickButton(driveStick, 6).onTrue(new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.OUT), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.REVERSE)));
 
-    new JoystickButton(buttonBoard, 6).onTrue(new SequentialCommandGroup(new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(2), new IntakeRunCommand(intake, IntakeRunState.NONE)));
+    new JoystickButton(buttonBoard, 6).onTrue(new SequentialCommandGroup(new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.NONE)));
     //new JoystickButton(driveStick, 3).onTrue(new IntakeRunCommand(intake, IntakeRunState.REVERSE));
     new JoystickButton(driveStick, 4).onTrue(new IntakeRunCommand(intake, IntakeRunState.NONE));
 
     new JoystickButton(buttonBoard,9).onTrue(new ShooterRunCommand(shooter, ShooterRunState.NONE));
     new JoystickButton(buttonBoard, 11).onTrue(new ShooterRunCommand(shooter, ShooterRunState.SHOOT));
-    new JoystickButton(buttonBoard, 7).onTrue(new ShooterRunCommand(shooter, ShooterRunState.AMP));
+    //new JoystickButton(buttonBoard, 7).onTrue(new ShooterRunCommand(shooter, ShooterRunState.AMP));
 
 
     //new JoystickButton(buttonBoard, 0).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.START));
     new JoystickButton(buttonBoard, 8).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE));
     new JoystickButton(buttonBoard, 3).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.DEFAULT_SHOOT));
     new JoystickButton(buttonBoard, 5).onTrue(new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.OUT), new WaitCommand(0.5), new ShooterPivotCommand(shooter, ShooterPivotState.STUPID_POS)));
-    new JoystickButton(buttonBoard, 4).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.AMP));
+    //new JoystickButton(buttonBoard, 4).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.AMP));
+    new JoystickButton(buttonBoard, 4).onTrue(new SequentialCommandGroup(new ShooterRunCommand(shooter, ShooterRunState.AMP), new RepeatCommand(new ShooterPivotCommand(shooter, ShooterPivotState.AMP)).until(shooter.ShooterAtAngle), new AutoVisionDrive(swerveDrive, vision, Constants.VisionConstants.AMP_VISION_DRIVE_TARGET), new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.NONE)));
     new JoystickButton(driveStick, 9).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT));
 
     new JoystickButton(buttonBoard, 12).whileTrue(new ClimberCommand(climber, ClimberMode.EXTEND));
