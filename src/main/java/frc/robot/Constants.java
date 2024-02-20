@@ -251,10 +251,10 @@ import frc.robot.CustomTypes.Math.Vector2;
     0.0,
     0.0001);
     
-    public static final double SHOOTER_PIVOT_MAX_VEL = 1035 * 1.5;
+    public static final double SHOOTER_PIVOT_MAX_VEL = 1350;
     public static final double SHOOTER_PIVOT_MAX_ACCEL = SHOOTER_PIVOT_MAX_VEL * 2;
 
-    public static final double SHOOTER_PIVOT_GEAR_RATIO = 621;
+    public static final double SHOOTER_PIVOT_GEAR_RATIO = 540;
     public static final double SHOOTER_PIVOT_ROTATIONS_PER_DEGREE = SHOOTER_PIVOT_GEAR_RATIO / 360.0;
 
 
