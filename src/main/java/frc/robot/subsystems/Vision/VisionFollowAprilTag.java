@@ -21,7 +21,7 @@ public class VisionFollowAprilTag {
     double turnSpeed = 1.2;
     double driveSpeed = 2;
 
-    double rotationVelocity = VisionDriveCalculator.rotateTowardsTarget() * turnSpeed;
+    double rotationVelocity = VisionDriveCalculator.rotateTowardsTarget(0) * turnSpeed;
     Vector2 moveVelocity = VisionDriveCalculator.GetVelocityToAprilTagOffset(offset).velocity.times(driveSpeed);
 
     SmartDashboard.putString("AT Rotation velocity", rotationVelocity + "");

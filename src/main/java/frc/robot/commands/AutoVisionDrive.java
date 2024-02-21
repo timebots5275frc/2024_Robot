@@ -40,7 +40,7 @@ public class AutoVisionDrive extends Command {
   public void execute()
   {
     VisionDriveCalculator.AprilTagMoveVelocity moveDirection = VisionDriveCalculator.GetVelocityToAprilTagOffset(offset);
-    double rotationDirection = VisionDriveCalculator.rotateTowardsTarget();
+    double rotationDirection = VisionDriveCalculator.rotateTowardsTarget(0);
 
     Vector2 moveVelocity = moveDirection.velocity.times(driveSpeed);
     double rotationVelocity = rotationDirection * turnSpeed;

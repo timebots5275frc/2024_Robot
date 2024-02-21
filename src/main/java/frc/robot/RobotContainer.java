@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.CustomTypes.Math.Vector2;
 import frc.robot.commands.AutoOdometryDrive;
 import frc.robot.commands.AutoVisionDrive;
+import frc.robot.commands.AutoVisionSpeakerShoot;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.IntakePivotCommand;
 import frc.robot.commands.IntakeRunCommand;
@@ -115,9 +116,10 @@ public class RobotContainer {
     new JoystickButton(buttonBoard, 8).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE));
     new JoystickButton(buttonBoard, 3).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.DEFAULT_SHOOT));
     new JoystickButton(buttonBoard, 5).onTrue(new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.OUT), new WaitCommand(0.5), new ShooterPivotCommand(shooter, ShooterPivotState.STUPID_POS)));
-    //new JoystickButton(buttonBoard, 4).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.AMP));
-    new JoystickButton(buttonBoard, 4).onTrue(new SequentialCommandGroup(new ShooterRunCommand(shooter, ShooterRunState.AMP), new RepeatCommand(new ShooterPivotCommand(shooter, ShooterPivotState.AMP)).until(shooter.ShooterAtAngle), new AutoVisionDrive(swerveDrive, vision, Constants.VisionConstants.AMP_VISION_DRIVE_TARGET), new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.NONE)));
-    new JoystickButton(driveStick, 9).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT));
+    new JoystickButton(buttonBoard, 4).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.AMP));
+    //new JoystickButton(buttonBoard, 4).onTrue(new SequentialCommandGroup(new ShooterRunCommand(shooter, ShooterRunState.AMP), new RepeatCommand(new ShooterPivotCommand(shooter, ShooterPivotState.AMP)).until(shooter.ShooterAtAngle), new AutoVisionDrive(swerveDrive, vision, Constants.VisionConstants.AMP_VISION_DRIVE_TARGET), new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.NONE)));
+    //new JoystickButton(driveStick, 9).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT));
+    new JoystickButton(driveStick, 9).onTrue(new AutoVisionSpeakerShoot(swerveDrive, shooter, vision, intake));
 
     new JoystickButton(buttonBoard, 12).whileTrue(new ClimberCommand(climber, ClimberMode.EXTEND));
     new JoystickButton(buttonBoard, 10).whileTrue(new ClimberCommand(climber, ClimberMode.RETRACT));

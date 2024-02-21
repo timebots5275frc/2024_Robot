@@ -9,9 +9,9 @@ public class VisionDriveCalculator {
 
     public static void SetVisionReference(Vision vision) { VisionDriveCalculator.vision = vision; }
 
-    public static double rotateTowardsTarget()
+    public static double rotateTowardsTarget(double offset)
     {
-        return -SillyMath.clamp(vision.HorizontalOffsetFromAprilTag() / 22, -1, 1);
+        return -SillyMath.clamp((vision.HorizontalOffsetFromAprilTag() + offset) / 22, -1, 1);
     }
 
     public static AprilTagMoveVelocity GetVelocityToAprilTagOffset(Vector2 aprilTagOffset)

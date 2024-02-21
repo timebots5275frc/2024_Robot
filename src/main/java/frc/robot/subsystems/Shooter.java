@@ -104,7 +104,7 @@ public class Shooter extends SubsystemBase {
     shooterPivotPID.setSmartMotionMaxVelocity(Constants.ShooterConstants.SHOOTER_PIVOT_MAX_VEL, 0);
     shooterPivotPID.setSmartMotionMaxAccel(Constants.ShooterConstants.SHOOTER_PIVOT_MAX_ACCEL, 0);
     VisionShooterCalculator.SetShooterReference(this);
-
+    shooterPivotEncoder.setPosition(getShooterAngle() * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE);
   }
 
   public void setVisionShooterAngle() {
