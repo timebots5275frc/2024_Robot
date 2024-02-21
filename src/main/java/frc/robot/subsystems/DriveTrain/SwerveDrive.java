@@ -43,9 +43,10 @@ public class SwerveDrive extends SubsystemBase {
 
     public final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(leftFrontWheelLocation, rightFrontWheelLocation, rightRearWheelLocation, leftRearWheelLocation);
     
-    public final SwerveModulePosition[] modulePositions = new SwerveModulePosition[] {leftFrontSwerveModule.getPosition(), rightFrontSwerveModule.getPosition(), rightRearSwerveModule.getPosition(), leftFrontSwerveModule.getPosition()};
+    public final SwerveModulePosition[] startingSwerveModulePositions = new SwerveModulePosition[] {leftFrontSwerveModule.getPosition(), rightFrontSwerveModule.getPosition(), rightRearSwerveModule.getPosition(), leftRearSwerveModule.getPosition()};
+    private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(kinematics, this.getHeading(), startingSwerveModulePositions);
 
-    private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(kinematics, this.getHeading(), modulePositions);
+    SwerveModulePosition[] currentSwerveModulePositions;
 
     public void Drivetrain() {
         System.out.println("SwerveDrive.java started...");
@@ -69,14 +70,7 @@ public class SwerveDrive extends SubsystemBase {
     @SuppressWarnings("ParameterName")
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
 
-        SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(
-                fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, this.getHeading())
-                        : new ChassisSpeeds(xSpeed, ySpeed, rot));
-
-        SmartDashboard.putNumber("odometry getX", m_odometry.getPoseMeters().getX());
-        SmartDashboard.putNumber("odometry getY", m_odometry.getPoseMeters().getY());
-        SmartDashboard.putString("odometry getRotation",
-                m_odometry.getPoseMeters().getRotation().toString());
+        SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, this.getHeading()) : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.MAX_DRIVE_SPEED);
 
@@ -84,6 +78,12 @@ public class SwerveDrive extends SubsystemBase {
         rightFrontSwerveModule.setDesiredState(swerveModuleStates[1], true, "RF");
         rightRearSwerveModule.setDesiredState(swerveModuleStates[2], true, "RR");
         leftRearSwerveModule.setDesiredState(swerveModuleStates[3], true, "LR");
+
+        currentSwerveModulePositions = new SwerveModulePosition[] { leftFrontSwerveModule.getPosition(), rightFrontSwerveModule.getPosition(), rightRearSwerveModule.getPosition(), leftRearSwerveModule.getPosition(), };
+
+        SmartDashboard.putNumber("odometry getX", m_odometry.getPoseMeters().getX());
+        SmartDashboard.putNumber("odometry getY", m_odometry.getPoseMeters().getY());
+        SmartDashboard.putString("odometry getRotation", m_odometry.getPoseMeters().getRotation().toString());
     }
 
     /**
@@ -103,7 +103,7 @@ public class SwerveDrive extends SubsystemBase {
 
     /** Updates the field relative position of the robot. */
     public void updateOdometry() {
-        m_odometry.update(this.getHeading(), modulePositions);
+        m_odometry.update(this.getHeading(), currentSwerveModulePositions);
     }
 
     /**
@@ -111,7 +111,7 @@ public class SwerveDrive extends SubsystemBase {
      */
     public void resetOdometry() {
         System.out.println("resetOdometry");
-        m_odometry.resetPosition(this.getHeading(), modulePositions, new Pose2d());
+        m_odometry.resetPosition(this.getHeading(), currentSwerveModulePositions, new Pose2d());
     }
 
     /**
@@ -121,7 +121,7 @@ public class SwerveDrive extends SubsystemBase {
      */
     public void resetOdometryWithPose2d(Pose2d pose) {
         System.out.println("resetOdometryWithPose2d");
-        m_odometry.resetPosition(pose.getRotation(), modulePositions, pose); // imuADIS16470.getRotation2d()
+        m_odometry.resetPosition(pose.getRotation(), startingSwerveModulePositions, pose); // imuADIS16470.getRotation2d()
     }
 
     public void resetPigeon() {
