@@ -50,6 +50,8 @@ public class AutoVisionAmpShoot extends ManagerCommand {
         Command setShooterAngleCommand = new ShooterPivotCommand(shooter, ShooterPivotState.AMP);
         Command shootNoteCommand = new AutoShootNote(shooter, intake, ShooterPivotState.AMP, ShooterRunState.AMP);
         subCommand = new SequentialCommandGroup(driveToPointInFrontOfAmpCommand, setShooterAngleCommand, driveIntoAmpCommand, shootNoteCommand);
+
+        scheduleSubcommand();
       }
       else { finished = true; }
     }
@@ -58,6 +60,6 @@ public class AutoVisionAmpShoot extends ManagerCommand {
 
   @Override
   public boolean isFinished() {
-    return finished;
+    return finished || subcommandFinished();
   }
 }

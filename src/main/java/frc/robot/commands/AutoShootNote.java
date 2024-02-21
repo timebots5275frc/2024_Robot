@@ -58,13 +58,13 @@ public class AutoShootNote extends ManagerCommand {
       seqCommand.addCommands(new IntakePivotCommand(intake, IntakePivotState.IN), new ParallelCommandGroup(shootNoteIntoShooterCommand, shootNoteCommand));
 
       subCommand = seqCommand;
-      subCommand.schedule();
+      scheduleSubcommand();
     }
     else { finished = true; }
   }
 
   @Override
   public boolean isFinished() {
-    return finished;
+    return finished || subcommandFinished();
   }
 }
