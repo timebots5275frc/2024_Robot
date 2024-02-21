@@ -60,13 +60,13 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
       }
       else { subCommand = new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand); System.out.println("Dont drive"); }
 
-      subCommand.schedule();
+      scheduleSubcommand();
     }
     else { finished = true; }
   }
 
   @Override
   public boolean isFinished() {
-  return finished || (subCommand != null && subCommand.isFinished());
+  return finished || subcommandFinished();
   }
 }
