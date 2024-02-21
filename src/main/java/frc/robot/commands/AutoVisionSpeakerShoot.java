@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -42,6 +43,7 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
 
     if (vision.hasValidData())
     {
+      System.out.println("HasValidData");
       Vector3 aprilTagPosInTargetSpace = vision.AprilTagPosInRobotSpace();
       Vector2 horizontalAprilTagPosition = new Vector2(aprilTagPosInTargetSpace.x, aprilTagPosInTargetSpace.z);
       double aprilTagDistance = horizontalAprilTagPosition.magnitude();
@@ -50,12 +52,13 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
       Command rotateTowardsAprilTagCommand = new AutoVisionRotate(swerveDrive, 0);
       if (aprilTagDistance > ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE || aprilTagDistance < ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE)
       {
+        System.out.println("Drive");
         Vector2 targetPosRelativeToAprilTag = Vector2.clampMagnitude(horizontalAprilTagPosition, ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE, ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE);
 
         Command driveToPointInBoundsCommand = new AutoVisionDrive(swerveDrive, vision, targetPosRelativeToAprilTag);
         subCommand = new SequentialCommandGroup(driveToPointInBoundsCommand, rotateTowardsAprilTagCommand, shootNoteCommand);
       }
-      else { subCommand = new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand); }
+      else { subCommand = new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand); System.out.println("Dont drive"); }
 
       subCommand.schedule();
     }
@@ -64,6 +67,6 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
 
   @Override
   public boolean isFinished() {
-    return finished;
+  return finished || (subCommand != null && subCommand.isFinished());
   }
 }

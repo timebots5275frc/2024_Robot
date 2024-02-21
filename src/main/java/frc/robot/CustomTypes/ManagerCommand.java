@@ -8,6 +8,10 @@ public abstract class ManagerCommand extends Command {
     @Override
     public void end(boolean interrupted)
     {
-      if (subCommand != null && !subCommand.isFinished()) { subCommand.cancel(); }
+      if (subCommand != null && !subCommand.isFinished()) 
+      { 
+        subCommand.cancel();
+        subCommand = null;
+       }
     }
 }
