@@ -55,7 +55,7 @@ public class SwerveDrive extends SubsystemBase {
     @Override
     public void periodic() {
         this.updateOdometry();
-        SmartDashboard.putNumber("getHeading", getHeading().getDegrees());
+        SmartDashboard.putNumber("Heading", getHeading().getDegrees());
     }
 
     /**
@@ -74,16 +74,15 @@ public class SwerveDrive extends SubsystemBase {
 
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.MAX_DRIVE_SPEED);
 
-        leftFrontSwerveModule.setDesiredState(swerveModuleStates[0], true, "LF");
-        rightFrontSwerveModule.setDesiredState(swerveModuleStates[1], true, "RF");
-        rightRearSwerveModule.setDesiredState(swerveModuleStates[2], true, "RR");
-        leftRearSwerveModule.setDesiredState(swerveModuleStates[3], true, "LR");
+        leftFrontSwerveModule.setDesiredState(swerveModuleStates[0], false, "LF");
+        rightFrontSwerveModule.setDesiredState(swerveModuleStates[1], false, "RF");
+        rightRearSwerveModule.setDesiredState(swerveModuleStates[2], false, "RR");
+        leftRearSwerveModule.setDesiredState(swerveModuleStates[3], false, "LR");
 
         currentSwerveModulePositions = new SwerveModulePosition[] { leftFrontSwerveModule.getPosition(), rightFrontSwerveModule.getPosition(), rightRearSwerveModule.getPosition(), leftRearSwerveModule.getPosition(), };
 
-        SmartDashboard.putNumber("odometry getX", m_odometry.getPoseMeters().getX());
-        SmartDashboard.putNumber("odometry getY", m_odometry.getPoseMeters().getY());
-        SmartDashboard.putString("odometry getRotation", m_odometry.getPoseMeters().getRotation().toString());
+        SmartDashboard.putString("Odometry Pos", this.getOdometryPosition().toString());
+        SmartDashboard.putString("Odometry Rot", m_odometry.getPoseMeters().getRotation().toString());
     }
 
     /**
