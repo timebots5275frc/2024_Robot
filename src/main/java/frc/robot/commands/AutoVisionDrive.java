@@ -47,7 +47,6 @@ public class AutoVisionDrive extends Command {
 
     SmartDashboard.putString("AT Move velocity", moveVelocity.toString(3));
     SmartDashboard.putString("AT Rotation velocity", rotationVelocity + "");
-    SmartDashboard.putString("getSubsystem()", moveDirection.distanceFromTarget + "");
 
     // Check if made it to target position
     if (moveDirection.validData && moveDirection.distanceFromTarget <= VisionConstants.TARGET_POSITION_ALLOWED_ERROR)

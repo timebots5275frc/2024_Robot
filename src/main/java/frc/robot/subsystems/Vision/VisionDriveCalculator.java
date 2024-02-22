@@ -23,10 +23,10 @@ public class VisionDriveCalculator {
             Vector2 aprilTagInRobotSpace = new Vector2(vision.AprilTagPosInRobotSpace().x, vision.AprilTagPosInRobotSpace().z);
             Vector2 targetPositionInRobotSpace = aprilTagInRobotSpace.add(aprilTagOffsetInRobotSpace);
 
-            SmartDashboard.putString("AT Offset in Robot Space", aprilTagOffsetInRobotSpace.toString(3));
-            SmartDashboard.putString("AT in robot space", aprilTagInRobotSpace.toString(3));
-            SmartDashboard.putString("Target Position in Robot Space", targetPositionInRobotSpace.toString(3));
-            SmartDashboard.putNumber("Magnientuecd", targetPositionInRobotSpace.magnitude());
+            SmartDashboard.putString("AT offset in RS", aprilTagOffsetInRobotSpace.toString(3));
+            SmartDashboard.putString("AT in RS", aprilTagInRobotSpace.toString(3));
+            SmartDashboard.putString("AT Target Position in RS", targetPositionInRobotSpace.toString(3));
+            SmartDashboard.putNumber("AT Target Distance", targetPositionInRobotSpace.magnitude());
 
             //return new AprilTagMoveVelocity(Vector2.zero, 0, false);
             return new AprilTagMoveVelocity(ApplyEasingToVector2(targetPositionInRobotSpace), targetPositionInRobotSpace.magnitude(), true);
