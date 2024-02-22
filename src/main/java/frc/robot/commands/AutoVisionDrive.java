@@ -58,7 +58,9 @@ public class AutoVisionDrive extends Command {
     else if (moveDirection.validData)
     {
       if (moveVelocity.magnitude() < .1) { moveVelocity = Vector2.zero; }
-      swerveDrive.drive(moveVelocity.y, moveVelocity.x, rotationVelocity, false);
+
+      //swerveDrive.drive(moveVelocity.y, moveVelocity.x, rotationVelocity, false);
+      swerveDrive.drive(0, 0, 0, false);
     }
     else { swerveDrive.drive(0, 0, 0, false); }
   }

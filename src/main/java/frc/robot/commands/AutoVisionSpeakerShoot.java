@@ -41,16 +41,14 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
 
     if (vision.hasValidData())
     {
-      System.out.println("HasValidData");
       Vector3 aprilTagPosInTargetSpace = vision.AprilTagPosInRobotSpace();
       Vector2 horizontalAprilTagPosition = new Vector2(aprilTagPosInTargetSpace.x, aprilTagPosInTargetSpace.z);
       double aprilTagDistance = horizontalAprilTagPosition.magnitude();
 
       Command shootNoteCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT), new ShooterRunCommand(shooter, ShooterRunState.SHOOT), new WaitCommand(2), new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(2), new ShooterRunCommand(shooter, ShooterRunState.NONE), new IntakeRunCommand(intake, IntakeRunState.NONE));
-      Command rotateTowardsAprilTagCommand = new AutoVisionRotate(swerveDrive, 0);
+      Command rotateTowardsAprilTagCommand = new AutoVisionRotate(swerveDrive, 5);
       if (aprilTagDistance > ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE || aprilTagDistance < ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE)
       {
-        System.out.println("Drive");
         Vector2 targetPosRelativeToAprilTag = Vector2.clampMagnitude(horizontalAprilTagPosition, ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE, ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE);
 
         Command driveToPointInBoundsCommand = new AutoVisionDrive(swerveDrive, vision, targetPosRelativeToAprilTag);

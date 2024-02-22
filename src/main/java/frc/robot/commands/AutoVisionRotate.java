@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Vision.VisionDriveCalculator;
@@ -14,7 +16,7 @@ public class AutoVisionRotate extends Command {
 
   boolean facingTarget = false;
 
-  private static double turnSpeed = 1;
+  private static double turnSpeed = 1.5;
 
   public AutoVisionRotate(SwerveDrive swerveDrive, double offset) {
     this.swerveDrive = swerveDrive;
@@ -29,7 +31,8 @@ public class AutoVisionRotate extends Command {
   {
     double rotationDirection = VisionDriveCalculator.rotateTowardsTarget(offset);
 
-    if (Math.abs(rotationDirection) <= .1) { facingTarget = true; }
+    SmartDashboard.putNumber("Rot Dir", rotationDirection);
+    if (Math.abs(rotationDirection) <= .05) { facingTarget = true; }
     else { swerveDrive.drive(0, 0, rotationDirection * turnSpeed, false); }
   }
 

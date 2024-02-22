@@ -28,6 +28,7 @@ public class VisionDriveCalculator {
             SmartDashboard.putString("Target Position in Robot Space", targetPositionInRobotSpace.toString(3));
             SmartDashboard.putNumber("Magnientuecd", targetPositionInRobotSpace.magnitude());
 
+            //return new AprilTagMoveVelocity(Vector2.zero, 0, false);
             return new AprilTagMoveVelocity(ApplyEasingToVector2(targetPositionInRobotSpace), targetPositionInRobotSpace.magnitude(), true);
         }
 

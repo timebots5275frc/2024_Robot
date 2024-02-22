@@ -46,7 +46,7 @@ public class SwerveDrive extends SubsystemBase {
     public final SwerveModulePosition[] startingSwerveModulePositions = new SwerveModulePosition[] {leftFrontSwerveModule.getPosition(), rightFrontSwerveModule.getPosition(), rightRearSwerveModule.getPosition(), leftRearSwerveModule.getPosition()};
     private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(kinematics, this.getHeading(), startingSwerveModulePositions);
 
-    SwerveModulePosition[] currentSwerveModulePositions;
+    SwerveModulePosition[] currentSwerveModulePositions = startingSwerveModulePositions;
 
     public void Drivetrain() {
         System.out.println("SwerveDrive.java started...");

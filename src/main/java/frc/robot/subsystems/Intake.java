@@ -123,7 +123,7 @@ public class Intake extends SubsystemBase {
       intakeRunPID.setReference(0, ControlType.kVelocity);
       break;
       case FORWARD: 
-      intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
+      intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED * 0.15, ControlType.kVelocity);
       break;
       case REVERSE: 
       intakeRunPID.setReference(Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
