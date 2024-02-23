@@ -251,7 +251,7 @@ import frc.robot.CustomTypes.Math.Vector2;
     0.0,
     0.0001);
     
-    public static final double SHOOTER_PIVOT_MAX_VEL = 1200;
+    public static final double SHOOTER_PIVOT_MAX_VEL = 2000;
     public static final double SHOOTER_PIVOT_MAX_ACCEL = SHOOTER_PIVOT_MAX_VEL * 2;
 
     public static final double SHOOTER_PIVOT_GEAR_RATIO = 480;
@@ -323,7 +323,6 @@ import frc.robot.CustomTypes.Math.Vector2;
     public static final double INTAKE_PIVOT_ALLOWED_OFFSET = 5 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE;
 
     public static final double INTAKE_RUN_SPEED = 400;
-
   }
 
   public static final class MathConstants

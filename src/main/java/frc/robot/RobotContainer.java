@@ -120,7 +120,8 @@ public class RobotContainer {
     new JoystickButton(buttonBoard, 4).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.AMP));
     //new JoystickButton(buttonBoard, 4).onTrue(new SequentialCommandGroup(new ShooterRunCommand(shooter, ShooterRunState.AMP), new RepeatCommand(new ShooterPivotCommand(shooter, ShooterPivotState.AMP)).until(shooter.ShooterAtAngle), new AutoVisionDrive(swerveDrive, vision, Constants.VisionConstants.AMP_VISION_DRIVE_TARGET), new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.NONE)));
     //new JoystickButton(driveStick, 9).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT));
-    //new JoystickButton(driveStick, 9).onTrue(new AutoVisionSpeakerShoot(swerveDrive, shooter, vision, intake));
+  
+    new JoystickButton(driveStick, 11).onTrue(new AutoVisionSpeakerShoot(swerveDrive, shooter, vision, intake));
     new JoystickButton(driveStick, 9).onTrue(new AutoVisionDrive(swerveDrive, vision, new Vector2(0, 1)).until(input.receivingJoystickInput));
 
     new JoystickButton(buttonBoard, 12).whileTrue(new ClimberCommand(climber, ClimberMode.EXTEND));

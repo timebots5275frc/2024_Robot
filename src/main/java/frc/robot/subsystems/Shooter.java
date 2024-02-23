@@ -52,7 +52,7 @@ public class Shooter extends SubsystemBase {
     public boolean getAsBoolean() { return false; };
   };
 
-  public BooleanSupplier ShooterAtAngle = new BooleanSupplier() {
+  public BooleanSupplier ReadyToShoot = new BooleanSupplier() {
     public boolean getAsBoolean() { return readyToShoot(); }
   };
 
@@ -85,6 +85,7 @@ public class Shooter extends SubsystemBase {
     shooterPivotEncoder = shooterPivotMotor.getEncoder();
     shooterPivotMotor.setInverted(true);
     leftShooterRunMotor.setInverted(true);
+    rightShooterRunMotor.setInverted(false);
 
     leftShooterRunPID.setP(Constants.ShooterConstants.ShooterRunPIDs.P);
     leftShooterRunPID.setI(Constants.ShooterConstants.ShooterRunPIDs.I);
@@ -163,8 +164,8 @@ public class Shooter extends SubsystemBase {
       case SHOOT:
       leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_SHOOTER_SPEED, ControlType.kVelocity);
       rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_SHOOTER_SPEED, ControlType.kVelocity);
-      lTargetSpeed = Constants.ShooterConstants.LEFT_SHOOTER_SPEED;
-      rTargetSpeed = Constants.ShooterConstants.RIGHT_SHOOTER_SPEED;
+      lTargetSpeed = 5300;
+      rTargetSpeed = 4200;
       break;
       // case TRAP:
     }

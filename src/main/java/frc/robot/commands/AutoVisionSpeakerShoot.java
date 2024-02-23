@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.CustomTypes.ManagerCommand;
 import frc.robot.CustomTypes.Math.Vector2;
@@ -37,6 +38,7 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
   @Override
   public void initialize() 
   {
+    System.out.println("command");
     finished = false;
 
     if (vision.hasValidData())
@@ -45,9 +47,9 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
       Vector2 horizontalAprilTagPosition = new Vector2(aprilTagPosInTargetSpace.x, aprilTagPosInTargetSpace.z);
       double aprilTagDistance = horizontalAprilTagPosition.magnitude();
 
-      Command shootNoteCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT), new ShooterRunCommand(shooter, ShooterRunState.SHOOT), new WaitCommand(2), new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(2), new ShooterRunCommand(shooter, ShooterRunState.NONE), new IntakeRunCommand(intake, IntakeRunState.NONE));
-      Command rotateTowardsAprilTagCommand = new AutoVisionRotate(swerveDrive, 5);
-      if (aprilTagDistance > ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE || aprilTagDistance < ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE)
+      Command shootNoteCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT), new ShooterRunCommand(shooter, ShooterRunState.SHOOT), new WaitUntilCommand(shooter.ReadyToShoot), new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(1), new ShooterRunCommand(shooter, ShooterRunState.NONE), new IntakeRunCommand(intake, IntakeRunState.NONE));
+      Command rotateTowardsAprilTagCommand = new AutoVisionRotate(swerveDrive, 3);
+      if ((aprilTagDistance > ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE || aprilTagDistance < ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE) && false)
       {
         Vector2 targetPosRelativeToAprilTag = Vector2.clampMagnitude(horizontalAprilTagPosition, ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE, ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE);
 
@@ -58,7 +60,11 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
 
       scheduleSubcommand();
     }
-    else { finished = true; }
+    else 
+    { 
+      System.out.println("balls");
+      finished = true; 
+    }
   }
 
   @Override
