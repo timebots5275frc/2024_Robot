@@ -46,16 +46,17 @@ public class VisionDriveCalculator {
 
     public static double getAngleOffsetForVision()
     {
-        //double limelightXDistanceFromCenter = VisionConstants.LIMELIGHT_X_OFFSET;
-        Vector3 aprilTagPos = vision.AprilTagPosInRobotSpace();
-        Vector2 aprilTagHorizontalPos = new Vector2(aprilTagPos.x, aprilTagPos.z);
+        if (vision.hasValidData())
+        {
+            Vector3 aprilTagPos = vision.AprilTagPosInRobotSpace();
+            Vector2 aprilTagHorizontalPos = new Vector2(aprilTagPos.x, aprilTagPos.z);
 
-        double limelightDistToAprilTag = aprilTagHorizontalPos.magnitude();
-        //double centerDistToAprilTag = Vector2.distance(aprilTagHorizontalPos, new Vector2(-limelightXDistanceFromCenter, 0));
+            double limelightDistToAprilTag = aprilTagHorizontalPos.magnitude();
 
-        //double B = 
+            return (5 / (limelightDistToAprilTag * limelightDistToAprilTag)) + 9;
+        }
 
-        return (5 / (limelightDistToAprilTag * limelightDistToAprilTag)) + 9;
+        return 0;
     }
 
     public static class AprilTagMoveVelocity

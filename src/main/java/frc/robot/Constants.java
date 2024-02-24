@@ -278,8 +278,8 @@ import frc.robot.CustomTypes.Math.Vector2;
     public final static double SHOOTER_STUPID_POS = 78 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
 
     public final static double SHOOTER_PIVOT_ALLOWED_OFFSET = 1;
-    public final static double LEFT_SHOOTER_ALLOWED_DIFFERENTIAL = 100;
-    public final static double RIGHT_SHOOTER_ALLOWED_DIFFERENTIAL = 100;
+    public final static double LEFT_SHOOTER_ALLOWED_DIFFERENTIAL = 150;
+    public final static double RIGHT_SHOOTER_ALLOWED_DIFFERENTIAL = 150;
 
     public final static double SPEAKER_MIN_SHOT_DISTANCE = .8; // Meters
     public final static double SPEAKER_MAX_SHOT_DISTANCE = 5; // Meters

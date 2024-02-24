@@ -35,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 
@@ -122,8 +123,8 @@ public class RobotContainer {
     //new JoystickButton(buttonBoard, 4).onTrue(new SequentialCommandGroup(new ShooterRunCommand(shooter, ShooterRunState.AMP), new RepeatCommand(new ShooterPivotCommand(shooter, ShooterPivotState.AMP)).until(shooter.ShooterAtAngle), new AutoVisionDrive(swerveDrive, vision, Constants.VisionConstants.AMP_VISION_DRIVE_TARGET), new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.NONE)));
     //new JoystickButton(driveStick, 9).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT));
   
-    //new JoystickButton(driveStick, 11).onTrue(new AutoVisionSpeakerShoot(swerveDrive, shooter, vision, intake));
-    new JoystickButton(driveStick, 11).onTrue(getAutonomousCommand());
+    new JoystickButton(driveStick, 11).onTrue(AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake));
+    //new JoystickButton(driveStick, 11).onTrue(new SequentialCommandGroup(AutoVisionSpeakerShoot.getCommand(shooter, swerveDrive, vision, intake), new AutoVisionDrive(swerveDrive, vision, new Vector2(0, 1.5))));
     new JoystickButton(driveStick, 9).onTrue(new AutoVisionDrive(swerveDrive, vision, new Vector2(0, .5)).until(input.receivingJoystickInput));
 
     new JoystickButton(buttonBoard, 12).whileTrue(new ClimberCommand(climber, ClimberMode.EXTEND));
@@ -138,13 +139,30 @@ public class RobotContainer {
 
   }
 
-  public Command getAutonomousCommand() {
-    AutoVisionDrive visionDriveNoteLeft = new AutoVisionDrive(swerveDrive, vision, new Vector2(-1.35, 2.2));
-    AutoVisionDrive visionDriveNoteLMTransition = new AutoVisionDrive(swerveDrive, vision, new Vector2(-.762, 1.8));
-    AutoVisionDrive visionDriveNoteMiddle = new AutoVisionDrive(swerveDrive, vision, new Vector2(0, 2.2));
-    AutoVisionDrive visionDriveNoteMRTransition = new AutoVisionDrive(swerveDrive, vision, new Vector2(.762, 1.8));
-    AutoVisionDrive visionDriveNoteRight = new AutoVisionDrive(swerveDrive, vision, new Vector2(1.55, 2.2));
+  Command intakeAndWaitToShootCommand()
+  {
+    return new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.OUT), new IntakeRunCommand(intake, IntakeRunState.REVERSE), new WaitCommand(.25), new WaitUntilCommand(intake.NoteReadyToFeedToShooter));
+  }
 
-    return new SequentialCommandGroup(new AutoVisionSpeakerShoot(swerveDrive, shooter, vision, intake), new PrintCommand("Moved On"), visionDriveNoteLeft, new WaitCommand(2), visionDriveNoteLMTransition, visionDriveNoteMiddle, new WaitCommand(2), visionDriveNoteMRTransition, visionDriveNoteRight);
+  public Command getAutonomousCommand() {
+    AutoVisionDrive visionDriveNoteLeft = new AutoVisionDrive(swerveDrive, vision, new Vector2(-1.7, 2.5));
+    AutoVisionDrive visionDriveNoteLMTransition = new AutoVisionDrive(swerveDrive, vision, new Vector2(-.762, 1.8));
+    AutoVisionDrive visionDriveNoteMiddle = new AutoVisionDrive(swerveDrive, vision, new Vector2(-0.1, 2.3));
+    AutoVisionDrive visionDriveNoteMRTransition = new AutoVisionDrive(swerveDrive, vision, new Vector2(.762, 1.8));
+    AutoVisionDrive visionDriveNoteRight = new AutoVisionDrive(swerveDrive, vision, new Vector2(1.3, 2.35));
+
+    return new SequentialCommandGroup(
+      AutoVisionSpeakerShoot.ShootCommand(shooter, swerveDrive, vision, intake), 
+      visionDriveNoteLeft, 
+      intakeAndWaitToShootCommand(),
+      AutoVisionSpeakerShoot.ShootCommand(shooter, swerveDrive, vision, intake),
+      visionDriveNoteLMTransition, 
+      visionDriveNoteMiddle, 
+      intakeAndWaitToShootCommand(),
+      AutoVisionSpeakerShoot.ShootCommand(shooter, swerveDrive, vision, intake),
+      visionDriveNoteMRTransition, 
+      visionDriveNoteRight,
+      intakeAndWaitToShootCommand(),
+      AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake));
   }
 }

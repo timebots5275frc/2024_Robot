@@ -19,6 +19,7 @@ import frc.robot.subsystems.Intake.IntakeRunState;
 import frc.robot.subsystems.Shooter.ShooterPivotState;
 import frc.robot.subsystems.Shooter.ShooterRunState;
 import frc.robot.subsystems.Vision.Vision;
+import frc.robot.subsystems.Vision.VisionDriveCalculator;
 
 public class AutoVisionSpeakerShoot extends ManagerCommand {
   SwerveDrive swerveDrive;
@@ -27,6 +28,22 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
   Intake intake;
 
   boolean finished = false;
+
+  public static Command ShootAndStopCommand(Shooter shooter, SwerveDrive swerveDrive, Vision vision, Intake intake) {
+
+    Command shootNoteCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT), new ShooterRunCommand(shooter, ShooterRunState.SHOOT), new WaitUntilCommand(shooter.ReadyToShoot), new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(1), new ShooterRunCommand(shooter, ShooterRunState.NONE), new IntakeRunCommand(intake, IntakeRunState.NONE));
+    Command rotateTowardsAprilTagCommand = new FaceAprilTag(swerveDrive);
+
+    return new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand).onlyIf(vision.HasValidData);
+  }
+
+  public static Command ShootCommand(Shooter shooter, SwerveDrive swerveDrive, Vision vision, Intake intake) {
+
+    Command shootNoteCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT), new ShooterRunCommand(shooter, ShooterRunState.SHOOT), new WaitUntilCommand(shooter.ReadyToShoot), new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(1), new IntakeRunCommand(intake, IntakeRunState.NONE));
+    Command rotateTowardsAprilTagCommand = new FaceAprilTag(swerveDrive);
+
+    return new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand).onlyIf(vision.HasValidData);
+  }
 
   public AutoVisionSpeakerShoot(SwerveDrive swerveDrive, Shooter shooter, Vision vision, Intake intake) {
     this.swerveDrive = swerveDrive;

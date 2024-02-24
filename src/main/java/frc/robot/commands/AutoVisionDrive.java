@@ -28,6 +28,7 @@ public class AutoVisionDrive extends Command {
     this.swerveDrive = swerveDrive;
     this.vision = vision;
     this.offset = offset;
+    
     addRequirements(swerveDrive);
   }
 

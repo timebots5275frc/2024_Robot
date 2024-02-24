@@ -46,6 +46,10 @@ public class Intake extends SubsystemBase {
     public boolean getAsBoolean() { return !limitSwitchPressed(); };
   };
 
+  public BooleanSupplier NoteReadyToFeedToShooter = new BooleanSupplier() {
+    public boolean getAsBoolean() { return intakePivotEncoder.getPosition() > 58; };
+  };
+
   public enum IntakePivotState {
     NONE,
     OUT,
@@ -172,6 +176,7 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Intake Pivot Rotations", intakePivotEncoder.getPosition());
     SmartDashboard.putNumber("Intake run speed", intakeRunEncoder.getVelocity());
     SmartDashboard.putBoolean("Inside threshold", targetReached);
+    SmartDashboard.putBoolean("Note ready to feed", NoteReadyToFeedToShooter.getAsBoolean());
     if (targetReached) {
       intakeSetPivotState(IntakePivotState.NONE);
     }
