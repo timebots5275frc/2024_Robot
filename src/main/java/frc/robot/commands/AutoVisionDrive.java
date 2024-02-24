@@ -15,8 +15,8 @@ import frc.robot.subsystems.Vision.VisionDriveCalculator;
 
 public class AutoVisionDrive extends Command {
 
-  static final double turnSpeed = 1.5;
-  static final double driveSpeed = 3;
+  static final double turnSpeed = 1;
+  static final double driveSpeed = 3.5;
 
   SwerveDrive swerveDrive;
   Vision vision;
@@ -33,14 +33,15 @@ public class AutoVisionDrive extends Command {
 
   @Override
   public void initialize() {
-      SmartDashboard.putString("Auto Vision Drive Target", offset.toString(3));
+    madeItToTarget = false;
+    SmartDashboard.putString("Auto Vision Drive Target", offset.toString(3));
   }
 
   @Override
   public void execute()
   {
     VisionDriveCalculator.AprilTagMoveVelocity moveDirection = VisionDriveCalculator.GetVelocityToAprilTagOffset(offset);
-    double rotationDirection = VisionDriveCalculator.rotateTowardsTarget(0);
+    double rotationDirection = VisionDriveCalculator.rotateTowardsTarget(VisionDriveCalculator.getAngleOffsetForVision());
 
     Vector2 moveVelocity = moveDirection.velocity.times(driveSpeed);
     double rotationVelocity = rotationDirection * turnSpeed;
@@ -56,10 +57,10 @@ public class AutoVisionDrive extends Command {
     }
     else if (moveDirection.validData)
     {
-      if (moveVelocity.magnitude() < .1) { moveVelocity = Vector2.zero; }
+      if (moveVelocity.magnitude() < .1) { moveVelocity = Vector2.zero; System.out.println("Balls;");}
 
-      //swerveDrive.drive(moveVelocity.y, moveVelocity.x, rotationVelocity, false);
-      swerveDrive.drive(0, 0, 0, false);
+      swerveDrive.drive(moveVelocity.y, -moveVelocity.x, rotationVelocity, false);
+      //swerveDrive.drive(0, 0, 0, false);
     }
     else { swerveDrive.drive(0, 0, 0, false); }
   }
@@ -67,6 +68,7 @@ public class AutoVisionDrive extends Command {
   @Override
   public void end(boolean interrupted)
   {
+    System.out.println(interrupted);
     swerveDrive.drive(0, 0, 0, false);
   }
 

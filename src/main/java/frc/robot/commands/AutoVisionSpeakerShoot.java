@@ -38,7 +38,6 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
   @Override
   public void initialize() 
   {
-    System.out.println("command");
     finished = false;
 
     if (vision.hasValidData())
@@ -56,7 +55,7 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
         Command driveToPointInBoundsCommand = new AutoVisionDrive(swerveDrive, vision, targetPosRelativeToAprilTag);
         subCommand = new SequentialCommandGroup(driveToPointInBoundsCommand, rotateTowardsAprilTagCommand, shootNoteCommand);
       }
-      else { subCommand = new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand); System.out.println("Dont drive"); }
+      else { subCommand = new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand); }
 
       scheduleSubcommand();
     }

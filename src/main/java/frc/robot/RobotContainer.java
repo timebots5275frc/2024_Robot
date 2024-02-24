@@ -122,7 +122,7 @@ public class RobotContainer {
     //new JoystickButton(driveStick, 9).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT));
   
     new JoystickButton(driveStick, 11).onTrue(new AutoVisionSpeakerShoot(swerveDrive, shooter, vision, intake));
-    new JoystickButton(driveStick, 9).onTrue(new AutoVisionDrive(swerveDrive, vision, new Vector2(0, 1)).until(input.receivingJoystickInput));
+    new JoystickButton(driveStick, 9).onTrue(new AutoVisionDrive(swerveDrive, vision, new Vector2(0, .5)).until(input.receivingJoystickInput));
 
     new JoystickButton(buttonBoard, 12).whileTrue(new ClimberCommand(climber, ClimberMode.EXTEND));
     new JoystickButton(buttonBoard, 10).whileTrue(new ClimberCommand(climber, ClimberMode.RETRACT));
@@ -137,8 +137,12 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    Command driveCommand = new AutoOdometryDrive(swerveDrive, new Vector2(-.5, 0), .4);
-    //return new AutoShootNote(shooter, intake, ShooterPivotState.DEFAULT_SHOOT, ShooterRunState.AMP);
-    return new SequentialCommandGroup(new ShooterRunCommand(shooter, ShooterRunState.SHOOT), new ShooterPivotCommand(shooter, ShooterPivotState.DEFAULT_SHOOT), new WaitCommand(5), new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(3), new IntakeRunCommand(intake, IntakeRunState.NONE), new ShooterRunCommand(shooter, ShooterRunState.NONE));
+    AutoVisionDrive visionDriveNoteLeft = new AutoVisionDrive(swerveDrive, vision, new Vector2(-1.35, 2.2));
+    AutoVisionDrive visionDriveNoteLMTransition = new AutoVisionDrive(swerveDrive, vision, new Vector2(-.762, 1.8));
+    AutoVisionDrive visionDriveNoteMiddle = new AutoVisionDrive(swerveDrive, vision, new Vector2(0, 2.2));
+    AutoVisionDrive visionDriveNoteMRTransition = new AutoVisionDrive(swerveDrive, vision, new Vector2(.762, 1.8));
+    AutoVisionDrive visionDriveNoteRight = new AutoVisionDrive(swerveDrive, vision, new Vector2(1.55, 2.2));
+
+    return new SequentialCommandGroup(new AutoVisionSpeakerShoot(swerveDrive, shooter, vision, intake), visionDriveNoteLeft, new WaitCommand(2), visionDriveNoteLMTransition, visionDriveNoteMiddle, new WaitCommand(2), visionDriveNoteMRTransition, visionDriveNoteRight);
   }
 }
