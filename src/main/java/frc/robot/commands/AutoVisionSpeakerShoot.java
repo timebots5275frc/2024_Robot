@@ -48,26 +48,24 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
 
       Command shootNoteCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT), new ShooterRunCommand(shooter, ShooterRunState.SHOOT), new WaitUntilCommand(shooter.ReadyToShoot), new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(1), new ShooterRunCommand(shooter, ShooterRunState.NONE), new IntakeRunCommand(intake, IntakeRunState.NONE));
       Command rotateTowardsAprilTagCommand = new AutoVisionRotate(swerveDrive, 3);
-      if ((aprilTagDistance > ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE || aprilTagDistance < ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE) && false)
-      {
-        Vector2 targetPosRelativeToAprilTag = Vector2.clampMagnitude(horizontalAprilTagPosition, ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE, ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE);
-
-        Command driveToPointInBoundsCommand = new AutoVisionDrive(swerveDrive, vision, targetPosRelativeToAprilTag);
-        subCommand = new SequentialCommandGroup(driveToPointInBoundsCommand, rotateTowardsAprilTagCommand, shootNoteCommand);
-      }
-      else { subCommand = new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand); }
+      subCommand = new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand);
 
       scheduleSubcommand();
-    }
-    else 
+    } else
     { 
-      System.out.println("balls");
       finished = true; 
     }
   }
 
   @Override
   public boolean isFinished() {
-  return finished || subcommandFinished();
+    return finished || subcommandFinished();
+  }
+
+  @Override
+  public void end(boolean interrupted)
+  {
+    super.end(interrupted);
+    System.out.println("AutoVisionSpeakerShoot ended");
   }
 }

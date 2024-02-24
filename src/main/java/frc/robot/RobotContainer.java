@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -101,7 +102,7 @@ public class RobotContainer {
   
     // Test Buttons
 
-    new JoystickButton(driveStick, 5).onTrue(new IntakePivotCommand(intake, IntakePivotState.IN));
+    new JoystickButton(driveStick, 5).onTrue(new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.IN), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.NONE)));
     new JoystickButton(driveStick, 6).onTrue(new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.OUT), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.REVERSE)));
 
     new JoystickButton(buttonBoard, 6).onTrue(new SequentialCommandGroup(new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.NONE)));
@@ -121,7 +122,8 @@ public class RobotContainer {
     //new JoystickButton(buttonBoard, 4).onTrue(new SequentialCommandGroup(new ShooterRunCommand(shooter, ShooterRunState.AMP), new RepeatCommand(new ShooterPivotCommand(shooter, ShooterPivotState.AMP)).until(shooter.ShooterAtAngle), new AutoVisionDrive(swerveDrive, vision, Constants.VisionConstants.AMP_VISION_DRIVE_TARGET), new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.NONE)));
     //new JoystickButton(driveStick, 9).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT));
   
-    new JoystickButton(driveStick, 11).onTrue(new AutoVisionSpeakerShoot(swerveDrive, shooter, vision, intake));
+    //new JoystickButton(driveStick, 11).onTrue(new AutoVisionSpeakerShoot(swerveDrive, shooter, vision, intake));
+    new JoystickButton(driveStick, 11).onTrue(getAutonomousCommand());
     new JoystickButton(driveStick, 9).onTrue(new AutoVisionDrive(swerveDrive, vision, new Vector2(0, .5)).until(input.receivingJoystickInput));
 
     new JoystickButton(buttonBoard, 12).whileTrue(new ClimberCommand(climber, ClimberMode.EXTEND));
@@ -143,6 +145,6 @@ public class RobotContainer {
     AutoVisionDrive visionDriveNoteMRTransition = new AutoVisionDrive(swerveDrive, vision, new Vector2(.762, 1.8));
     AutoVisionDrive visionDriveNoteRight = new AutoVisionDrive(swerveDrive, vision, new Vector2(1.55, 2.2));
 
-    return new SequentialCommandGroup(new AutoVisionSpeakerShoot(swerveDrive, shooter, vision, intake), visionDriveNoteLeft, new WaitCommand(2), visionDriveNoteLMTransition, visionDriveNoteMiddle, new WaitCommand(2), visionDriveNoteMRTransition, visionDriveNoteRight);
+    return new SequentialCommandGroup(new AutoVisionSpeakerShoot(swerveDrive, shooter, vision, intake), new PrintCommand("Moved On"), visionDriveNoteLeft, new WaitCommand(2), visionDriveNoteLMTransition, visionDriveNoteMiddle, new WaitCommand(2), visionDriveNoteMRTransition, visionDriveNoteRight);
   }
 }
