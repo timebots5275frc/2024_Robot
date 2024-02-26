@@ -53,7 +53,7 @@ public class VisionDriveCalculator {
 
             double limelightDistToAprilTag = aprilTagHorizontalPos.magnitude();
 
-            return (5 / (limelightDistToAprilTag * limelightDistToAprilTag)) + 9;
+            return (4.75 / (limelightDistToAprilTag * limelightDistToAprilTag)) + 9;
         }
 
         return 0;

@@ -267,7 +267,7 @@ import frc.robot.CustomTypes.Math.Vector2;
     public final static double LEFT_SHOOTER_SPEED = 5000;
     public final static double RIGHT_SHOOTER_SPEED = 0.8 * LEFT_SHOOTER_SPEED;
 
-    public final static double LEFT_AMP_SPEED = 731;
+    public final static double LEFT_AMP_SPEED = 681;
     public final static double RIGHT_AMP_SPEED = LEFT_AMP_SPEED;
 
     public final static double SHOOTER_RESET_POS = 65 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
@@ -276,6 +276,7 @@ import frc.robot.CustomTypes.Math.Vector2;
     public final static double SHOOTER_DEFAULT_AMP_POS = 56 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_NONE_POS = 45 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_STUPID_POS = 78 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+    public final static double SHOOTER_CLIMB_POS = 20 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
 
     public final static double SHOOTER_PIVOT_ALLOWED_OFFSET = 1;
     public final static double LEFT_SHOOTER_ALLOWED_DIFFERENTIAL = 150;
