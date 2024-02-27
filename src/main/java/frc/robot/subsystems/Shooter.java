@@ -175,6 +175,10 @@ public class Shooter extends SubsystemBase {
     }
   }
 
+  public static double getShooterRPM() {
+    return (leftShooterRunEncoder.getVelocity() + rightShooterRunEncoder.getVelocity()) / 2;
+  }
+
   public boolean readyToShoot() {
     boolean pivotReached = (Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET > Math.abs(targetAngle - shooterPivotEncoder.getPosition()));
     boolean lSpeedReached = (lTargetSpeed > 0 && Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_DIFFERENTIAL > Math.abs(lTargetSpeed - leftShooterRunEncoder.getVelocity()));
