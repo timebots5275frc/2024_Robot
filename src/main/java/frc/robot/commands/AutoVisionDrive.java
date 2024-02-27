@@ -80,8 +80,7 @@ public class AutoVisionDrive extends Command {
   @Override
   public void end(boolean interrupted)
   {
-    System.out.println(interrupted);
-    swerveDrive.drive(0, 0, 0, false);
+    if (stopOnEnd) { swerveDrive.drive(0, 0, 0, false); }
   }
 
   @Override
