@@ -85,49 +85,57 @@ public class RGB extends SubsystemBase {
 
   public void shooterLED()
       {
-        if(shooterSpeed>0)
+        if(shooterSpeed<4000)
         {
-          for(int i = 0; i < 3; i++)
+          for(int i = 1; i < 22; i++)
           {
             m_ledBuffer.setRGB(i, 0, 0, 255);
             m_ledBuffer.setRGB(43-i, 0, 0, 255);
             m_ledBuffer.setRGB(i + 42, 0, 0, 255);
-            //m_ledBuffer.setRGB(84- i, 0, 0, 255);
+            m_ledBuffer.setRGB(85- i, 0, 0, 255);
           }
+          m_led.setData(m_ledBuffer);
         }
-        if(shooterSpeed>700)
+        else if(shooterSpeed<3000)
         {
-          for(int i = 4; i < 9; i++)
+          setAllianceColor();
+          for(int i = 1; i < 17; i++)
           {
             m_ledBuffer.setRGB(i, 0, 255, 0);
             m_ledBuffer.setRGB(43-i, 0, 255, 0);
             m_ledBuffer.setRGB(i + 42, 0, 255, 0);
             m_ledBuffer.setRGB(85- i, 0, 255, 0);
           }
+          m_led.setData(m_ledBuffer);
         }
-        if(shooterSpeed>2000)
+        else if(shooterSpeed<2000)
         {
-          for(int i = 9; i < 14; i++)
+          setAllianceColor();
+          for(int i = 1; i < 12; i++)
           {
             m_ledBuffer.setRGB(i, 0, 255, 0);
             m_ledBuffer.setRGB(43-i, 0, 255, 0);
             m_ledBuffer.setRGB(i + 42, 0, 255, 0);
             m_ledBuffer.setRGB(85- i, 0, 255, 0);
           }
+          m_led.setData(m_ledBuffer);
         }
-        if(shooterSpeed>3200)
+        else if(shooterSpeed<1000)
         {
-          for(int i = 14; i < 17; i++)
+          setAllianceColor();
+          for(int i = 1; i < 9; i++)
           {
             m_ledBuffer.setRGB(i, 0, 255, 0);
             m_ledBuffer.setRGB(43-i, 0, 255, 0);
             m_ledBuffer.setRGB(i + 42, 0, 255, 0);
             m_ledBuffer.setRGB(85- i, 0, 255, 0);
           }
+          m_led.setData(m_ledBuffer);
         }
-        if(shooterSpeed>4600)
+        else
           {
-            for(int i = 17; i < 22; i++)
+            setAllianceColor();
+            for(int i = 1; i < 4; i++)
             {
              m_ledBuffer.setRGB(i, 255, 0, 0);
              m_ledBuffer.setRGB(43-i, 255, 0, 0);
