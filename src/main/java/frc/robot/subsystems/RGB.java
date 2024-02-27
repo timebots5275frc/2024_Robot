@@ -10,9 +10,18 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class RGB extends SubsystemBase {
+
+  static final Color RED = new Color(255, 0, 0);
+  static final Color GREEN = new Color(0, 255, 0);
+  static final Color BLUE = new Color(0, 0, 255);
+
+  static final Color OFF = new Color(0, 0, 0);
+  static final Color YELLOW = new Color(204, 159, 47);
+
   private AddressableLED m_led = new AddressableLED(0);
       // Reuse buffer
       // Default to a length of 60, start empty output
@@ -28,61 +37,30 @@ public class RGB extends SubsystemBase {
       this.shooter = shooter;
       m_led.setLength(m_ledBuffer.getLength());
   
-      // Set the data
-      for (int i = 0; i < m_ledBuffer.getLength(); i += 2) {
-        // Sets the specified LED to the RGB values for red
-        m_ledBuffer.setRGB(i, 255, 0, 0);
-      }
-      for (int i = 1; i < m_ledBuffer.getLength(); i += 2) {
-        // Sets the specified LED to the RGB values for red
-        m_ledBuffer.setRGB(i, 0, 0, 255);
-      }
-      
+      setColorPattern(new Color[] { BLUE, RED } );
 
       m_led.start();
-      m_led.setData(m_ledBuffer);
-
     }
 
-  public void setBlueLed()
-  {
-    for (int i = 0; i < m_ledBuffer.getLength(); i ++) {
-        // Sets the specified LED to the RGB values for red
-        m_ledBuffer.setRGB(i, 0, 0, 255);
-     }
+    public void setSolidRGBColor(Color color)
+    {
+      for (int i = 0; i < m_ledBuffer.getLength(); i ++) {
+        m_ledBuffer.setRGB(i, (int)(color.red * 255), (int)(color.green * 255), (int)(color.blue * 255));
+      }
+
       m_led.setData(m_ledBuffer);
-  }
-  public void setgreen()
-  {
-   for(int i = 0; i < m_ledBuffer.getLength(); i ++) {
-        // Sets the specified LED to the RGB values for red
-        m_ledBuffer.setRGB(i, 0, 255, 0);
-     }
+    }
+
+    public void setColorPattern(Color[] colors)
+    {
+      for (int i = 0; i < m_ledBuffer.getLength(); i ++) {
+        Color color = colors[i % colors.length];
+        m_ledBuffer.setRGB(i, (int)(color.red * 255), (int)(color.green * 255), (int)(color.blue * 255));
+      }
+
       m_led.setData(m_ledBuffer);
-  }
-  public void setYellowLed()
-  {
-    for (var i = 0; i < m_ledBuffer.getLength(); i ++) {
-        // Sets the specified LED to the RGB values for red
-        m_ledBuffer.setRGB(i, 204, 159, 47);
-        System.out.println("Set led" + i);
-     }
-      m_led.setData(m_ledBuffer);
-  }
-  public void setBlinkingYellow()
-  {
-    for (int i = 0; i < m_ledBuffer.getLength(); i ++) {
-        // Sets the specified LED to the RGB values for red
-        m_ledBuffer.setRGB(i, 204, 159, 47);
-        m_led.setData(m_ledBuffer);
-     }
-     for (int i = 0; i < m_ledBuffer.getLength(); i += 2) {
-        // Sets the specified LED to the RGB values for red
-        m_ledBuffer.setRGB(i, 0, 0, 0);
-        m_led.setData(m_ledBuffer);
-     }
-   
-  }
+    }
+
   public void shooterLED()
       {
         if(shooterSpeed>0)
@@ -92,7 +70,7 @@ public class RGB extends SubsystemBase {
             m_ledBuffer.setRGB(i, 0, 0, 255);
             m_ledBuffer.setRGB(43-i, 0, 0, 255);
             m_ledBuffer.setRGB(i + 42, 0, 0, 255);
-            m_ledBuffer.setRGB(84- i, 0, 0, 255);
+            //m_ledBuffer.setRGB(84- i, 0, 0, 255);
           }
         }
         if(shooterSpeed>700)
@@ -139,28 +117,24 @@ public class RGB extends SubsystemBase {
         }
       
 
-  public void startLight() {
-      if (DriverStation.getAlliance().get() == Alliance.Red) {
-         for (int i = 0; i < m_ledBuffer.getLength(); i++) {
-         // Sets the specified LED to the RGB values for red
-         m_ledBuffer.setRGB(i, 100, 0, 0);
-         }
-      } else if (DriverStation.getAlliance().get() == Alliance.Blue) {
-         for (int i = 0; i < m_ledBuffer.getLength(); i++) {
-         // Sets the specified LED to the RGB values for red
-         m_ledBuffer.setRGB(i, 0, 0, 100);
-         }
+  public void setAllianceColor() {
+      if (DriverStation.getAlliance().get() == Alliance.Red) { setSolidRGBColor(RED); } 
+      else if (DriverStation.getAlliance().get() == Alliance.Blue) { setSolidRGBColor(BLUE); }
+      else { setColorPattern(new Color[] { RED, BLUE }); }
+  }
+
+  public void rainbowRGB()
+  {
+      for (int i = 0; i < m_ledBuffer.getLength(); i ++) {
+        Color color = new Color(1, 1, 1);
+        m_ledBuffer.setRGB(i, (int)(color.red * 255), (int)(color.green * 255), (int)(color.blue * 255));
       }
+
       m_led.setData(m_ledBuffer);
   }
 
   @Override
-  
   public void periodic() {
-    shooterSpeed = shooter.getShooterRPM();
-    shooterLED();
-    if (!DriverStation.isEnabled()) {
-      startLight();
-    }
+
   }
 }
