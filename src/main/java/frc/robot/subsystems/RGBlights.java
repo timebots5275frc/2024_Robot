@@ -158,7 +158,7 @@ public class RGB extends SubsystemBase {
   
   public void periodic() {
     shooterSpeed = Shooter.getShooterRPM();
-    shooterLED();
+    shooterLED()
     if (!DriverStation.isEnabled()) {
       startLight();
     }
