@@ -1,8 +1,10 @@
 package frc.robot.subsystems.Vision;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.CustomTypes.Math.SillyMath;
 import frc.robot.CustomTypes.Math.Vector2;
+import frc.robot.CustomTypes.Math.Vector3;
 
 public class VisionDriveCalculator {
     static Vision vision;
@@ -18,8 +20,8 @@ public class VisionDriveCalculator {
     {
         if (vision.hasValidData())
         {
-            Vector2 adjustedAprilTagOffset = new Vector2(-aprilTagOffset.x, aprilTagOffset.y); // needed because otherwise doesnt work right for some reason
-            Vector2 aprilTagOffsetInRobotSpace = Vector2.rotate(adjustedAprilTagOffset, Math.toRadians(vision.AprilTagRotInRobotSpace().y + 180));
+            Vector2 adjustedAprilTagOffset = new Vector2(aprilTagOffset.x, aprilTagOffset.y); // needed because otherwise doesnt work right for some reason
+            Vector2 aprilTagOffsetInRobotSpace = Vector2.rotate(adjustedAprilTagOffset, Math.toRadians(-vision.AprilTagRotInRobotSpace().y + 180));
             Vector2 aprilTagInRobotSpace = new Vector2(vision.AprilTagPosInRobotSpace().x, vision.AprilTagPosInRobotSpace().z);
             Vector2 targetPositionInRobotSpace = aprilTagInRobotSpace.add(aprilTagOffsetInRobotSpace);
 
@@ -40,6 +42,21 @@ public class VisionDriveCalculator {
         double easedMagnitude = Math.cbrt(direction.magnitude() + 1) - 1;
 
         return direction.normalized().times(easedMagnitude);
+    }
+
+    public static double getAngleOffsetForVision()
+    {
+        if (vision.hasValidData())
+        {
+            Vector3 aprilTagPos = vision.AprilTagPosInRobotSpace();
+            Vector2 aprilTagHorizontalPos = new Vector2(aprilTagPos.x, aprilTagPos.z);
+
+            double limelightDistToAprilTag = aprilTagHorizontalPos.magnitude();
+
+            return (4.75 / (limelightDistToAprilTag * limelightDistToAprilTag)) + 9;
+        }
+
+        return 0;
     }
 
     public static class AprilTagMoveVelocity

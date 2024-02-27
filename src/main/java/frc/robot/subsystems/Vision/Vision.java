@@ -5,6 +5,8 @@
 package frc.robot.subsystems.Vision;
 
 import java.util.ArrayList;
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,6 +24,10 @@ public class Vision extends SubsystemBase {
 
   private Vector3 avgAprilTagRotInRobotSpace;
   private ArrayList<Vector3> aprilTagRotInRobotSpaceValues = new ArrayList<Vector3>();
+
+  public BooleanSupplier HasValidData = new BooleanSupplier() {
+    public boolean getAsBoolean() { return hasValidData(); };
+  };
 
   /** Creates a new Vision. */
   public Vision() 

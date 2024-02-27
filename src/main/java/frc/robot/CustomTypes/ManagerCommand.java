@@ -2,6 +2,7 @@ package frc.robot.CustomTypes;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 public abstract class ManagerCommand extends Command {
     protected Command subCommand;
@@ -10,6 +11,8 @@ public abstract class ManagerCommand extends Command {
     @Override
     public void end(boolean interrupted)
     {
+      System.out.println("ManagerCommand ended | Interrupted: " + interrupted + " | Subcommand finished: " + subCommand.isFinished());
+
       if (subCommand != null && !subCommand.isFinished()) 
       { 
         subCommand.cancel();
@@ -19,6 +22,7 @@ public abstract class ManagerCommand extends Command {
 
     private void setSubCommandFinished()
     {
+      System.out.println("Subcommand set finished");
       subCommandFinished = true;
     }
 
@@ -26,6 +30,7 @@ public abstract class ManagerCommand extends Command {
     {
       if (subCommand != null)
       {
+        System.out.println("Schedule Subcommand");
         subCommandFinished = false;
         subCommand.andThen(new InstantCommand(this::setSubCommandFinished)).schedule();
       }

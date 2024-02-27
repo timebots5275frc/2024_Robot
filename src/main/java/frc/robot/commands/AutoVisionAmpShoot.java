@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.CustomTypes.ManagerCommand;
 import frc.robot.CustomTypes.Math.Vector2;
@@ -15,6 +16,8 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterPivotState;
 import frc.robot.subsystems.Shooter.ShooterRunState;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
+import frc.robot.subsystems.Intake.IntakePivotState;
+import frc.robot.subsystems.Intake.IntakeRunState;
 import frc.robot.subsystems.Vision.Vision;
 
 public class AutoVisionAmpShoot extends ManagerCommand {
@@ -22,6 +25,14 @@ public class AutoVisionAmpShoot extends ManagerCommand {
   Vision vision;
   Shooter shooter;
   Intake intake;
+
+  public static Command GetCommand(SwerveDrive swerveDrive, Vision vision, Shooter shooter, Intake intake)
+  {
+    SequentialCommandGroup getShooterIntakeReadyCommand = new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.IN), new ShooterPivotCommand(shooter, ShooterPivotState.AMP), new ShooterRunCommand(shooter, ShooterRunState.AMP));
+    SequentialCommandGroup alignAndDriveCommand = new SequentialCommandGroup(new AutoVisionDrive(swerveDrive, vision, new Vector2(0, .8f)), new FaceAprilTag(swerveDrive), new AutoVisionDrive(swerveDrive, vision, new Vector2(0, .38)));
+    SequentialCommandGroup shootAndStopShooterCommand = new SequentialCommandGroup(new IntakeRunCommand(intake, IntakeRunState.OUTTAKE), new WaitCommand(1), new IntakeRunCommand(intake, IntakeRunState.NONE), new ShooterRunCommand(shooter, ShooterRunState.NONE));
+    return new SequentialCommandGroup(getShooterIntakeReadyCommand, alignAndDriveCommand, shootAndStopShooterCommand);
+  }
 
   boolean finished = false;
 

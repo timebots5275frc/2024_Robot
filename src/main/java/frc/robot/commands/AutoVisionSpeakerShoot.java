@@ -15,6 +15,7 @@ import frc.robot.CustomTypes.Math.Vector3;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
+import frc.robot.subsystems.Intake.IntakePivotState;
 import frc.robot.subsystems.Intake.IntakeRunState;
 import frc.robot.subsystems.Shooter.ShooterPivotState;
 import frc.robot.subsystems.Shooter.ShooterRunState;
@@ -28,6 +29,42 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
 
   boolean finished = false;
 
+  public static Command ShootVisionCommand(Shooter shooter, Intake intake, boolean stopShooter)
+  {
+    SequentialCommandGroup shootCommand = new SequentialCommandGroup(
+      new IntakeRunCommand(intake, IntakeRunState.NONE), 
+      new IntakePivotCommand(intake, IntakePivotState.IN),
+      new WaitUntilCommand(intake.NoteReadyToFeedToShooter),
+      new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT), 
+      new ShooterRunCommand(shooter, ShooterRunState.SHOOT), 
+      new WaitUntilCommand(shooter.ReadyToShoot), 
+      new IntakeRunCommand(intake, IntakeRunState.OUTTAKE),
+      new WaitCommand(1), 
+      new IntakeRunCommand(intake, IntakeRunState.NONE));
+
+      if (stopShooter) {
+        shootCommand.addCommands(new ShooterRunCommand(shooter, ShooterRunState.NONE));
+      }
+      
+      return shootCommand;
+  }
+
+  public static Command ShootAndStopCommand(Shooter shooter, SwerveDrive swerveDrive, Vision vision, Intake intake) {
+
+    Command shootNoteCommand = ShootVisionCommand(shooter, intake, true);
+    Command rotateTowardsAprilTagCommand = new FaceAprilTag(swerveDrive);
+
+    return new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand).onlyIf(vision.HasValidData);
+  }
+
+  public static Command ShootCommand(Shooter shooter, SwerveDrive swerveDrive, Vision vision, Intake intake) {
+
+    Command shootNoteCommand = ShootVisionCommand(shooter, intake, false);
+    Command rotateTowardsAprilTagCommand = new FaceAprilTag(swerveDrive);
+
+    return new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand).onlyIf(vision.HasValidData);
+  }
+
   public AutoVisionSpeakerShoot(SwerveDrive swerveDrive, Shooter shooter, Vision vision, Intake intake) {
     this.swerveDrive = swerveDrive;
     this.shooter = shooter;
@@ -38,7 +75,6 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
   @Override
   public void initialize() 
   {
-    System.out.println("command");
     finished = false;
 
     if (vision.hasValidData())
@@ -47,28 +83,26 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
       Vector2 horizontalAprilTagPosition = new Vector2(aprilTagPosInTargetSpace.x, aprilTagPosInTargetSpace.z);
       double aprilTagDistance = horizontalAprilTagPosition.magnitude();
 
-      Command shootNoteCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT), new ShooterRunCommand(shooter, ShooterRunState.SHOOT), new WaitUntilCommand(shooter.ReadyToShoot), new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(1), new ShooterRunCommand(shooter, ShooterRunState.NONE), new IntakeRunCommand(intake, IntakeRunState.NONE));
+      Command shootNoteCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT), new ShooterRunCommand(shooter, ShooterRunState.SHOOT), new WaitUntilCommand(shooter.ReadyToShoot), new IntakeRunCommand(intake, IntakeRunState.OUTTAKE), new WaitCommand(1), new ShooterRunCommand(shooter, ShooterRunState.NONE), new IntakeRunCommand(intake, IntakeRunState.NONE));
       Command rotateTowardsAprilTagCommand = new AutoVisionRotate(swerveDrive, 3);
-      if ((aprilTagDistance > ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE || aprilTagDistance < ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE) && false)
-      {
-        Vector2 targetPosRelativeToAprilTag = Vector2.clampMagnitude(horizontalAprilTagPosition, ShooterConstants.SPEAKER_MIN_SHOT_DISTANCE, ShooterConstants.SPEAKER_MAX_SHOT_DISTANCE);
-
-        Command driveToPointInBoundsCommand = new AutoVisionDrive(swerveDrive, vision, targetPosRelativeToAprilTag);
-        subCommand = new SequentialCommandGroup(driveToPointInBoundsCommand, rotateTowardsAprilTagCommand, shootNoteCommand);
-      }
-      else { subCommand = new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand); System.out.println("Dont drive"); }
+      subCommand = new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand);
 
       scheduleSubcommand();
-    }
-    else 
+    } else
     { 
-      System.out.println("balls");
       finished = true; 
     }
   }
 
   @Override
   public boolean isFinished() {
-  return finished || subcommandFinished();
+    return finished || subcommandFinished();
+  }
+
+  @Override
+  public void end(boolean interrupted)
+  {
+    super.end(interrupted);
+    System.out.println("AutoVisionSpeakerShoot ended");
   }
 }

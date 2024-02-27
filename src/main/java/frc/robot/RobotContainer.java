@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.CustomTypes.Math.Vector2;
 import frc.robot.commands.AutoOdometryDrive;
+import frc.robot.commands.AutoVisionAmpShoot;
 import frc.robot.commands.AutoVisionDrive;
 import frc.robot.commands.AutoVisionSpeakerShoot;
 import frc.robot.commands.ClimberCommand;
@@ -31,9 +32,11 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 
@@ -101,11 +104,10 @@ public class RobotContainer {
   
     // Test Buttons
 
-    new JoystickButton(driveStick, 5).onTrue(new IntakePivotCommand(intake, IntakePivotState.IN));
-    new JoystickButton(driveStick, 6).onTrue(new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.OUT), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.REVERSE)));
+    new JoystickButton(driveStick, 5).onTrue(new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.IN), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.NONE)));
+    new JoystickButton(driveStick, 6).onTrue(new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.OUT), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.INTAKE)));
 
-    new JoystickButton(buttonBoard, 6).onTrue(new SequentialCommandGroup(new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.NONE)));
-    //new JoystickButton(driveStick, 3).onTrue(new IntakeRunCommand(intake, IntakeRunState.REVERSE));
+    new JoystickButton(buttonBoard, 6).onTrue(new SequentialCommandGroup(new IntakeRunCommand(intake, IntakeRunState.OUTTAKE), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.NONE)));
     new JoystickButton(driveStick, 4).onTrue(new IntakeRunCommand(intake, IntakeRunState.NONE));
 
     new JoystickButton(buttonBoard,9).onTrue(new ShooterRunCommand(shooter, ShooterRunState.NONE));
@@ -113,32 +115,55 @@ public class RobotContainer {
     new JoystickButton(buttonBoard, 7).onTrue(new ShooterRunCommand(shooter, ShooterRunState.AMP));
 
 
-    //new JoystickButton(buttonBoard, 0).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.START));
     new JoystickButton(buttonBoard, 8).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE));
     new JoystickButton(buttonBoard, 3).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.DEFAULT_SHOOT));
-    new JoystickButton(buttonBoard, 5).onTrue(new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.OUT), new WaitCommand(0.5), new ShooterPivotCommand(shooter, ShooterPivotState.STUPID_POS)));
+    new JoystickButton(buttonBoard, 5).onTrue(new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.OUT), new WaitCommand(0.5), new ShooterPivotCommand(shooter, ShooterPivotState.CLIMBING_POS)));
     new JoystickButton(buttonBoard, 4).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.AMP));
-    //new JoystickButton(buttonBoard, 4).onTrue(new SequentialCommandGroup(new ShooterRunCommand(shooter, ShooterRunState.AMP), new RepeatCommand(new ShooterPivotCommand(shooter, ShooterPivotState.AMP)).until(shooter.ShooterAtAngle), new AutoVisionDrive(swerveDrive, vision, Constants.VisionConstants.AMP_VISION_DRIVE_TARGET), new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.NONE)));
-    //new JoystickButton(driveStick, 9).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT));
   
-    new JoystickButton(driveStick, 11).onTrue(new AutoVisionSpeakerShoot(swerveDrive, shooter, vision, intake));
-    new JoystickButton(driveStick, 9).onTrue(new AutoVisionDrive(swerveDrive, vision, new Vector2(0, 1)).until(input.receivingJoystickInput));
+    new JoystickButton(driveStick, 1).onTrue(AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake));
+    new JoystickButton(driveStick, 11).onTrue(AutoVisionAmpShoot.GetCommand(swerveDrive, vision, shooter, intake).until(input.receivingJoystickInput));
 
     new JoystickButton(buttonBoard, 12).whileTrue(new ClimberCommand(climber, ClimberMode.EXTEND));
     new JoystickButton(buttonBoard, 10).whileTrue(new ClimberCommand(climber, ClimberMode.RETRACT));
     new JoystickButton(driveStick, 12).whileTrue(new ResetClimberCommand(climber));
+  }
 
-    //new JoystickButton(buttonBoard, 8).onTrue(new RepeatCommand(new AutoVisionDrive(swerveDrive, vision, new Vector2(0, 2))).until(input.receivingJoystickInput));
+  Command intakeAndWaitToShootCommand()
+  {
+    return new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.OUT), new IntakeRunCommand(intake, IntakeRunState.INTAKE), new WaitCommand(.25), new WaitUntilCommand(intake.NoteReadyToFeedToShooter));
+  }
 
-    // new JoystickButton(driveStick, 5).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.DEFAULT_SHOOT));
-    // new JoystickButton(driveStick, 6).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.AMP));
+  Command readyIntakeToGetNoteCommand()
+  {
+    return new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.OUT), new IntakeRunCommand(intake, IntakeRunState.INTAKE));
+  }
 
-
+  Command driveUntilPickedUpNoteCommand(AutoVisionDrive driveCommand)
+  {
+   return driveCommand.until(intake.NoteReadyToFeedToShooter);
   }
 
   public Command getAutonomousCommand() {
-    Command driveCommand = new AutoOdometryDrive(swerveDrive, new Vector2(-.5, 0), .4);
-    //return new AutoShootNote(shooter, intake, ShooterPivotState.DEFAULT_SHOOT, ShooterRunState.AMP);
-    return new SequentialCommandGroup(new ShooterRunCommand(shooter, ShooterRunState.SHOOT), new ShooterPivotCommand(shooter, ShooterPivotState.DEFAULT_SHOOT), new WaitCommand(5), new IntakeRunCommand(intake, IntakeRunState.FORWARD), new WaitCommand(3), new IntakeRunCommand(intake, IntakeRunState.NONE), new ShooterRunCommand(shooter, ShooterRunState.NONE));
+    AutoVisionDrive visionDriveNoteLeft = new AutoVisionDrive(swerveDrive, vision, new Vector2(-1.6, 2.5));
+    AutoVisionDrive visionDriveNoteLMTransition = new AutoVisionDrive(swerveDrive, vision, new Vector2(-.762, 1.8));
+    AutoVisionDrive visionDriveNoteMiddle = new AutoVisionDrive(swerveDrive, vision, new Vector2(-0.1, 2.4));
+    AutoVisionDrive visionDriveNoteMRTransition = new AutoVisionDrive(swerveDrive, vision, new Vector2(.762, 1.8));
+    AutoVisionDrive visionDriveNoteRight = new AutoVisionDrive(swerveDrive, vision, new Vector2(1.1, 2.5));
+
+    return new SequentialCommandGroup(
+      new WaitUntilCommand(vision.HasValidData),
+      AutoVisionSpeakerShoot.ShootCommand(shooter, swerveDrive, vision, intake), 
+      readyIntakeToGetNoteCommand(),
+      new WaitCommand(.85),
+      driveUntilPickedUpNoteCommand(visionDriveNoteLeft),
+      AutoVisionSpeakerShoot.ShootCommand(shooter, swerveDrive, vision, intake),
+      readyIntakeToGetNoteCommand(),
+      visionDriveNoteLMTransition, 
+      driveUntilPickedUpNoteCommand(visionDriveNoteMiddle),
+      AutoVisionSpeakerShoot.ShootCommand(shooter, swerveDrive, vision, intake),
+      readyIntakeToGetNoteCommand(),
+      visionDriveNoteMRTransition,
+      driveUntilPickedUpNoteCommand(visionDriveNoteRight),
+      AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake));
   }
 }

@@ -48,7 +48,7 @@ public class AutoShootNote extends ManagerCommand {
     
     if (intake.limitSwitchPressed())
     {
-      Command shootNoteIntoShooterCommand = new IntakeRunCommand(intake, IntakeRunState.FORWARD).until(intake.LimitSwitchIsNotPressed).andThen(new IntakeRunCommand(intake, IntakeRunState.NONE));
+      Command shootNoteIntoShooterCommand = new IntakeRunCommand(intake, IntakeRunState.OUTTAKE).until(intake.LimitSwitchIsNotPressed).andThen(new IntakeRunCommand(intake, IntakeRunState.NONE));
       Command resetShooterCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE), new ShooterRunCommand(shooter, ShooterRunState.NONE));
       Command shootNoteCommand = new ShooterRunCommand(shooter, shooterRun).until(shooter.ShotNote).andThen(resetShooterCommand);
 

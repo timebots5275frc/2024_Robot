@@ -46,6 +46,10 @@ public class Intake extends SubsystemBase {
     public boolean getAsBoolean() { return !limitSwitchPressed(); };
   };
 
+  public BooleanSupplier NoteReadyToFeedToShooter = new BooleanSupplier() {
+    public boolean getAsBoolean() { return intakePivotEncoder.getPosition() > 58; };
+  };
+
   public enum IntakePivotState {
     NONE,
     OUT,
@@ -64,8 +68,8 @@ public class Intake extends SubsystemBase {
   
   public enum IntakeRunState {
     NONE,
-    REVERSE,
-    FORWARD;
+    INTAKE,
+    OUTTAKE;
   }
 
 
@@ -122,10 +126,10 @@ public class Intake extends SubsystemBase {
       case NONE:
       intakeRunPID.setReference(0, ControlType.kVelocity);
       break;
-      case FORWARD: 
+      case OUTTAKE: 
       intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED * 0.4, ControlType.kVelocity);
       break;
-      case REVERSE: 
+      case INTAKE: 
       intakeRunPID.setReference(Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
       break;
     }
@@ -172,6 +176,7 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Intake Pivot Rotations", intakePivotEncoder.getPosition());
     SmartDashboard.putNumber("Intake run speed", intakeRunEncoder.getVelocity());
     SmartDashboard.putBoolean("Inside threshold", targetReached);
+    SmartDashboard.putBoolean("Note ready to feed", NoteReadyToFeedToShooter.getAsBoolean());
     if (targetReached) {
       intakeSetPivotState(IntakePivotState.NONE);
     }

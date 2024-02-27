@@ -62,7 +62,8 @@ public class Shooter extends SubsystemBase {
     DEFAULT_SHOOT,
     VISION_SHOOT,
     SHOOTER_NONE,
-    STUPID_POS;
+    STUPID_POS,
+    CLIMBING_POS;
     //TRAP,
   }
 
@@ -141,6 +142,9 @@ public class Shooter extends SubsystemBase {
       case STUPID_POS: 
       shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_STUPID_POS, ControlType.kSmartMotion);
       targetAngle = Constants.ShooterConstants.SHOOTER_STUPID_POS;
+      case CLIMBING_POS: 
+      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_CLIMB_POS, ControlType.kSmartMotion);
+      targetAngle = Constants.ShooterConstants.SHOOTER_CLIMB_POS;
       // case TRAP:
     }
   }
