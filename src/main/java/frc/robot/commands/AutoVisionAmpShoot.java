@@ -29,7 +29,7 @@ public class AutoVisionAmpShoot extends ManagerCommand {
   public static Command GetCommand(SwerveDrive swerveDrive, Vision vision, Shooter shooter, Intake intake)
   {
     SequentialCommandGroup getShooterIntakeReadyCommand = new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.IN), new ShooterPivotCommand(shooter, ShooterPivotState.AMP), new ShooterRunCommand(shooter, ShooterRunState.AMP));
-    SequentialCommandGroup alignAndDriveCommand = new SequentialCommandGroup(new AutoVisionDrive(swerveDrive, vision, new Vector2(0, .8f)), new FaceAprilTag(swerveDrive), new AutoVisionDrive(swerveDrive, vision, new Vector2(0, .38)));
+    SequentialCommandGroup alignAndDriveCommand = new SequentialCommandGroup(/*new AutoVisionDrive(swerveDrive, vision, new Vector2(0, .8f)), new FaceAprilTag(swerveDrive),*/ new AutoVisionDrive(swerveDrive, vision, new Vector2(0, .4)), new WaitCommand(0.5));
     SequentialCommandGroup shootAndStopShooterCommand = new SequentialCommandGroup(new IntakeRunCommand(intake, IntakeRunState.OUTTAKE), new WaitCommand(1), new IntakeRunCommand(intake, IntakeRunState.NONE), new ShooterRunCommand(shooter, ShooterRunState.NONE));
     return new SequentialCommandGroup(getShooterIntakeReadyCommand, alignAndDriveCommand, shootAndStopShooterCommand);
   }

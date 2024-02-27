@@ -174,6 +174,7 @@ public class Intake extends SubsystemBase {
     boolean targetReached = targetPosReached();
     SmartDashboard.putNumber("Intake angle", intakeAngleEncoder.getAbsolutePosition().getValueAsDouble() * 360);
     SmartDashboard.putNumber("Intake Pivot Rotations", intakePivotEncoder.getPosition());
+    SmartDashboard.putNumber("Intake Pivot Velocity", intakePivotEncoder.getVelocity());
     SmartDashboard.putNumber("Intake run speed", intakeRunEncoder.getVelocity());
     SmartDashboard.putBoolean("Inside threshold", targetReached);
     SmartDashboard.putBoolean("Note ready to feed", NoteReadyToFeedToShooter.getAsBoolean());

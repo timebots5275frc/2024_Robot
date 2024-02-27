@@ -239,7 +239,7 @@ import frc.robot.CustomTypes.Math.Vector2;
   }
   public static class ShooterConstants {
     public static final PID_Values ShooterRunPIDs = new PID_Values(
-    0.00005,
+    0.00008,
     0.0,
     0.0,
     0.0,
@@ -308,8 +308,8 @@ import frc.robot.CustomTypes.Math.Vector2;
     0.001,
     0.0,
     0.000162);
-    public static final double INTAKE_PIVOT_MAX_VEL = 4000;
-    public static final double INTAKE_PIVOT_MAX_ACCEL = 4000;
+    public static final double INTAKE_PIVOT_MAX_VEL = 5000;
+    public static final double INTAKE_PIVOT_MAX_ACCEL = 10000;
     public static final double INTAKE_PIVOT_MIN_VEL = 5;
     // Spark Max Motor ID's5
     public static final int INTAKE_RUN_MOTOR_ID = 21;

@@ -34,9 +34,9 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
     SequentialCommandGroup shootCommand = new SequentialCommandGroup(
       new IntakeRunCommand(intake, IntakeRunState.NONE), 
       new IntakePivotCommand(intake, IntakePivotState.IN),
-      new WaitUntilCommand(intake.NoteReadyToFeedToShooter),
       new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT), 
       new ShooterRunCommand(shooter, ShooterRunState.SHOOT), 
+      new WaitUntilCommand(intake.NoteReadyToFeedToShooter),
       new WaitUntilCommand(shooter.ReadyToShoot), 
       new IntakeRunCommand(intake, IntakeRunState.OUTTAKE),
       new WaitCommand(1), 

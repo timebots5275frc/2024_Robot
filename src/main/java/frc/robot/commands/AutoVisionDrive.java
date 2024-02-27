@@ -16,7 +16,7 @@ import frc.robot.subsystems.Vision.VisionDriveCalculator;
 public class AutoVisionDrive extends Command {
 
   static final double turnSpeed = 3;
-  static final double driveSpeed = 6;
+  static final double driveSpeed = 5;
 
   SwerveDrive swerveDrive;
   Vision vision;

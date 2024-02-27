@@ -39,7 +39,9 @@ public class VisionDriveCalculator {
 
     static Vector2 ApplyEasingToVector2(Vector2 direction)
     {
-        double easedMagnitude = Math.cbrt(direction.magnitude() + 1) - 1;
+        //double easedMagnitude = Math.cbrt(direction.magnitude() + 1) - 1;
+        //double easedMagnitude = Math.pow(direction.magnitude() + 1, 1/2.5) - 1;
+        double easedMagnitude = Math.sqrt(direction.magnitude() + 1) - 1;
 
         return direction.normalized().times(easedMagnitude);
     }

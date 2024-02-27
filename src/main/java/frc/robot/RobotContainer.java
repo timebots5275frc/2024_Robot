@@ -148,7 +148,7 @@ public class RobotContainer {
     AutoVisionDrive visionDriveNoteLMTransition = new AutoVisionDrive(swerveDrive, vision, new Vector2(-.762, 1.8));
     AutoVisionDrive visionDriveNoteMiddle = new AutoVisionDrive(swerveDrive, vision, new Vector2(-0.1, 2.4));
     AutoVisionDrive visionDriveNoteMRTransition = new AutoVisionDrive(swerveDrive, vision, new Vector2(.762, 1.8));
-    AutoVisionDrive visionDriveNoteRight = new AutoVisionDrive(swerveDrive, vision, new Vector2(1.1, 2.5));
+    AutoVisionDrive visionDriveNoteRight = new AutoVisionDrive(swerveDrive, vision, new Vector2(1, 2.5));
 
     return new SequentialCommandGroup(
       new WaitUntilCommand(vision.HasValidData),
