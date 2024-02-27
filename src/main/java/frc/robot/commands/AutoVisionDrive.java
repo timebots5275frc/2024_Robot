@@ -23,11 +23,22 @@ public class AutoVisionDrive extends Command {
   Vector2 offset;
 
   public boolean madeItToTarget = false;
+  boolean stopOnEnd;
 
-  public AutoVisionDrive(SwerveDrive swerveDrive, Vision vision, Vector2 offset) {
+  public AutoVisionDrive(SwerveDrive swerveDrive, Vision vision, Vector2 offset, boolean stopOnEnd) {
     this.swerveDrive = swerveDrive;
     this.vision = vision;
     this.offset = offset;
+    this.stopOnEnd = stopOnEnd;
+    
+    addRequirements(swerveDrive);
+  }
+
+  public AutoVisionDrive(SwerveDrive swerveDrive, Vision vision, Vector2 offset) { 
+      this.swerveDrive = swerveDrive;
+      this.vision = vision;
+      this.offset = offset;
+      this.stopOnEnd = true;
     
     addRequirements(swerveDrive);
   }

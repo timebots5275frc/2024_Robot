@@ -19,6 +19,7 @@ import frc.robot.commands.ShooterRunCommand;
 import frc.robot.commands.TeleopJoystickDrive;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.RGB;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Climber.ClimberMode;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
@@ -53,6 +54,7 @@ public class RobotContainer {
   Intake intake;
   Vision vision;
   Climber climber;
+  RGB rgb;
 
   Joystick driveStick;
   GenericHID buttonBoard;
@@ -72,6 +74,7 @@ public class RobotContainer {
     shooter = new Shooter();
     intake = new Intake();
     climber = new Climber();
+    //rgb = new RGB(shooter);
 
     driveStick = new Joystick(0);
     buttonBoard = new GenericHID(1);
@@ -145,16 +148,16 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     AutoVisionDrive visionDriveNoteLeft = new AutoVisionDrive(swerveDrive, vision, new Vector2(-1.6, 2.5));
-    AutoVisionDrive visionDriveNoteLMTransition = new AutoVisionDrive(swerveDrive, vision, new Vector2(-.762, 1.8));
-    AutoVisionDrive visionDriveNoteMiddle = new AutoVisionDrive(swerveDrive, vision, new Vector2(-0.1, 2.4));
-    AutoVisionDrive visionDriveNoteMRTransition = new AutoVisionDrive(swerveDrive, vision, new Vector2(.762, 1.8));
-    AutoVisionDrive visionDriveNoteRight = new AutoVisionDrive(swerveDrive, vision, new Vector2(1, 2.5));
+    AutoVisionDrive visionDriveNoteLMTransition = new AutoVisionDrive(swerveDrive, vision, new Vector2(-.762, 1.8), false);
+    AutoVisionDrive visionDriveNoteMiddle = new AutoVisionDrive(swerveDrive, vision, new Vector2(-0.1, 2.45));
+    AutoVisionDrive visionDriveNoteMRTransition = new AutoVisionDrive(swerveDrive, vision, new Vector2(.762, 1.8), false);
+    AutoVisionDrive visionDriveNoteRight = new AutoVisionDrive(swerveDrive, vision, new Vector2(1, 2.55));
 
     return new SequentialCommandGroup(
       new WaitUntilCommand(vision.HasValidData),
       AutoVisionSpeakerShoot.ShootCommand(shooter, swerveDrive, vision, intake), 
       readyIntakeToGetNoteCommand(),
-      new WaitCommand(.85),
+      new WaitCommand(.5),
       driveUntilPickedUpNoteCommand(visionDriveNoteLeft),
       AutoVisionSpeakerShoot.ShootCommand(shooter, swerveDrive, vision, intake),
       readyIntakeToGetNoteCommand(),

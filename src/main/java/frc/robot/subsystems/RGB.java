@@ -17,7 +17,7 @@ public class RGB extends SubsystemBase {
       // Reuse buffer
       // Default to a length of 60, start empty output
       // Length is expensive to set, so only set it once, then just update data
-      private AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(84);
+      private AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(85);
 
       Shooter shooter;
       private double shooterSpeed;
@@ -90,9 +90,9 @@ public class RGB extends SubsystemBase {
           for(int i = 0; i < 3; i++)
           {
             m_ledBuffer.setRGB(i, 0, 0, 255);
-            m_ledBuffer.setRGB(42-i, 0, 0, 255);
+            m_ledBuffer.setRGB(43-i, 0, 0, 255);
             m_ledBuffer.setRGB(i + 42, 0, 0, 255);
-            m_ledBuffer.setRGB(84- i, 0, 0, 255);
+            m_ledBuffer.setRGB(85- i, 0, 0, 255);
           }
         }
         if(shooterSpeed>700)
@@ -100,7 +100,7 @@ public class RGB extends SubsystemBase {
           for(int i = 4; i < 9; i++)
           {
             m_ledBuffer.setRGB(i, 0, 255, 0);
-            m_ledBuffer.setRGB(42-i, 0, 255, 0);
+            m_ledBuffer.setRGB(43-i, 0, 255, 0);
             m_ledBuffer.setRGB(i + 42, 0, 255, 0);
             m_ledBuffer.setRGB(84- i, 0, 255, 0);
           }
