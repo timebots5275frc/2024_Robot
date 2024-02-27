@@ -143,12 +143,12 @@ public class RGB extends SubsystemBase {
       if (DriverStation.getAlliance().get() == Alliance.Red) {
          for (int i = 0; i < m_ledBuffer.getLength(); i++) {
          // Sets the specified LED to the RGB values for red
-         m_ledBuffer.setRGB(i, 255, 0, 0);
+         m_ledBuffer.setRGB(i, 100, 0, 0);
          }
       } else if (DriverStation.getAlliance().get() == Alliance.Blue) {
          for (int i = 0; i < m_ledBuffer.getLength(); i++) {
          // Sets the specified LED to the RGB values for red
-         m_ledBuffer.setRGB(i, 0, 0, 255);
+         m_ledBuffer.setRGB(i, 0, 0, 100);
          }
       }
       m_led.setData(m_ledBuffer);
