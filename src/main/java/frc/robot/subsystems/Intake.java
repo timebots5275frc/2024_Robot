@@ -69,7 +69,8 @@ public class Intake extends SubsystemBase {
   public enum IntakeRunState {
     NONE,
     INTAKE,
-    OUTTAKE;
+    OUTTAKE,
+    OUTTAKE_AMP;
   }
 
 
@@ -131,6 +132,9 @@ public class Intake extends SubsystemBase {
       break;
       case INTAKE: 
       intakeRunPID.setReference(Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
+      break;
+      case OUTTAKE_AMP:
+      intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED * 0.2, ControlType.kVelocity);
       break;
     }
   }

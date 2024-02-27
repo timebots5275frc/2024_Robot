@@ -29,6 +29,8 @@ public class Vision extends SubsystemBase {
     public boolean getAsBoolean() { return hasValidData(); };
   };
 
+  public static boolean usingVisionCommand;
+
   /** Creates a new Vision. */
   public Vision() 
   {

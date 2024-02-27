@@ -48,6 +48,25 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
       return shootCommand;
   }
 
+  public static Command ShootVisionCommandDontWaitForRampUp(Shooter shooter, Intake intake, boolean stopIntake, boolean stopShooter)
+  {
+    SequentialCommandGroup shootCommand = new SequentialCommandGroup(
+      new IntakeRunCommand(intake, IntakeRunState.NONE), 
+      new IntakePivotCommand(intake, IntakePivotState.IN),
+      new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT), 
+      new ShooterRunCommand(shooter, ShooterRunState.SHOOT), 
+      new WaitUntilCommand(intake.NoteReadyToFeedToShooter),
+      new WaitCommand(.4),
+      new IntakeRunCommand(intake, IntakeRunState.OUTTAKE));
+
+      if (stopIntake || stopShooter) { shootCommand.addCommands(new WaitCommand(.8)); }
+      else { shootCommand.addCommands(new WaitCommand(.6)); }
+      if (stopIntake) { shootCommand.addCommands(new IntakeRunCommand(intake, IntakeRunState.NONE)); }
+      if (stopShooter) { shootCommand.addCommands(new ShooterRunCommand(shooter, ShooterRunState.NONE)); }
+      
+      return shootCommand;
+  }
+
   public static Command ShootAndStopCommand(Shooter shooter, SwerveDrive swerveDrive, Vision vision, Intake intake) {
     Command shootNoteCommand = ShootVisionCommand(shooter, intake, true, true);
     Command rotateTowardsAprilTagCommand = new FaceAprilTag(swerveDrive);

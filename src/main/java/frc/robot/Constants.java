@@ -239,7 +239,7 @@ import frc.robot.CustomTypes.Math.Vector2;
   }
   public static class ShooterConstants {
     public static final PID_Values ShooterRunPIDs = new PID_Values(
-    0.00025,
+    0.00008,
     0.0,
     0.0,
     0.0,
@@ -267,7 +267,7 @@ import frc.robot.CustomTypes.Math.Vector2;
     public final static double LEFT_SHOOTER_SPEED = 5000;
     public final static double RIGHT_SHOOTER_SPEED = 0.8 * LEFT_SHOOTER_SPEED;
 
-    public final static double LEFT_AMP_SPEED = 681;
+    public final static double LEFT_AMP_SPEED = 731;
     public final static double RIGHT_AMP_SPEED = LEFT_AMP_SPEED;
 
     public final static double SHOOTER_RESET_POS = 65 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;

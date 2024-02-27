@@ -68,6 +68,7 @@ public class Robot extends TimedRobot {
     }
 
     m_robotContainer.vision.onRobotEnable();
+    m_robotContainer.rgb.setAllianceColor();
   }
 
   /** This function is called periodically during autonomous. */
@@ -85,6 +86,7 @@ public class Robot extends TimedRobot {
     }
 
     m_robotContainer.vision.onRobotEnable();
+    m_robotContainer.rgb.setAllianceColor();
   }
 
   /** This function is called periodically during operator control. */

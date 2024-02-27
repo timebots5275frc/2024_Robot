@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
+import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionDriveCalculator;
 
 public class AutoVisionRotate extends Command {
@@ -25,6 +26,12 @@ public class AutoVisionRotate extends Command {
     addRequirements(swerveDrive);
   }
 
+  @Override
+  public void initialize()
+  {
+    Vision.usingVisionCommand = true;
+  }
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute()
@@ -39,6 +46,7 @@ public class AutoVisionRotate extends Command {
   @Override
   public void end(boolean a)
   {
+    Vision.usingVisionCommand = false;
     swerveDrive.drive(00, 00000, 0.0, false);
   }
 

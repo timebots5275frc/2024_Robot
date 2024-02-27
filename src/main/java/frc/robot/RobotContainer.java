@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.VisionConstants;
 import frc.robot.CustomTypes.Math.Vector2;
+import frc.robot.commands.AutoCommands;
 import frc.robot.commands.AutoOdometryDrive;
 import frc.robot.commands.AutoVisionAmpShoot;
 import frc.robot.commands.AutoVisionDrive;
@@ -74,7 +75,7 @@ public class RobotContainer {
     shooter = new Shooter();
     intake = new Intake();
     climber = new Climber();
-    rgb = new RGB(shooter);
+    rgb = new RGB(shooter, intake);
 
     driveStick = new Joystick(0);
     buttonBoard = new GenericHID(1);
@@ -131,49 +132,7 @@ public class RobotContainer {
     new JoystickButton(driveStick, 12).whileTrue(new ResetClimberCommand(climber));
   }
 
-  Command intakeAndWaitToShootCommand()
-  {
-    return new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.OUT), new IntakeRunCommand(intake, IntakeRunState.INTAKE), new WaitCommand(.25), new WaitUntilCommand(intake.NoteReadyToFeedToShooter));
-  }
-
-  Command readyIntakeToGetNoteCommand()
-  {
-    return new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.OUT), new IntakeRunCommand(intake, IntakeRunState.INTAKE));
-  }
-
-  Command driveUntilPickedUpNoteCommand(AutoVisionDrive driveCommand)
-  {
-   return driveCommand.until(intake.NoteReadyToFeedToShooter);
-  }
-
   public Command getAutonomousCommand() {
-    Vector2 leftNotePos = new Vector2(-1.6, 2.5);
-    Vector2 middleNotePos = new Vector2(-0.1, 2.4);
-    Vector2 rightNotePos = new Vector2(1, 2.55);
-
-    Vector2 lmTransPos = new Vector2((leftNotePos.x + middleNotePos.x) / 2, 1.75);
-    Vector2 rmTransPos = new Vector2((rightNotePos.x + middleNotePos.x) / 2, 1.75);
-
-    AutoVisionDrive visionDriveNoteLeft = new AutoVisionDrive(swerveDrive, vision, leftNotePos);
-    AutoVisionDrive visionDriveNoteMiddle = new AutoVisionDrive(swerveDrive, vision, middleNotePos);
-    AutoVisionDrive visionDriveNoteRight = new AutoVisionDrive(swerveDrive, vision, rightNotePos);
-    AutoVisionDrive visionDriveNoteMRTransition = new AutoVisionDrive(swerveDrive, vision, rmTransPos, true);
-    AutoVisionDrive visionDriveNoteLMTransition = new AutoVisionDrive(swerveDrive, vision, lmTransPos, true);
-
-    return new SequentialCommandGroup(
-      new WaitUntilCommand(vision.HasValidData),
-      AutoVisionSpeakerShoot.ShootCommand(shooter, swerveDrive, vision, intake), 
-      readyIntakeToGetNoteCommand(),
-      new WaitCommand(.5),
-      driveUntilPickedUpNoteCommand(visionDriveNoteLeft),
-      AutoVisionSpeakerShoot.ShootDontStopAnything(shooter, swerveDrive, vision, intake),
-      readyIntakeToGetNoteCommand(),
-      visionDriveNoteLMTransition, 
-      driveUntilPickedUpNoteCommand(visionDriveNoteMiddle),
-      AutoVisionSpeakerShoot.ShootDontStopAnything(shooter, swerveDrive, vision, intake),
-      readyIntakeToGetNoteCommand(),
-      visionDriveNoteMRTransition,
-      driveUntilPickedUpNoteCommand(visionDriveNoteRight),
-      AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake));
+    return AutoCommands.leftMiddleRightAutoCommand(swerveDrive, vision, shooter, intake);
   }
 }
