@@ -74,7 +74,7 @@ public class RobotContainer {
     shooter = new Shooter();
     intake = new Intake();
     climber = new Climber();
-    //rgb = new RGB(shooter);
+    rgb = new RGB(shooter);
 
     driveStick = new Joystick(0);
     buttonBoard = new GenericHID(1);
@@ -147,11 +147,18 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    AutoVisionDrive visionDriveNoteLeft = new AutoVisionDrive(swerveDrive, vision, new Vector2(-1.6, 2.5));
-    AutoVisionDrive visionDriveNoteLMTransition = new AutoVisionDrive(swerveDrive, vision, new Vector2(-.762, 1.8), false);
-    AutoVisionDrive visionDriveNoteMiddle = new AutoVisionDrive(swerveDrive, vision, new Vector2(-0.1, 2.45));
-    AutoVisionDrive visionDriveNoteMRTransition = new AutoVisionDrive(swerveDrive, vision, new Vector2(.762, 1.8), false);
-    AutoVisionDrive visionDriveNoteRight = new AutoVisionDrive(swerveDrive, vision, new Vector2(1, 2.55));
+    Vector2 leftNotePos = new Vector2(-1.6, 2.5);
+    Vector2 middleNotePos = new Vector2(-0.1, 2.4);
+    Vector2 rightNotePos = new Vector2(1, 2.55);
+
+    Vector2 lmTransPos = new Vector2((leftNotePos.x + middleNotePos.x) / 2, 1.75);
+    Vector2 rmTransPos = new Vector2((rightNotePos.x + middleNotePos.x) / 2, 1.75);
+
+    AutoVisionDrive visionDriveNoteLeft = new AutoVisionDrive(swerveDrive, vision, leftNotePos);
+    AutoVisionDrive visionDriveNoteMiddle = new AutoVisionDrive(swerveDrive, vision, middleNotePos);
+    AutoVisionDrive visionDriveNoteRight = new AutoVisionDrive(swerveDrive, vision, rightNotePos);
+    AutoVisionDrive visionDriveNoteMRTransition = new AutoVisionDrive(swerveDrive, vision, rmTransPos, true);
+    AutoVisionDrive visionDriveNoteLMTransition = new AutoVisionDrive(swerveDrive, vision, lmTransPos, true);
 
     return new SequentialCommandGroup(
       new WaitUntilCommand(vision.HasValidData),
@@ -159,11 +166,11 @@ public class RobotContainer {
       readyIntakeToGetNoteCommand(),
       new WaitCommand(.5),
       driveUntilPickedUpNoteCommand(visionDriveNoteLeft),
-      AutoVisionSpeakerShoot.ShootCommand(shooter, swerveDrive, vision, intake),
+      AutoVisionSpeakerShoot.ShootDontStopAnything(shooter, swerveDrive, vision, intake),
       readyIntakeToGetNoteCommand(),
       visionDriveNoteLMTransition, 
       driveUntilPickedUpNoteCommand(visionDriveNoteMiddle),
-      AutoVisionSpeakerShoot.ShootCommand(shooter, swerveDrive, vision, intake),
+      AutoVisionSpeakerShoot.ShootDontStopAnything(shooter, swerveDrive, vision, intake),
       readyIntakeToGetNoteCommand(),
       visionDriveNoteMRTransition,
       driveUntilPickedUpNoteCommand(visionDriveNoteRight),

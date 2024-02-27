@@ -239,7 +239,7 @@ import frc.robot.CustomTypes.Math.Vector2;
   }
   public static class ShooterConstants {
     public static final PID_Values ShooterRunPIDs = new PID_Values(
-    0.00024,
+    0.00025,
     0.0,
     0.0,
     0.0,

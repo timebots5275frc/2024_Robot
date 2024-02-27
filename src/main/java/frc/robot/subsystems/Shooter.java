@@ -14,7 +14,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
-
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -47,6 +47,8 @@ public class Shooter extends SubsystemBase {
 
   private ShooterPivotState currentPivotState;
   private ShooterRunState currentRunState;
+
+  private double shootDiffMult;
 
   public BooleanSupplier ShotNote = new BooleanSupplier() {
     public boolean getAsBoolean() { return false; };
@@ -107,6 +109,8 @@ public class Shooter extends SubsystemBase {
     shooterPivotPID.setSmartMotionMaxAccel(Constants.ShooterConstants.SHOOTER_PIVOT_MAX_ACCEL, 0);
     VisionShooterCalculator.SetShooterReference(this);
     shooterPivotEncoder.setPosition(getShooterAngle() * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE);
+
+    shootDiffMult = 1;
   }
 
   public void setVisionShooterAngle() {
@@ -180,9 +184,14 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean readyToShoot() {
+    // if (DriverStation.isAutonomousEnabled()) {
+    //   shootDiffMult = 2;
+    // } else {
+    //   shootDiffMult = 1;
+    // }
     boolean pivotReached = (Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET > Math.abs(targetAngle - shooterPivotEncoder.getPosition()));
-    boolean lSpeedReached = (lTargetSpeed > 0 && Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_DIFFERENTIAL > Math.abs(lTargetSpeed - leftShooterRunEncoder.getVelocity()));
-    boolean rSpeedReached = (rTargetSpeed > 0 && Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_DIFFERENTIAL > Math.abs(rTargetSpeed - rightShooterRunEncoder.getVelocity()));
+    boolean lSpeedReached = (lTargetSpeed > 0 && Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_DIFFERENTIAL * shootDiffMult > Math.abs(lTargetSpeed - leftShooterRunEncoder.getVelocity()));
+    boolean rSpeedReached = (rTargetSpeed > 0 && Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_DIFFERENTIAL * shootDiffMult > Math.abs(rTargetSpeed - rightShooterRunEncoder.getVelocity()));
     return pivotReached && lSpeedReached && rSpeedReached;
   }
 

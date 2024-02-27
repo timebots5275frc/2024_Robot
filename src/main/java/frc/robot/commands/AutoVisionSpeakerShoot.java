@@ -5,20 +5,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.CustomTypes.ManagerCommand;
 import frc.robot.CustomTypes.Math.Vector2;
 import frc.robot.CustomTypes.Math.Vector3;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Intake.IntakePivotState;
 import frc.robot.subsystems.Intake.IntakeRunState;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterPivotState;
 import frc.robot.subsystems.Shooter.ShooterRunState;
+import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Vision.Vision;
 
 public class AutoVisionSpeakerShoot extends ManagerCommand {
@@ -29,7 +29,7 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
 
   boolean finished = false;
 
-  public static Command ShootVisionCommand(Shooter shooter, Intake intake, boolean stopShooter)
+  public static Command ShootVisionCommand(Shooter shooter, Intake intake, boolean stopIntake, boolean stopShooter)
   {
     SequentialCommandGroup shootCommand = new SequentialCommandGroup(
       new IntakeRunCommand(intake, IntakeRunState.NONE), 
@@ -38,28 +38,32 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
       new ShooterRunCommand(shooter, ShooterRunState.SHOOT), 
       new WaitUntilCommand(intake.NoteReadyToFeedToShooter),
       new WaitUntilCommand(shooter.ReadyToShoot), 
-      new IntakeRunCommand(intake, IntakeRunState.OUTTAKE),
-      new WaitCommand(1), 
-      new IntakeRunCommand(intake, IntakeRunState.NONE));
+      new IntakeRunCommand(intake, IntakeRunState.OUTTAKE));
 
-      if (stopShooter) {
-        shootCommand.addCommands(new ShooterRunCommand(shooter, ShooterRunState.NONE));
-      }
+      if (stopIntake || stopShooter) { shootCommand.addCommands(new WaitCommand(.8)); }
+      else { shootCommand.addCommands(new WaitCommand(.6)); }
+      if (stopIntake) { shootCommand.addCommands(new IntakeRunCommand(intake, IntakeRunState.NONE)); }
+      if (stopShooter) { shootCommand.addCommands(new ShooterRunCommand(shooter, ShooterRunState.NONE)); }
       
       return shootCommand;
   }
 
   public static Command ShootAndStopCommand(Shooter shooter, SwerveDrive swerveDrive, Vision vision, Intake intake) {
-
-    Command shootNoteCommand = ShootVisionCommand(shooter, intake, true);
+    Command shootNoteCommand = ShootVisionCommand(shooter, intake, true, true);
     Command rotateTowardsAprilTagCommand = new FaceAprilTag(swerveDrive);
 
     return new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand).onlyIf(vision.HasValidData);
   }
 
   public static Command ShootCommand(Shooter shooter, SwerveDrive swerveDrive, Vision vision, Intake intake) {
+    Command shootNoteCommand = ShootVisionCommand(shooter, intake, true, false);
+    Command rotateTowardsAprilTagCommand = new FaceAprilTag(swerveDrive);
 
-    Command shootNoteCommand = ShootVisionCommand(shooter, intake, false);
+    return new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand).onlyIf(vision.HasValidData);
+  }
+
+  public static Command ShootDontStopAnything(Shooter shooter, SwerveDrive swerveDrive, Vision vision, Intake intake) {
+    Command shootNoteCommand = ShootVisionCommand(shooter, intake, false, false);
     Command rotateTowardsAprilTagCommand = new FaceAprilTag(swerveDrive);
 
     return new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand).onlyIf(vision.HasValidData);

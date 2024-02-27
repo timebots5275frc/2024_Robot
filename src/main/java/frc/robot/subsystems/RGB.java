@@ -92,7 +92,7 @@ public class RGB extends SubsystemBase {
             m_ledBuffer.setRGB(i, 0, 0, 255);
             m_ledBuffer.setRGB(43-i, 0, 0, 255);
             m_ledBuffer.setRGB(i + 42, 0, 0, 255);
-            m_ledBuffer.setRGB(85- i, 0, 0, 255);
+           // m_ledBuffer.setRGB(85- i, 0, 0, 255);
           }
         }
         if(shooterSpeed>700)
