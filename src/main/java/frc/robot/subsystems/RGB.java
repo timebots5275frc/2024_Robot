@@ -92,7 +92,7 @@ public class RGB extends SubsystemBase {
             m_ledBuffer.setRGB(i, 0, 0, 255);
             m_ledBuffer.setRGB(43-i, 0, 0, 255);
             m_ledBuffer.setRGB(i + 42, 0, 0, 255);
-            m_ledBuffer.setRGB(85- i, 0, 0, 255);
+            m_ledBuffer.setRGB(84- i, 0, 0, 255);
           }
         }
         if(shooterSpeed>700)
@@ -127,14 +127,13 @@ public class RGB extends SubsystemBase {
         }
         if(shooterSpeed>4600)
           {
-            for(int i = 17; i < 21; i++)
+            for(int i = 17; i < 22; i++)
             {
              m_ledBuffer.setRGB(i, 255, 0, 0);
              m_ledBuffer.setRGB(43-i, 255, 0, 0);
              m_ledBuffer.setRGB(i + 42, 255, 0, 0);
              m_ledBuffer.setRGB(85- i, 255, 0, 0);
            }
-           m_ledBuffer.setRGB(22, 255, 0, 0);
            m_led.setData(m_ledBuffer);
           }
         }
