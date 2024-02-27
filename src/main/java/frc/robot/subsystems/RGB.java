@@ -19,12 +19,13 @@ public class RGB extends SubsystemBase {
       // Length is expensive to set, so only set it once, then just update data
       private AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(84);
 
+      Shooter shooter;
       private double shooterSpeed;
 
-      public RGB() {
+      public RGB(Shooter shooter) {
       // PWM port 9
       // Must be a PWM header, not MXP or DIO
-      
+      this.shooter = shooter;
       m_led.setLength(m_ledBuffer.getLength());
   
       // Set the data
@@ -155,7 +156,7 @@ public class RGB extends SubsystemBase {
   @Override
   
   public void periodic() {
-    shooterSpeed = Shooter.getShooterRPM();
+    shooterSpeed = shooter.getShooterRPM();
     if (!DriverStation.isEnabled()) {
       startLight();
     }

@@ -175,7 +175,7 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-  public static double getShooterRPM() {
+  public double getShooterRPM() {
     return (leftShooterRunEncoder.getVelocity() + rightShooterRunEncoder.getVelocity()) / 2;
   }
 
