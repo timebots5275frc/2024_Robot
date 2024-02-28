@@ -11,10 +11,12 @@ import java.util.random.RandomGenerator;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Intake.IntakePivotState;
+import frc.robot.subsystems.Shooter.ShooterRunState;
 import frc.robot.subsystems.Vision.Vision;
 
 public class RGB extends SubsystemBase {
@@ -24,7 +26,7 @@ public class RGB extends SubsystemBase {
   static final Color BLUE = new Color(0, 0, 255);
 
   static final Color OFF = new Color(0, 0, 0);
-  static final Color ORANGE = new Color(255, 50, 0);
+  static final Color ORANGE = new Color(255, 30, 0);
   static final Color YELLOW = new Color(204, 159, 47);
   static final Color PURPLE = new Color(170, 0, 255);
 
@@ -32,11 +34,15 @@ public class RGB extends SubsystemBase {
 
   double rgbStrength = .5;
 
+  static final double startFlashTime = 15;
+  static final int flashInterval = 20;
+  boolean displayEndOfMatchFlash = false;
+
   private AddressableLED m_led = new AddressableLED(0);
       // Reuse buffer
       // Default to a length of 60, start empty output
       // Length is expensive to set, so only set it once, then just update data
-      private AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(149);
+      private AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(213);
 
       Shooter shooter;
       Intake intake;
@@ -49,7 +55,7 @@ public class RGB extends SubsystemBase {
       this.intake = intake;
 
       m_led.setLength(m_ledBuffer.getLength());
-      setColorPattern(new Color[] { BLUE, RED } );
+      setColorPattern(new Color[] { BLUE, BLUE, RED, RED } );
       m_led.start();
     }
 
@@ -171,14 +177,28 @@ public class RGB extends SubsystemBase {
       m_led.setData(m_ledBuffer);
   }
 
+  void SetAscendingOrderRGB()
+  {
+      for (int i = 0; i < m_ledBuffer.getLength(); i ++) {
+        int val = i;
+        m_ledBuffer.setRGB(i, val, val, val);
+      }
+
+      m_led.setData(m_ledBuffer);
+  }
+
   @Override
   public void periodic() {
     //rainbowRGB();
-    //periodicCalls++;
+    periodicCalls++;
 
-    //if (periodicCalls % 10 == 0) {allRandom();}
+    double matchTime = DriverStation.getMatchTime();
+    if (matchTime < startFlashTime && DriverStation.isTeleop() && periodicCalls % flashInterval == 0) { displayEndOfMatchFlash = !displayEndOfMatchFlash; }
+    if (matchTime > startFlashTime || matchTime == -1 || !DriverStation.isTeleop()) { displayEndOfMatchFlash = false; }
 
-    if (Vision.usingVisionCommand) { setSolidRGBColor(GREEN); }
+    if (displayEndOfMatchFlash) {  setSolidRGBColor(YELLOW); }
+    //else if (shooter.getCurrentRunState() == ShooterRunState.SHOOT) { shooterLED(); }
+    else if (Vision.usingVisionCommand) { setSolidRGBColor(GREEN); }
     else if (intake.limitSwitchPressed()) { setSolidRGBColor(ORANGE); }
     else if (intake.getCurrentPivotState() == IntakePivotState.OUT) { setSolidRGBColor(PURPLE); }
     else { setAllianceColor(); }

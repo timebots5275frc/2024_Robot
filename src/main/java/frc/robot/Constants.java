@@ -274,7 +274,7 @@ import frc.robot.CustomTypes.Math.Vector2;
     public final static double SHOOTER_START_POS = 65 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_DEFAULT_SHOOTING_POS = 60 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_DEFAULT_AMP_POS = 56 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
-    public final static double SHOOTER_NONE_POS = 45 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+    public final static double SHOOTER_NONE_POS = 40 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_STUPID_POS = 78 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_CLIMB_POS = 20 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
 

@@ -31,7 +31,7 @@ public class AutoCommands {
 
     public static Command leftMiddleRightAutoCommand(SwerveDrive swerveDrive, Vision vision, Shooter shooter, Intake intake)
     {
-        Vector2 leftNotePos = new Vector2(-1.6, 2.4);
+        Vector2 leftNotePos = new Vector2(-1.55, 2.4);
         Vector2 middleNotePos = new Vector2(-0.1, 2.4);
         Vector2 rightNotePos = new Vector2(1, 2.55);
 
@@ -46,7 +46,7 @@ public class AutoCommands {
 
         return new SequentialCommandGroup(
             new WaitUntilCommand(vision.HasValidData),
-            AutoVisionSpeakerShoot.ShootVisionCommandDontWaitForRampUp(shooter, intake, true, false), 
+            AutoVisionSpeakerShoot.ShootVisionCommandAutoFirstShot(shooter, intake, true, false), 
             readyIntakeToGetNoteCommand(intake),
             new WaitCommand(.5),
             driveUntilPickedUpNoteCommand(visionDriveNoteLeft, intake),

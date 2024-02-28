@@ -45,10 +45,10 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
       if (stopIntake) { shootCommand.addCommands(new IntakeRunCommand(intake, IntakeRunState.NONE)); }
       if (stopShooter) { shootCommand.addCommands(new ShooterRunCommand(shooter, ShooterRunState.NONE)); }
       
-      return shootCommand;
+      return shootCommand.onlyIf(Vision.Instance.LookingAtSpeakerTag);
   }
 
-  public static Command ShootVisionCommandDontWaitForRampUp(Shooter shooter, Intake intake, boolean stopIntake, boolean stopShooter)
+  public static Command ShootVisionCommandAutoFirstShot(Shooter shooter, Intake intake, boolean stopIntake, boolean stopShooter)
   {
     SequentialCommandGroup shootCommand = new SequentialCommandGroup(
       new IntakeRunCommand(intake, IntakeRunState.NONE), 
@@ -56,7 +56,7 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
       new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT), 
       new ShooterRunCommand(shooter, ShooterRunState.SHOOT), 
       new WaitUntilCommand(intake.NoteReadyToFeedToShooter),
-      new WaitCommand(.4),
+      new WaitCommand(.5),
       new IntakeRunCommand(intake, IntakeRunState.OUTTAKE));
 
       if (stopIntake || stopShooter) { shootCommand.addCommands(new WaitCommand(.8)); }
@@ -64,28 +64,28 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
       if (stopIntake) { shootCommand.addCommands(new IntakeRunCommand(intake, IntakeRunState.NONE)); }
       if (stopShooter) { shootCommand.addCommands(new ShooterRunCommand(shooter, ShooterRunState.NONE)); }
       
-      return shootCommand;
+      return shootCommand.onlyIf(Vision.Instance.LookingAtSpeakerTag);
   }
 
   public static Command ShootAndStopCommand(Shooter shooter, SwerveDrive swerveDrive, Vision vision, Intake intake) {
     Command shootNoteCommand = ShootVisionCommand(shooter, intake, true, true);
     Command rotateTowardsAprilTagCommand = new FaceAprilTag(swerveDrive);
 
-    return new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand).onlyIf(vision.HasValidData);
+    return new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand).onlyIf(vision.LookingAtSpeakerTag);
   }
 
   public static Command ShootCommand(Shooter shooter, SwerveDrive swerveDrive, Vision vision, Intake intake) {
     Command shootNoteCommand = ShootVisionCommand(shooter, intake, true, false);
     Command rotateTowardsAprilTagCommand = new FaceAprilTag(swerveDrive);
 
-    return new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand).onlyIf(vision.HasValidData);
+    return new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand).onlyIf(vision.LookingAtSpeakerTag);
   }
 
   public static Command ShootDontStopAnything(Shooter shooter, SwerveDrive swerveDrive, Vision vision, Intake intake) {
     Command shootNoteCommand = ShootVisionCommand(shooter, intake, false, false);
     Command rotateTowardsAprilTagCommand = new FaceAprilTag(swerveDrive);
 
-    return new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand).onlyIf(vision.HasValidData);
+    return new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand).onlyIf(vision.LookingAtSpeakerTag);
   }
 
   public AutoVisionSpeakerShoot(SwerveDrive swerveDrive, Shooter shooter, Vision vision, Intake intake) {

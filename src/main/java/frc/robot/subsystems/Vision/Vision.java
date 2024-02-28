@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.CustomTypes.Math.Vector3;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.Constants.VisionConstants.AprilTagData;
 
 public class Vision extends SubsystemBase {
 
@@ -29,6 +30,15 @@ public class Vision extends SubsystemBase {
     public boolean getAsBoolean() { return hasValidData(); };
   };
 
+  public BooleanSupplier LookingAtSpeakerTag = new BooleanSupplier() {
+    public boolean getAsBoolean() { return aprilTagID != -1 && AprilTagData.isSpeakerTag(AprilTagData.getTag(aprilTagID)); }
+  };
+
+  public BooleanSupplier LookingAtAmpTag = new BooleanSupplier() {
+    public boolean getAsBoolean() { return aprilTagID != -1 && AprilTagData.isAmpTag(AprilTagData.getTag(aprilTagID)); }
+  };
+
+  public static Vision Instance;
   public static boolean usingVisionCommand;
 
   /** Creates a new Vision. */
@@ -36,6 +46,8 @@ public class Vision extends SubsystemBase {
   {
     VisionDriveCalculator.SetVisionReference(this);
     VisionShooterCalculator.SetVisionReference(this);
+
+    Instance = this;
   }
 
   public void onRobotDisable()

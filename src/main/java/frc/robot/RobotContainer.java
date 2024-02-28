@@ -11,6 +11,7 @@ import frc.robot.commands.AutoOdometryDrive;
 import frc.robot.commands.AutoVisionAmpShoot;
 import frc.robot.commands.AutoVisionDrive;
 import frc.robot.commands.AutoVisionSpeakerShoot;
+import frc.robot.commands.AutoVisionStageShoot;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.IntakePivotCommand;
 import frc.robot.commands.IntakeRunCommand;
@@ -125,7 +126,8 @@ public class RobotContainer {
     new JoystickButton(buttonBoard, 4).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.AMP));
   
     new JoystickButton(driveStick, 1).onTrue(AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake));
-    new JoystickButton(driveStick, 11).onTrue(AutoVisionAmpShoot.GetCommand(swerveDrive, vision, shooter, intake).until(input.receivingJoystickInput));
+    new JoystickButton(driveStick, 2).onTrue(AutoVisionAmpShoot.GetCommand(swerveDrive, vision, shooter, intake).until(input.receivingJoystickInput));
+    new JoystickButton(driveStick, 11).onTrue(AutoVisionStageShoot.getCommand(shooter, intake, vision, swerveDrive).until(input.receivingJoystickInput));
 
     new JoystickButton(buttonBoard, 12).whileTrue(new ClimberCommand(climber, ClimberMode.EXTEND));
     new JoystickButton(buttonBoard, 10).whileTrue(new ClimberCommand(climber, ClimberMode.RETRACT));
