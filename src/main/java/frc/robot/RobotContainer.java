@@ -33,6 +33,8 @@ import frc.robot.subsystems.Shooter.ShooterRunState;
 import frc.robot.subsystems.Vision.Vision;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -65,11 +67,9 @@ public class RobotContainer {
 
   TeleopJoystickDrive joyDrive;
 
-  //AutoIntake autoIntake;
-  
-  //private Climber climber;
-
   SequentialCommandGroup autoCommands;
+
+  SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
     swerveDrive = new SwerveDrive();
@@ -83,6 +83,10 @@ public class RobotContainer {
     input = new Input(driveStick);
     vision = new Vision();
     joyDrive = new TeleopJoystickDrive(swerveDrive, driveStick, input, true);
+
+    autoChooser.setDefaultOption("None", null);
+    autoChooser.addOption("4-Note LMR", AutoCommands.leftMiddleRightAutoCommand(swerveDrive, vision, shooter, intake));
+    SmartDashboard.putData(autoChooser);
 
     configureBindings();
   }
@@ -135,6 +139,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return AutoCommands.leftMiddleRightAutoCommand(swerveDrive, vision, shooter, intake);
+    return autoChooser.getSelected();
   }
 }

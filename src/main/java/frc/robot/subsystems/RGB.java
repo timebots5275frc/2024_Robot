@@ -34,7 +34,7 @@ public class RGB extends SubsystemBase {
 
   double rgbStrength = .5;
 
-  static final double startFlashTime = 15;
+  static final double startFlashTime = 30;
   static final int flashInterval = 20;
   boolean displayEndOfMatchFlash = false;
 
