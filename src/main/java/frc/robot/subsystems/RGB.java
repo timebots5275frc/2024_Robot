@@ -198,7 +198,7 @@ public class RGB extends SubsystemBase {
 
     if (displayEndOfMatchFlash) {  setSolidRGBColor(YELLOW); }
     //else if (shooter.getCurrentRunState() == ShooterRunState.SHOOT) { shooterLED(); }
-    else if (Vision.usingVisionCommand) { setSolidRGBColor(GREEN); }
+    else if (Vision.usingLimelight) { setSolidRGBColor(GREEN); }
     else if (intake.limitSwitchPressed()) { setSolidRGBColor(ORANGE); }
     else if (intake.getCurrentPivotState() == IntakePivotState.OUT) { setSolidRGBColor(PURPLE); }
     else { setAllianceColor(); }

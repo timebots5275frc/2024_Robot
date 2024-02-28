@@ -45,6 +45,7 @@ public class AutoCommands {
         AutoVisionDrive visionDriveNoteLMTransition = new AutoVisionDrive(swerveDrive, vision, lmTransPos, true);
 
         return new SequentialCommandGroup(
+            new UseLimelightCommand(true),
             new WaitUntilCommand(vision.HasValidData),
             AutoVisionSpeakerShoot.ShootVisionCommandAutoFirstShot(shooter, intake, true, false), 
             readyIntakeToGetNoteCommand(intake),
@@ -58,6 +59,7 @@ public class AutoCommands {
             readyIntakeToGetNoteCommand(intake),
             visionDriveNoteMRTransition,
             driveUntilPickedUpNoteCommand(visionDriveNoteRight, intake),
-            AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake));
+            AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake),
+            new UseLimelightCommand(false));
     }
 }

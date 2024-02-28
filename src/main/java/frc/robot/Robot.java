@@ -50,9 +50,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {
-    m_robotContainer.vision.onRobotDisable();
-  }
+  public void disabledInit() {}
 
   @Override
   public void disabledPeriodic() {}
@@ -67,7 +65,6 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.schedule();
     }
 
-    m_robotContainer.vision.onRobotEnable();
     m_robotContainer.rgb.setAllianceColor();
   }
 
@@ -85,7 +82,6 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    m_robotContainer.vision.onRobotEnable();
     m_robotContainer.rgb.setAllianceColor();
   }
 
@@ -99,7 +95,6 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-    m_robotContainer.vision.onRobotEnable();
   }
 
   /** This function is called periodically during test mode. */

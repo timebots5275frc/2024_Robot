@@ -29,7 +29,7 @@ public class AutoVisionRotate extends Command {
   @Override
   public void initialize()
   {
-    Vision.usingVisionCommand = true;
+    Vision.Instance.setUsingLimelight(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -46,7 +46,7 @@ public class AutoVisionRotate extends Command {
   @Override
   public void end(boolean a)
   {
-    Vision.usingVisionCommand = false;
+    Vision.Instance.setUsingLimelight(false);
     swerveDrive.drive(00, 00000, 0.0, false);
   }
 

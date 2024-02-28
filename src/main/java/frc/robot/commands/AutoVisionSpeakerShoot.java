@@ -32,13 +32,15 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
   public static Command ShootVisionCommand(Shooter shooter, Intake intake, boolean stopIntake, boolean stopShooter)
   {
     SequentialCommandGroup shootCommand = new SequentialCommandGroup(
+      new UseLimelightCommand(true),
       new IntakeRunCommand(intake, IntakeRunState.NONE), 
       new IntakePivotCommand(intake, IntakePivotState.IN),
       new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT), 
       new ShooterRunCommand(shooter, ShooterRunState.SHOOT), 
       new WaitUntilCommand(intake.NoteReadyToFeedToShooter),
       new WaitUntilCommand(shooter.ReadyToShoot), 
-      new IntakeRunCommand(intake, IntakeRunState.OUTTAKE));
+      new IntakeRunCommand(intake, IntakeRunState.OUTTAKE),
+      new UseLimelightCommand(false));
 
       if (stopIntake || stopShooter) { shootCommand.addCommands(new WaitCommand(.8)); }
       else { shootCommand.addCommands(new WaitCommand(.6)); }

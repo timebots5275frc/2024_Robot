@@ -39,7 +39,9 @@ public class Vision extends SubsystemBase {
   };
 
   public static Vision Instance;
-  public static boolean usingVisionCommand;
+  public static boolean usingLimelight = false;
+
+  int thingsUsingLimelight = 0;
 
   /** Creates a new Vision. */
   public Vision() 
@@ -48,20 +50,6 @@ public class Vision extends SubsystemBase {
     VisionShooterCalculator.SetVisionReference(this);
 
     Instance = this;
-  }
-
-  public void onRobotDisable()
-  {
-    if (!DriverStation.isAutonomous())
-    {
-      ToggleLimelightLight(false);
-    }
-  }
-
-  // called when: test, teleop, auto, and simulation start (in Robot.java)
-  public void onRobotEnable()
-  {
-    ToggleLimelightLight(true);
   }
 
   @Override
@@ -128,9 +116,18 @@ public class Vision extends SubsystemBase {
     aprilTagRotInRobotSpaceValues.clear();
   }
 
+  public void setUsingLimelight(boolean usingLimelight)
+  {
+    thingsUsingLimelight += usingLimelight ? 1 : -1;
+
+    if (thingsUsingLimelight > 0 && !usingLimelight) { ToggleLimelightLight(true); } 
+    else if (thingsUsingLimelight == 0 && usingLimelight) { ToggleLimelightLight(false); }
+  }
+
   public void ToggleLimelightLight(boolean on)
   {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(on ? 3 : 1);
+    usingLimelight = on;
   }
 
   // Getter methods //

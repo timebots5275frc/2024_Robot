@@ -46,7 +46,7 @@ public class AutoVisionDrive extends Command {
   @Override
   public void initialize() {
     madeItToTarget = false;
-    Vision.usingVisionCommand = true;
+    Vision.Instance.setUsingLimelight(true);
     SmartDashboard.putString("Auto Vision Drive Target", offset.toString(3));
   }
 
@@ -81,7 +81,7 @@ public class AutoVisionDrive extends Command {
   @Override
   public void end(boolean interrupted)
   {
-    Vision.usingVisionCommand = false;
+    Vision.Instance.setUsingLimelight(false);
     if (stopOnEnd) { swerveDrive.drive(0, 0, 0, false); }
   }
 

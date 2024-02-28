@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
+import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionDriveCalculator;
 
 public class FaceAprilTag extends Command {
@@ -26,6 +27,7 @@ public class FaceAprilTag extends Command {
   public void initialize()
   {
     facingTarget = false;
+    Vision.Instance.setUsingLimelight(true);
   }
 
   @Override
@@ -41,6 +43,7 @@ public class FaceAprilTag extends Command {
   @Override
   public void end(boolean a)
   {
+    Vision.Instance.setUsingLimelight(true);
     swerveDrive.drive(00, 00000, 0.0, false);
   }
 
