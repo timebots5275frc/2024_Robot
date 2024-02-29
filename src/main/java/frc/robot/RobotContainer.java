@@ -84,8 +84,11 @@ public class RobotContainer {
     vision = new Vision();
     joyDrive = new TeleopJoystickDrive(swerveDrive, driveStick, input, true);
 
+    autoChooser = new SendableChooser<Command>();
     autoChooser.setDefaultOption("None", null);
+    autoChooser.addOption("Vision Shoot", AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake));
     autoChooser.addOption("4-Note LMR", AutoCommands.leftMiddleRightAutoCommand(swerveDrive, vision, shooter, intake));
+    autoChooser.addOption("4-Note RML", AutoCommands.rightMiddleLeftAutoCommand(swerveDrive, vision, shooter, intake));
     SmartDashboard.putData(autoChooser);
 
     configureBindings();
