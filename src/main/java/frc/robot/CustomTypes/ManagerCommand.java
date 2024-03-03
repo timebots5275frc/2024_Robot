@@ -1,44 +1,69 @@
 package frc.robot.CustomTypes;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 public abstract class ManagerCommand extends Command {
-    protected Command subCommand;
+    private Command subCommand;
+
     private boolean subCommandFinished;
+    private boolean subCommandScheduled;
+    private boolean runWhenDisabled;
 
-    @Override
-    public void end(boolean interrupted)
+    protected void scheduleSubcommand(Command newSubCommand)
     {
-      System.out.println("ManagerCommand ended | Interrupted: " + interrupted + " | Subcommand finished: " + subCommand.isFinished());
-
-      if (subCommand != null && !subCommand.isFinished()) 
-      { 
-        subCommand.cancel();
-        subCommand = null;
-       }
-    }
-
-    private void setSubCommandFinished()
-    {
-      System.out.println("Subcommand set finished");
-      subCommandFinished = true;
-    }
-
-    protected void scheduleSubcommand()
-    {
-      if (subCommand != null)
+      if (subCommandScheduled) { System.out.println("Trying to schedule SubCommand when one is already running!"); }
+      else if (newSubCommand != null)
       {
-        System.out.println("Schedule Subcommand");
+        subCommand = newSubCommand;
+
         subCommandFinished = false;
-        subCommand.andThen(new InstantCommand(this::setSubCommandFinished)).schedule();
+        subCommandScheduled = true;
+
+        m_requirements = subCommand.getRequirements();
+        runWhenDisabled = subCommand.runsWhenDisabled();
+
+        subCommand.initialize();
       }
       else { System.out.println("Trying to schedule null SubCommand!"); }
     }
 
-    protected boolean subcommandFinished()
-    {
+    protected boolean subCommandFinished() {
       return subCommandFinished;
     }
+
+    protected boolean subCommandScheduled() {
+      return subCommandScheduled;
+    }
+
+    @Override
+    public final void execute() {
+      if (!subCommandScheduled) { return; }
+
+      subCommand.execute();
+      if (subCommand.isFinished()) {
+        subCommand.end(false);
+        onSubCommandEnd(false);
+
+        subCommandFinished = true;
+        subCommandScheduled = false;
+      }
+    }
+
+    @Override
+    public final boolean runsWhenDisabled() {
+      return runWhenDisabled;
+    }
+
+    @Override
+    public final void end(boolean interrupted) {
+      onManagerCommandEnd(interrupted);
+
+      if (subCommand != null && !subCommand.isFinished()) { 
+        subCommand.end(interrupted);
+        onSubCommandEnd(interrupted);
+      }
+    }
+
+    public void onSubCommandEnd(boolean interrupted) {}
+    public void onManagerCommandEnd(boolean interrupted) {}
 }

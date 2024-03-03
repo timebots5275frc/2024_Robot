@@ -111,9 +111,8 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
 
       Command shootNoteCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT), new ShooterRunCommand(shooter, ShooterRunState.SHOOT), new WaitUntilCommand(shooter.ReadyToShoot), new IntakeRunCommand(intake, IntakeRunState.OUTTAKE), new WaitCommand(1), new ShooterRunCommand(shooter, ShooterRunState.NONE), new IntakeRunCommand(intake, IntakeRunState.NONE));
       Command rotateTowardsAprilTagCommand = new AutoVisionRotate(swerveDrive, 3);
-      subCommand = new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand);
 
-      scheduleSubcommand();
+      scheduleSubcommand(new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand));
     } else
     { 
       finished = true; 
@@ -122,13 +121,6 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
 
   @Override
   public boolean isFinished() {
-    return finished || subcommandFinished();
-  }
-
-  @Override
-  public void end(boolean interrupted)
-  {
-    super.end(interrupted);
-    System.out.println("AutoVisionSpeakerShoot ended");
+    return finished || subCommandFinished();
   }
 }

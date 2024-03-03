@@ -44,7 +44,7 @@ public class AutoShootNote extends ManagerCommand {
 
   @Override
   public void initialize() {
-    
+    finished = false;
     
     if (intake.limitSwitchPressed())
     {
@@ -57,14 +57,13 @@ public class AutoShootNote extends ManagerCommand {
       if (setAngle) { seqCommand.addCommands(new ShooterPivotCommand(shooter, shooterPivot)); }
       seqCommand.addCommands(new IntakePivotCommand(intake, IntakePivotState.IN), new ParallelCommandGroup(shootNoteIntoShooterCommand, shootNoteCommand));
 
-      subCommand = seqCommand;
-      scheduleSubcommand();
+      scheduleSubcommand(seqCommand);
     }
     else { finished = true; }
   }
 
   @Override
   public boolean isFinished() {
-    return finished || subcommandFinished();
+    return finished || subCommandFinished();
   }
 }

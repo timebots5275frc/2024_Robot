@@ -12,6 +12,7 @@ import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Vision.Vision;
 import java.util.Optional;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.Command;
 
 public class AutoVisionDetectAction extends ManagerCommand {
   SwerveDrive swerveDrive;
@@ -32,6 +33,7 @@ public class AutoVisionDetectAction extends ManagerCommand {
   public void initialize() 
   {
     int currentAprilTagID = vision.AprilTagID();
+    Command subCommand = null;
 
     if (currentAprilTagID != -1)
     {
@@ -52,7 +54,7 @@ public class AutoVisionDetectAction extends ManagerCommand {
         }
       }
 
-      scheduleSubcommand();
+      if (subCommand != null) { scheduleSubcommand(subCommand); }
     }
 
     finished = true;
@@ -60,6 +62,6 @@ public class AutoVisionDetectAction extends ManagerCommand {
 
   @Override
   public boolean isFinished() {
-    return finished || subcommandFinished();
+    return finished || subCommandFinished();
   }
 }
