@@ -103,24 +103,29 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
   {
     finished = false;
 
+    vision.setUsingLimelight(true);
+
     if (vision.hasValidData())
     {
       Vector3 aprilTagPosInTargetSpace = vision.AprilTagPosInRobotSpace();
-      Vector2 horizontalAprilTagPosition = new Vector2(aprilTagPosInTargetSpace.x, aprilTagPosInTargetSpace.z);
-      double aprilTagDistance = horizontalAprilTagPosition.magnitude();
+      Vector2 xzPlaneAprilTagPosition = new Vector2(aprilTagPosInTargetSpace.x, aprilTagPosInTargetSpace.z);
+      double aprilTagDistance = xzPlaneAprilTagPosition.magnitude();
 
       Command shootNoteCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT), new ShooterRunCommand(shooter, ShooterRunState.SHOOT), new WaitUntilCommand(shooter.ReadyToShoot), new IntakeRunCommand(intake, IntakeRunState.OUTTAKE), new WaitCommand(1), new ShooterRunCommand(shooter, ShooterRunState.NONE), new IntakeRunCommand(intake, IntakeRunState.NONE));
       Command rotateTowardsAprilTagCommand = new AutoVisionRotate(swerveDrive, 3);
 
       scheduleSubcommand(new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand));
-    } else
-    { 
-      finished = true; 
-    }
+    } 
+    else { finished = true; }
   }
 
   @Override
   public boolean isFinished() {
     return finished || subCommandFinished();
+  }
+
+  @Override
+  public void onSubCommandEnd(boolean interrupted) {
+    vision.setUsingLimelight(false);
   }
 }
