@@ -228,7 +228,7 @@ import frc.robot.CustomTypes.Math.Vector2;
     public static final int CLIMBER_MOTOR_L_ID  = 40;
     public static final int CLIMBER_MOTOR_R_ID  = 41;
     public static final double CLIMBER_MAX_POS = 230 * 2.25;
-    public static final double CLIMBER_SPEED = 9000;
+    public static final double CLIMBER_SPEED = 12000;
     public static final PID_Values ClimberMotorPIDs = new PID_Values(
       0.00016, 
     0.0,

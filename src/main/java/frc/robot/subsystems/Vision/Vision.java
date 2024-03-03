@@ -108,6 +108,7 @@ public class Vision extends SubsystemBase {
     SmartDashboard.putString("AprilTag position in Robot Space", aprilTagID == -1 ? "N/A" : avgAprilTagPosInRobotSpace.toString(3));
     SmartDashboard.putString("AprilTag rotation in Robot Space", aprilTagID == -1 ? "N/A" : avgAprilTagRotInRobotSpace.toString(3));
     SmartDashboard.putString("AprilTag horizontal offset", aprilTagID == -1 ? "N/A" : String.valueOf(horizontalOffsetFromAprilTag));
+    SmartDashboard.putNumber("Things using limelight", thingsUsingLimelight);
   }
 
   void ClearAprilTagData()
@@ -116,18 +117,32 @@ public class Vision extends SubsystemBase {
     aprilTagRotInRobotSpaceValues.clear();
   }
 
+  public void OnTeleopDisable()
+  {
+    thingsUsingLimelight = 0;
+    ToggleLimelightLight(false);
+  }
+
   public void setUsingLimelight(boolean usingLimelight)
   {
     thingsUsingLimelight += usingLimelight ? 1 : -1;
 
-    if (thingsUsingLimelight > 0 && !usingLimelight) { ToggleLimelightLight(true); } 
-    else if (thingsUsingLimelight == 0 && usingLimelight) { ToggleLimelightLight(false); }
+    System.out.println(usingLimelight ? "New thing using limelight" : "Something stopped using limelight");
+
+    if (thingsUsingLimelight <= 0) 
+    { 
+      thingsUsingLimelight = 0; 
+      ToggleLimelightLight(false);
+    }
+    else if (thingsUsingLimelight > 0) { ToggleLimelightLight(true); } 
   }
 
   public void ToggleLimelightLight(boolean on)
   {
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(on ? 3 : 1);
+    System.out.println("Toggling Limelight " + (on ? "on" : "off"));
+
     usingLimelight = on;
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(on ? 3 : 1);
   }
 
   // Getter methods //

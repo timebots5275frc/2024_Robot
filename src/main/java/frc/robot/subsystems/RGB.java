@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.Intake.IntakePivotState;
 import frc.robot.subsystems.Shooter.ShooterRunState;
 import frc.robot.subsystems.Vision.Vision;
@@ -27,12 +28,12 @@ public class RGB extends SubsystemBase {
 
   static final Color OFF = new Color(0, 0, 0);
   static final Color ORANGE = new Color(255, 30, 0);
-  static final Color YELLOW = new Color(204, 159, 47);
+  static final Color YELLOW = new Color(255, 155, 0);
   static final Color PURPLE = new Color(170, 0, 255);
 
   int periodicCalls = 0;
 
-  double rgbStrength = .5;
+  double rgbStrength = .15;
 
   static final double startFlashTime = 30;
   static final int flashInterval = 20;
@@ -198,9 +199,9 @@ public class RGB extends SubsystemBase {
 
     if (displayEndOfMatchFlash) {  setSolidRGBColor(YELLOW); }
     //else if (shooter.getCurrentRunState() == ShooterRunState.SHOOT) { shooterLED(); }
-    else if (Vision.usingLimelight) { setSolidRGBColor(GREEN); }
+    //else if (Vision.usingLimelight) { setSolidRGBColor(GREEN); }
     else if (intake.limitSwitchPressed()) { setSolidRGBColor(ORANGE); }
-    else if (intake.getCurrentPivotState() == IntakePivotState.OUT) { setSolidRGBColor(PURPLE); }
+    else if (intake.getCurrentPivotState() == IntakePivotState.OUT || intake.getCurrentPivotAngle() < IntakeConstants.INTAKE_UP_POS) { setSolidRGBColor(PURPLE); }
     else { setAllianceColor(); }
   }
 }

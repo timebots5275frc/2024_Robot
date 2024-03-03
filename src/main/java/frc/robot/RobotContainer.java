@@ -19,6 +19,7 @@ import frc.robot.commands.ResetClimberCommand;
 import frc.robot.commands.ShooterPivotCommand;
 import frc.robot.commands.ShooterRunCommand;
 import frc.robot.commands.TeleopJoystickDrive;
+import frc.robot.commands.UseLimelightCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.RGB;
@@ -89,6 +90,9 @@ public class RobotContainer {
     autoChooser.addOption("Vision Shoot", AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake));
     autoChooser.addOption("4-Note LMR", AutoCommands.leftMiddleRightAutoCommand(swerveDrive, vision, shooter, intake));
     autoChooser.addOption("4-Note RML", AutoCommands.rightMiddleLeftAutoCommand(swerveDrive, vision, shooter, intake));
+    autoChooser.addOption("2-Note L", AutoCommands.shootLeftShootAutoCommand(swerveDrive, vision, shooter, intake));
+    autoChooser.addOption("2-Note R", AutoCommands.shootRightShootAutoCommand(swerveDrive, vision, shooter, intake));
+    autoChooser.addOption("2-Note M", AutoCommands.shootMiddleShootAutoCommand(swerveDrive, vision, shooter, intake));
     SmartDashboard.putData(autoChooser);
 
     configureBindings();
@@ -133,12 +137,15 @@ public class RobotContainer {
     new JoystickButton(buttonBoard, 4).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.AMP));
   
     new JoystickButton(driveStick, 1).onTrue(AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake));
-    new JoystickButton(driveStick, 2).onTrue(AutoVisionAmpShoot.GetCommand(swerveDrive, vision, shooter, intake).until(input.receivingJoystickInput));
-    new JoystickButton(driveStick, 11).onTrue(AutoVisionStageShoot.getCommand(shooter, intake, vision, swerveDrive).until(input.receivingJoystickInput));
+    new JoystickButton(driveStick, 11).onTrue(AutoVisionAmpShoot.GetCommand(swerveDrive, vision, shooter, intake).until(input.receivingJoystickInput));
+    //new JoystickButton(driveStick, 11).onTrue(AutoVisionStageShoot.getCommand(shooter, intake, vision, swerveDrive).until(input.receivingJoystickInput));
 
     new JoystickButton(buttonBoard, 12).whileTrue(new ClimberCommand(climber, ClimberMode.EXTEND));
     new JoystickButton(buttonBoard, 10).whileTrue(new ClimberCommand(climber, ClimberMode.RETRACT));
     new JoystickButton(driveStick, 12).whileTrue(new ResetClimberCommand(climber));
+
+    new JoystickButton(driveStick, 9).onTrue(new UseLimelightCommand(true));
+    new JoystickButton(driveStick, 10).onTrue(new UseLimelightCommand(false));
   }
 
   public Command getAutonomousCommand() {

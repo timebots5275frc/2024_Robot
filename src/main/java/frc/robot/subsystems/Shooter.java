@@ -38,7 +38,7 @@ public class Shooter extends SubsystemBase {
 
   private double visionShooterAngle;
 
-  private double targetAngle;
+  public static double targetAngle;
   private double lTargetSpeed;
   private double rTargetSpeed;
 
@@ -149,8 +149,10 @@ public class Shooter extends SubsystemBase {
       case CLIMBING_POS: 
       shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_CLIMB_POS, ControlType.kSmartMotion);
       targetAngle = Constants.ShooterConstants.SHOOTER_CLIMB_POS;
-      // case TRAP:
+      break;
     }
+
+    System.out.println("Setting desired shooter angle to: " + targetAngle);
   }
 
   public void shooterSetRunState(ShooterRunState state) {

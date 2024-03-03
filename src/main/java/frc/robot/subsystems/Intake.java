@@ -129,6 +129,7 @@ public class Intake extends SubsystemBase {
       break;
       case OUTTAKE: 
       intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED * 0.4, ControlType.kVelocity);
+      System.out.println("Outtaking at shooter angle: " + Shooter.targetAngle);
       break;
       case INTAKE: 
       intakeRunPID.setReference(Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
@@ -172,6 +173,7 @@ public class Intake extends SubsystemBase {
 
   public IntakePivotState getCurrentPivotState() { return currentPivotState; }
   public IntakeRunState getCurrentRunState() { return currentRunState; }
+  public double getCurrentPivotAngle() { return intakeAngleEncoder.getAbsolutePosition().getValueAsDouble() * 360; }
 
   @Override
   public void periodic() {

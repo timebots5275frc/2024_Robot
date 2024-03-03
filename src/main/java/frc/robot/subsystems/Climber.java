@@ -28,6 +28,8 @@ public class Climber extends SubsystemBase {
   private double lClimberPose;
   private double rClimberPose;
 
+  private ClimberMode currentClimberMode;
+
   public Climber() {
     motorL = new CANSparkMax(Constants.ClimberConstants.CLIMBER_MOTOR_L_ID, MotorType.kBrushless);
     motorL.setInverted(true);
@@ -75,6 +77,7 @@ public class Climber extends SubsystemBase {
   };
 
   public void setClimberState(ClimberMode mode) {
+    currentClimberMode = mode;
     switch(mode) {
       case NONE: 
       motorLpid.setReference(0, ControlType.kVelocity, 0);
@@ -112,7 +115,10 @@ public class Climber extends SubsystemBase {
     SmartDashboard.putNumber("Left Climber height", lClimberPose);
     SmartDashboard.putNumber("Right climber height", rClimberPose);
     SmartDashboard.putNumber("Climber output current", motorL.getOutputCurrent());
-
+    SmartDashboard.putNumber("Climber Left vel", motorLEncoder.getVelocity());
+    SmartDashboard.putNumber("Climber right vel", motorREndcoder.getVelocity());
 
   }
+
+  public ClimberMode climberMode() { return currentClimberMode; }
 }
