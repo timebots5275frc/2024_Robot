@@ -232,7 +232,7 @@ import frc.robot.CustomTypes.Math.Vector2;
     public static final double CLIMBER_MAX_POS = 230 * 2.25;
     public static final double CLIMBER_SPEED = 12000;
     public static final PID_Values ClimberMotorPIDs = new PID_Values(
-      0.00016, 
+      0.0002, 
     0.0,
     0.0,
     0.0,
@@ -254,7 +254,7 @@ import frc.robot.CustomTypes.Math.Vector2;
     0.0,
     0.0001);
     
-    public static final double SHOOTER_PIVOT_MAX_VEL = 2000;
+    public static final double SHOOTER_PIVOT_MAX_VEL = 4000;
     public static final double SHOOTER_PIVOT_MAX_ACCEL = SHOOTER_PIVOT_MAX_VEL * 2;
 
     public static final double SHOOTER_PIVOT_GEAR_RATIO = 480;
