@@ -74,7 +74,7 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
     Command shootNoteCommand = ShootVisionCommand(shooter, intake, true, true);
     Command rotateTowardsAprilTagCommand = new FaceAprilTag(swerveDrive);
 
-    return new SequentialCommandGroup(rotateTowardsAprilTagCommand, shootNoteCommand);
+    return new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT), rotateTowardsAprilTagCommand, shootNoteCommand);
   }
 
   public static Command ShootCommand(Shooter shooter, SwerveDrive swerveDrive, Vision vision, Intake intake) {
