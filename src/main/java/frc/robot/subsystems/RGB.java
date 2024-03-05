@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.CustomTypes.RGB_Zone;
 import frc.robot.subsystems.Intake.IntakePivotState;
 import frc.robot.subsystems.Shooter.ShooterRunState;
 import frc.robot.subsystems.Vision.Vision;
@@ -40,10 +41,12 @@ public class RGB extends SubsystemBase {
   boolean displayEndOfMatchFlash = false;
 
   private AddressableLED m_led = new AddressableLED(0);
-      // Reuse buffer
-      // Default to a length of 60, start empty output
-      // Length is expensive to set, so only set it once, then just update data
-      private AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(213);
+  static final private AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(213);
+
+  static RGB_Zone SHOOTER_RIGHT_ZONE = new RGB_Zone(0, 20, m_ledBuffer);
+  static RGB_Zone SHOOTER_LEFT_ZONE = new RGB_Zone(21, 40, m_ledBuffer);
+  static RGB_Zone CLIMBER_RIGHT_ZONE = new RGB_Zone(41, 104, m_ledBuffer);
+  static RGB_Zone CLIMBER_LEFT_ZONE = new RGB_Zone(105, 169, m_ledBuffer);
 
       Shooter shooter;
       Intake intake;
@@ -56,7 +59,11 @@ public class RGB extends SubsystemBase {
       this.intake = intake;
 
       m_led.setLength(m_ledBuffer.getLength());
-      setColorPattern(new Color[] { BLUE, BLUE, RED, RED } );
+      //setColorPattern(new Color[] { BLUE, BLUE, RED, RED } );
+      SHOOTER_RIGHT_ZONE.setSolidColor(BLUE);
+      SHOOTER_LEFT_ZONE.setSolidColor(RED);
+      CLIMBER_RIGHT_ZONE.setSolidColor(PURPLE);
+      CLIMBER_LEFT_ZONE.setSolidColor(ORANGE);
       m_led.start();
     }
 
@@ -90,69 +97,6 @@ public class RGB extends SubsystemBase {
       m_led.setData(m_ledBuffer);
     }
 
-  public void shooterLED()
-      {
-        if(shooterSpeed<4000)
-        {
-          for(int i = 1; i < 22; i++)
-          {
-            m_ledBuffer.setRGB(i, 0, 0, 255);
-            m_ledBuffer.setRGB(43-i, 0, 0, 255);
-            m_ledBuffer.setRGB(i + 42, 0, 0, 255);
-            m_ledBuffer.setRGB(85- i, 0, 0, 255);
-          }
-          m_led.setData(m_ledBuffer);
-        }
-        else if(shooterSpeed<3000)
-        {
-          setAllianceColor();
-          for(int i = 1; i < 17; i++)
-          {
-            m_ledBuffer.setRGB(i, 0, 255, 0);
-            m_ledBuffer.setRGB(43-i, 0, 255, 0);
-            m_ledBuffer.setRGB(i + 42, 0, 255, 0);
-            m_ledBuffer.setRGB(85- i, 0, 255, 0);
-          }
-          m_led.setData(m_ledBuffer);
-        }
-        else if(shooterSpeed<2000)
-        {
-          setAllianceColor();
-          for(int i = 1; i < 12; i++)
-          {
-            m_ledBuffer.setRGB(i, 0, 255, 0);
-            m_ledBuffer.setRGB(43-i, 0, 255, 0);
-            m_ledBuffer.setRGB(i + 42, 0, 255, 0);
-            m_ledBuffer.setRGB(85- i, 0, 255, 0);
-          }
-          m_led.setData(m_ledBuffer);
-        }
-        else if(shooterSpeed<1000)
-        {
-          setAllianceColor();
-          for(int i = 1; i < 9; i++)
-          {
-            m_ledBuffer.setRGB(i, 0, 255, 0);
-            m_ledBuffer.setRGB(43-i, 0, 255, 0);
-            m_ledBuffer.setRGB(i + 42, 0, 255, 0);
-            m_ledBuffer.setRGB(85- i, 0, 255, 0);
-          }
-          m_led.setData(m_ledBuffer);
-        }
-        else
-          {
-            setAllianceColor();
-            for(int i = 1; i < 4; i++)
-            {
-             m_ledBuffer.setRGB(i, 255, 0, 0);
-             m_ledBuffer.setRGB(43-i, 255, 0, 0);
-             m_ledBuffer.setRGB(i + 42, 255, 0, 0);
-             m_ledBuffer.setRGB(85- i, 255, 0, 0);
-           }
-           m_led.setData(m_ledBuffer);
-          }
-        }
-      
 
   public void setAllianceColor() {
       if (DriverStation.getAlliance().get() == Alliance.Red) { setSolidRGBColor(RED); } 
@@ -190,18 +134,18 @@ public class RGB extends SubsystemBase {
 
   @Override
   public void periodic() {
-    //rainbowRGB();
-    periodicCalls++;
+    // //rainbowRGB();
+    // periodicCalls++;
 
-    double matchTime = DriverStation.getMatchTime();
-    if (matchTime < startFlashTime && DriverStation.isTeleop() && periodicCalls % flashInterval == 0) { displayEndOfMatchFlash = !displayEndOfMatchFlash; }
-    if (matchTime > startFlashTime || matchTime == -1 || !DriverStation.isTeleop()) { displayEndOfMatchFlash = false; }
+    // double matchTime = DriverStation.getMatchTime();
+    // if (matchTime < startFlashTime && DriverStation.isTeleop() && periodicCalls % flashInterval == 0) { displayEndOfMatchFlash = !displayEndOfMatchFlash; }
+    // if (matchTime > startFlashTime || matchTime == -1 || !DriverStation.isTeleop()) { displayEndOfMatchFlash = false; }
 
-    if (displayEndOfMatchFlash) {  setSolidRGBColor(YELLOW); }
-    //else if (shooter.getCurrentRunState() == ShooterRunState.SHOOT) { shooterLED(); }
-    //else if (Vision.usingLimelight) { setSolidRGBColor(GREEN); }
-    else if (intake.limitSwitchPressed()) { setSolidRGBColor(ORANGE); }
-    else if (intake.getCurrentPivotState() == IntakePivotState.OUT || intake.getCurrentPivotAngle() < IntakeConstants.INTAKE_UP_POS) { setSolidRGBColor(PURPLE); }
-    else { setAllianceColor(); }
+    // if (displayEndOfMatchFlash) {  setSolidRGBColor(YELLOW); }
+    // //else if (shooter.getCurrentRunState() == ShooterRunState.SHOOT) { shooterLED(); }
+    // //else if (Vision.usingLimelight) { setSolidRGBColor(GREEN); }
+    // else if (intake.limitSwitchPressed()) { setSolidRGBColor(ORANGE); }
+    // else if (intake.getCurrentPivotState() == IntakePivotState.OUT || intake.getCurrentPivotAngle() < IntakeConstants.INTAKE_UP_POS) { setSolidRGBColor(PURPLE); }
+    // else { setAllianceColor(); }
   }
 }
