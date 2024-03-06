@@ -232,11 +232,11 @@ import frc.robot.CustomTypes.Math.Vector2;
     public static final double CLIMBER_MAX_POS = 230 * 2.25;
     public static final double CLIMBER_SPEED = 12000;
     public static final PID_Values ClimberMotorPIDs = new PID_Values(
-      0.0002, 
+      0.00014, 
     0.0,
     0.0,
     0.0,
-    0.0
+    0.0001
     );
   }
   public static class ShooterConstants {
