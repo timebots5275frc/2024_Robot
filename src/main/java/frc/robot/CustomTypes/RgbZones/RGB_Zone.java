@@ -30,5 +30,5 @@ public abstract class RGB_Zone {
         rgbSubSystem.setBufferDirty();
     }
 
-    public abstract void setProgressColor(Color progressFillColor, Color backgroundColor);
+    public abstract void setProgressColor(double progress, Color progressFillColor, Color backgroundColor);
 }

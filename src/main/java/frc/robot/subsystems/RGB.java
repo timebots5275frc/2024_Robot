@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.CustomTypes.RgbZones.*;
+import frc.robot.subsystems.Input.Input;
 import frc.robot.subsystems.Intake.IntakePivotState;
 import frc.robot.subsystems.Shooter.ShooterRunState;
 import frc.robot.subsystems.Vision.Vision;
@@ -48,34 +49,52 @@ public class RGB extends SubsystemBase {
   final RGB_Zone SHOOTER_RIGHT_ZONE = new RGB_Zone(0, 41, this) {
 
     @Override
-    public void setProgressColor(Color progressFillColor, Color backgroundColor) {
+    public void setProgressColor(double progress, Color progressFillColor, Color backgroundColor) {
+      Color dimmedProgressColor = rgbSubSystem.getDimmedColor(progressFillColor);
+      Color dimmedBackgroundColor = rgbSubSystem.getDimmedColor(backgroundColor);
+      int oneStripLength = (zoneEndIndex - zoneStartIndex) / 2 + 1;
+
+      for (int i = 0; i < oneStripLength; i++)
+      {
+        rgbSubSystem.ledBuffer.setLED(i, (double)i / oneStripLength <= progress ? dimmedProgressColor : dimmedBackgroundColor);
+        rgbSubSystem.ledBuffer.setLED(i + oneStripLength, 1 - ((double)i + 1) / oneStripLength <= progress ? dimmedProgressColor : dimmedBackgroundColor);
+      }
+
+      rgbSubSystem.setBufferDirty();
+    }
+  };
+
+  final RGB_Zone SHOOTER_LEFT_ZONE = new RGB_Zone(42, 83, this) {
+
+    @Override
+    public void setProgressColor(double progress, Color progressFillColor, Color backgroundColor) {
+      Color dimmedProgressColor = rgbSubSystem.getDimmedColor(progressFillColor);
+      Color dimmedBackgroundColor = rgbSubSystem.getDimmedColor(backgroundColor);
+      int oneStripLength = (zoneEndIndex - zoneStartIndex) / 2 + 1;
+
+      for (int i = 0; i < oneStripLength; i++)
+      {
+        rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i, (double)i / oneStripLength <= progress ? dimmedProgressColor : dimmedBackgroundColor);
+        rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i + oneStripLength, 1 - ((double)i + 1)  / oneStripLength <= progress ? dimmedProgressColor : dimmedBackgroundColor);
+      }
+
+      rgbSubSystem.setBufferDirty();
+    }
+  };
+
+  final RGB_Zone CLIMBER_RIGHT_ZONE = new RGB_Zone(84, 147, this) {
+
+    @Override
+    public void setProgressColor(double progress, Color progressFillColor, Color backgroundColor) {
       // TODO Auto-generated method stub
       throw new UnsupportedOperationException("Unimplemented method 'setProgressColor'");
     }
   };
 
-  final RGB_Zone SHOOTER_LEFT_ZONE = new RGB_Zone(0, 41, this) {
+  final RGB_Zone CLIMBER_LEFT_ZONE = new RGB_Zone(148, 211, this) {
 
     @Override
-    public void setProgressColor(Color progressFillColor, Color backgroundColor) {
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("Unimplemented method 'setProgressColor'");
-    }
-  };
-
-  final RGB_Zone CLIMBER_RIGHT_ZONE = new RGB_Zone(106, 169, this) {
-
-    @Override
-    public void setProgressColor(Color progressFillColor, Color backgroundColor) {
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("Unimplemented method 'setProgressColor'");
-    }
-  };
-
-  final RGB_Zone CLIMBER_LEFT_ZONE = new RGB_Zone(42, 105, this) {
-
-    @Override
-    public void setProgressColor(Color progressFillColor, Color backgroundColor) {
+    public void setProgressColor(double progress, Color progressFillColor, Color backgroundColor) {
       // TODO Auto-generated method stub
       throw new UnsupportedOperationException("Unimplemented method 'setProgressColor'");
     }
@@ -95,6 +114,7 @@ public class RGB extends SubsystemBase {
 
       setColorPattern(new Color[] { BLUE, BLUE, RED, RED } );
       SHOOTER_RIGHT_ZONE.setSolidColor(ORANGE);
+      SHOOTER_LEFT_ZONE.setSolidColor(RED);
       CLIMBER_LEFT_ZONE.setSolidColor(PURPLE);
       CLIMBER_RIGHT_ZONE.setSolidColor(YELLOW);
       m_led.start();
@@ -187,6 +207,9 @@ public class RGB extends SubsystemBase {
     // else if (intake.limitSwitchPressed()) { setSolidRGBColor(ORANGE); }
     // else if (intake.getCurrentPivotState() == IntakePivotState.OUT || intake.getCurrentPivotAngle() < IntakeConstants.INTAKE_UP_POS) { setSolidRGBColor(PURPLE); }
     // else { setAllianceColor(); }
+
+    SHOOTER_RIGHT_ZONE.setProgressColor(Input.Throttle, GREEN, BLUE);
+    SHOOTER_LEFT_ZONE.setProgressColor(Input.Throttle, GREEN, BLUE);
 
     if (bufferDirty) {
       m_led.setData(ledBuffer);
