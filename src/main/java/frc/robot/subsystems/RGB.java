@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.CustomTypes.RGB_Zone;
+import frc.robot.CustomTypes.RgbZones.*;
 import frc.robot.subsystems.Intake.IntakePivotState;
 import frc.robot.subsystems.Shooter.ShooterRunState;
 import frc.robot.subsystems.Vision.Vision;
@@ -43,12 +43,43 @@ public class RGB extends SubsystemBase {
   boolean displayEndOfMatchFlash = false;
 
   private AddressableLED m_led = new AddressableLED(0);
-  public final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(213);
+  public final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(212);
 
-  final RGB_Zone SHOOTER_RIGHT_ZONE = new RGB_Zone(0, 20, this);
-  final RGB_Zone SHOOTER_LEFT_ZONE = new RGB_Zone(21, 40, this);
-  final RGB_Zone CLIMBER_RIGHT_ZONE = new RGB_Zone(41, 104, this);
-  final RGB_Zone CLIMBER_LEFT_ZONE = new RGB_Zone(105, 169, this);
+  final RGB_Zone SHOOTER_RIGHT_ZONE = new RGB_Zone(0, 41, this) {
+
+    @Override
+    public void setProgressColor(Color progressFillColor, Color backgroundColor) {
+      // TODO Auto-generated method stub
+      throw new UnsupportedOperationException("Unimplemented method 'setProgressColor'");
+    }
+  };
+
+  final RGB_Zone SHOOTER_LEFT_ZONE = new RGB_Zone(0, 41, this) {
+
+    @Override
+    public void setProgressColor(Color progressFillColor, Color backgroundColor) {
+      // TODO Auto-generated method stub
+      throw new UnsupportedOperationException("Unimplemented method 'setProgressColor'");
+    }
+  };
+
+  final RGB_Zone CLIMBER_RIGHT_ZONE = new RGB_Zone(106, 169, this) {
+
+    @Override
+    public void setProgressColor(Color progressFillColor, Color backgroundColor) {
+      // TODO Auto-generated method stub
+      throw new UnsupportedOperationException("Unimplemented method 'setProgressColor'");
+    }
+  };
+
+  final RGB_Zone CLIMBER_LEFT_ZONE = new RGB_Zone(42, 105, this) {
+
+    @Override
+    public void setProgressColor(Color progressFillColor, Color backgroundColor) {
+      // TODO Auto-generated method stub
+      throw new UnsupportedOperationException("Unimplemented method 'setProgressColor'");
+    }
+  };
 
       Shooter shooter;
       Intake intake;
@@ -61,12 +92,17 @@ public class RGB extends SubsystemBase {
       this.intake = intake;
 
       m_led.setLength(ledBuffer.getLength());
-      //setColorPattern(new Color[] { BLUE, BLUE, RED, RED } );
-      SHOOTER_RIGHT_ZONE.setSolidColor(BLUE);
-      SHOOTER_LEFT_ZONE.setSolidColor(RED);
-      CLIMBER_RIGHT_ZONE.setSolidColor(PURPLE);
-      CLIMBER_LEFT_ZONE.setSolidColor(ORANGE);
+
+      setColorPattern(new Color[] { BLUE, BLUE, RED, RED } );
+      SHOOTER_RIGHT_ZONE.setSolidColor(ORANGE);
+      CLIMBER_LEFT_ZONE.setSolidColor(PURPLE);
+      CLIMBER_RIGHT_ZONE.setSolidColor(YELLOW);
       m_led.start();
+    }
+
+    public Color getDimmedColor(Color color)
+    {
+      return new Color(color.red * rgbStrength, color.green * rgbStrength, color.blue * rgbStrength);
     }
 
     public Color multiplyColor(Color color, double a) { return new Color(color.red * a, color.green * a, color.blue * a); }

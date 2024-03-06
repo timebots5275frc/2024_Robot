@@ -24,6 +24,8 @@ public class Input extends SubsystemBase {
     public boolean getAsBoolean() { return joystickInput.x != 0 || joystickInput.y != 0; }
   };
 
+  public static double Throttle;
+
   public Input(Joystick driveJoystick) {
     this.driveJoystick = driveJoystick;
   }
@@ -38,6 +40,8 @@ public class Input extends SubsystemBase {
   {
     rawJoystickInput = new Vector2(-driveJoystick.getY(), -driveJoystick.getX());
     rawJoystickTwist = -driveJoystick.getTwist();
+
+    Throttle = (driveJoystick.getThrottle() / -2) + .5;
   }
 
   void calculateJoystickInput()
