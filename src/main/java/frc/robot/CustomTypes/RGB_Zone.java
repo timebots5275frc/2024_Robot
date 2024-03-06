@@ -2,25 +2,27 @@ package frc.robot.CustomTypes;
 
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.subsystems.RGB;
 
 public class RGB_Zone {
     protected int zoneStartIndex;
     protected int zoneEndIndex;
-    
-    protected final AddressableLEDBuffer rgbBuffer;
+    protected final RGB rgbSubSystem;
 
-    public RGB_Zone(int startIndex, int endIndex, AddressableLEDBuffer buffer)
+    public RGB_Zone(int zoneStartIndex, int zoneEndIndex, RGB rgbSubSystem)
     {
-        zoneEndIndex = startIndex;
-        zoneEndIndex = endIndex;
-        rgbBuffer = buffer;
+        this.zoneStartIndex = zoneStartIndex;
+        this.zoneEndIndex = zoneEndIndex;
+        this.rgbSubSystem = rgbSubSystem;
     }
 
     public void setSolidColor(Color color)
     {
         for (int i = zoneStartIndex; i <= zoneEndIndex; i++)
         {
-            rgbBuffer.setLED(i, color);
+            rgbSubSystem.ledBuffer.setLED(i, color);
         }
+
+        rgbSubSystem.setBufferDirty();
     }
 }

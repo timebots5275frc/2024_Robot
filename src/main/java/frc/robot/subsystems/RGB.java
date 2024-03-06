@@ -32,6 +32,8 @@ public class RGB extends SubsystemBase {
   static final Color YELLOW = new Color(255, 155, 0);
   static final Color PURPLE = new Color(170, 0, 255);
 
+  boolean bufferDirty = false;
+
   int periodicCalls = 0;
 
   double rgbStrength = .15;
@@ -41,12 +43,12 @@ public class RGB extends SubsystemBase {
   boolean displayEndOfMatchFlash = false;
 
   private AddressableLED m_led = new AddressableLED(0);
-  static final private AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(213);
+  public final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(213);
 
-  static RGB_Zone SHOOTER_RIGHT_ZONE = new RGB_Zone(0, 20, m_ledBuffer);
-  static RGB_Zone SHOOTER_LEFT_ZONE = new RGB_Zone(21, 40, m_ledBuffer);
-  static RGB_Zone CLIMBER_RIGHT_ZONE = new RGB_Zone(41, 104, m_ledBuffer);
-  static RGB_Zone CLIMBER_LEFT_ZONE = new RGB_Zone(105, 169, m_ledBuffer);
+  final RGB_Zone SHOOTER_RIGHT_ZONE = new RGB_Zone(0, 20, this);
+  final RGB_Zone SHOOTER_LEFT_ZONE = new RGB_Zone(21, 40, this);
+  final RGB_Zone CLIMBER_RIGHT_ZONE = new RGB_Zone(41, 104, this);
+  final RGB_Zone CLIMBER_LEFT_ZONE = new RGB_Zone(105, 169, this);
 
       Shooter shooter;
       Intake intake;
@@ -58,7 +60,7 @@ public class RGB extends SubsystemBase {
       this.shooter = shooter;
       this.intake = intake;
 
-      m_led.setLength(m_ledBuffer.getLength());
+      m_led.setLength(ledBuffer.getLength());
       //setColorPattern(new Color[] { BLUE, BLUE, RED, RED } );
       SHOOTER_RIGHT_ZONE.setSolidColor(BLUE);
       SHOOTER_LEFT_ZONE.setSolidColor(RED);
@@ -73,11 +75,11 @@ public class RGB extends SubsystemBase {
     {
       Color dimmedColor = multiplyColor(color, rgbStrength);
 
-      for (int i = 0; i < m_ledBuffer.getLength(); i ++) {
-        m_ledBuffer.setLED(i, dimmedColor);
+      for (int i = 0; i < ledBuffer.getLength(); i ++) {
+        ledBuffer.setLED(i, dimmedColor);
       }
 
-      m_led.setData(m_ledBuffer);
+      m_led.setData(ledBuffer);
     }
 
     public void setColorPattern(Color[] colors)
@@ -89,12 +91,12 @@ public class RGB extends SubsystemBase {
         dimmedColors[i] = multiplyColor(colors[i], rgbStrength);
       }
 
-      for (int i = 0; i < m_ledBuffer.getLength(); i ++) {
+      for (int i = 0; i < ledBuffer.getLength(); i ++) {
         Color color = dimmedColors[i % dimmedColors.length];
-        m_ledBuffer.setLED(i, color);
+        ledBuffer.setLED(i, color);
       }
 
-      m_led.setData(m_ledBuffer);
+      m_led.setData(ledBuffer);
     }
 
 
@@ -106,31 +108,33 @@ public class RGB extends SubsystemBase {
 
   public void rainbowRGB()
   {
-      for (int i = 0; i < m_ledBuffer.getLength(); i ++) {
-        m_ledBuffer.setHSV(i, periodicCalls + i % 180, 255, (int)(255 * rgbStrength));
+      for (int i = 0; i < ledBuffer.getLength(); i ++) {
+        ledBuffer.setHSV(i, periodicCalls + i % 180, 255, (int)(255 * rgbStrength));
       }
 
-      m_led.setData(m_ledBuffer);
+      m_led.setData(ledBuffer);
   }
 
   public void allRandom()
   {
-      for (int i = 0; i < m_ledBuffer.getLength(); i ++) {
-        m_ledBuffer.setRGB(i, (int)(Math.random() * 255 * rgbStrength), (int)(Math.random() * 255 * rgbStrength), (int)(Math.random() * 255 * rgbStrength));
+      for (int i = 0; i < ledBuffer.getLength(); i ++) {
+        ledBuffer.setRGB(i, (int)(Math.random() * 255 * rgbStrength), (int)(Math.random() * 255 * rgbStrength), (int)(Math.random() * 255 * rgbStrength));
       }
 
-      m_led.setData(m_ledBuffer);
+      m_led.setData(ledBuffer);
   }
 
   void SetAscendingOrderRGB()
   {
-      for (int i = 0; i < m_ledBuffer.getLength(); i ++) {
+      for (int i = 0; i < ledBuffer.getLength(); i ++) {
         int val = i;
-        m_ledBuffer.setRGB(i, val, val, val);
+        ledBuffer.setRGB(i, val, val, val);
       }
 
-      m_led.setData(m_ledBuffer);
+      m_led.setData(ledBuffer);
   }
+
+  public void setBufferDirty() { bufferDirty = true; }
 
   @Override
   public void periodic() {
@@ -147,5 +151,10 @@ public class RGB extends SubsystemBase {
     // else if (intake.limitSwitchPressed()) { setSolidRGBColor(ORANGE); }
     // else if (intake.getCurrentPivotState() == IntakePivotState.OUT || intake.getCurrentPivotAngle() < IntakeConstants.INTAKE_UP_POS) { setSolidRGBColor(PURPLE); }
     // else { setAllianceColor(); }
+
+    if (bufferDirty) {
+      m_led.setData(ledBuffer);
+      bufferDirty = false;
+    }
   }
 }
