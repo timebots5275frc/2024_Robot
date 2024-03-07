@@ -47,17 +47,18 @@ public class RGB extends SubsystemBase {
   public final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(212);
 
   final RGB_Zone SHOOTER_RIGHT_ZONE = new RGB_Zone(0, 41, this) {
+    int oneStripLength = 21;
 
     @Override
     public void setProgressColor(double progress, Color progressFillColor, Color backgroundColor) {
       Color dimmedProgressColor = rgbSubSystem.getDimmedColor(progressFillColor);
       Color dimmedBackgroundColor = rgbSubSystem.getDimmedColor(backgroundColor);
-      int oneStripLength = (zoneEndIndex - zoneStartIndex) / 2 + 1;
 
       for (int i = 0; i < oneStripLength; i++)
       {
-        rgbSubSystem.ledBuffer.setLED(i, (double)i / oneStripLength <= progress ? dimmedProgressColor : dimmedBackgroundColor);
-        rgbSubSystem.ledBuffer.setLED(i + oneStripLength, 1 - ((double)i + 1) / oneStripLength <= progress ? dimmedProgressColor : dimmedBackgroundColor);
+        float val = i / (oneStripLength - 1);
+        rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i, val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
+        rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i + oneStripLength, 1 - val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
       }
 
       rgbSubSystem.setBufferDirty();
@@ -65,17 +66,18 @@ public class RGB extends SubsystemBase {
   };
 
   final RGB_Zone SHOOTER_LEFT_ZONE = new RGB_Zone(42, 83, this) {
+    int oneStripLength = 21;
 
     @Override
     public void setProgressColor(double progress, Color progressFillColor, Color backgroundColor) {
       Color dimmedProgressColor = rgbSubSystem.getDimmedColor(progressFillColor);
       Color dimmedBackgroundColor = rgbSubSystem.getDimmedColor(backgroundColor);
-      int oneStripLength = (zoneEndIndex - zoneStartIndex) / 2 + 1;
 
       for (int i = 0; i < oneStripLength; i++)
       {
-        rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i, (double)i / oneStripLength <= progress ? dimmedProgressColor : dimmedBackgroundColor);
-        rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i + oneStripLength, 1 - ((double)i + 1)  / oneStripLength <= progress ? dimmedProgressColor : dimmedBackgroundColor);
+        float val = i / (oneStripLength - 1);
+        rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i, val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
+        rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i + oneStripLength, 1 - val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
       }
 
       rgbSubSystem.setBufferDirty();
@@ -83,11 +85,21 @@ public class RGB extends SubsystemBase {
   };
 
   final RGB_Zone CLIMBER_RIGHT_ZONE = new RGB_Zone(84, 147, this) {
+    int oneStripLength = 16;
 
     @Override
     public void setProgressColor(double progress, Color progressFillColor, Color backgroundColor) {
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("Unimplemented method 'setProgressColor'");
+      Color dimmedProgressColor = rgbSubSystem.getDimmedColor(progressFillColor);
+      Color dimmedBackgroundColor = rgbSubSystem.getDimmedColor(backgroundColor);
+
+      for (int i = 0; i < oneStripLength; i++)
+      {
+        float val = i / (oneStripLength - 1);
+        rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i, val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
+        rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i + oneStripLength, 1 - val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
+        rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i + oneStripLength * 2, val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
+        rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i + oneStripLength * 3, 1 - val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
+      }
     }
   };
 
@@ -195,7 +207,7 @@ public class RGB extends SubsystemBase {
   @Override
   public void periodic() {
     // //rainbowRGB();
-    // periodicCalls++;
+    periodicCalls++;
 
     // double matchTime = DriverStation.getMatchTime();
     // if (matchTime < startFlashTime && DriverStation.isTeleop() && periodicCalls % flashInterval == 0) { displayEndOfMatchFlash = !displayEndOfMatchFlash; }
@@ -208,12 +220,62 @@ public class RGB extends SubsystemBase {
     // else if (intake.getCurrentPivotState() == IntakePivotState.OUT || intake.getCurrentPivotAngle() < IntakeConstants.INTAKE_UP_POS) { setSolidRGBColor(PURPLE); }
     // else { setAllianceColor(); }
 
-    SHOOTER_RIGHT_ZONE.setProgressColor(Input.Throttle, GREEN, BLUE);
-    SHOOTER_LEFT_ZONE.setProgressColor(Input.Throttle, GREEN, BLUE);
+    Color rainbowColor = hsvToRgb(periodicCalls % 360, 1, 1);
+
+    SHOOTER_RIGHT_ZONE.setProgressColor(Input.Throttle, rainbowColor, PURPLE);
+    SHOOTER_LEFT_ZONE.setProgressColor(Input.Throttle, rainbowColor, PURPLE);
+    CLIMBER_RIGHT_ZONE.setProgressColor(Input.Throttle, rainbowColor, PURPLE);
 
     if (bufferDirty) {
       m_led.setData(ledBuffer);
       bufferDirty = false;
     }
   }
+
+  public static Color hsvToRgb(float hue, float saturation, float value) {
+    int[] rgb = new int[3];
+
+    int hi = (int) (Math.floor(hue / 60) % 6);
+    float f = (hue / 60) - (float) Math.floor(hue / 60);
+    float p = value * (1 - saturation);
+    float q = value * (1 - f * saturation);
+    float t = value * (1 - (1 - f) * saturation);
+
+    switch (hi) {
+        case 0:
+            rgb[0] = (int) (value * 255);
+            rgb[1] = (int) (t * 255);
+            rgb[2] = (int) (p * 255);
+            break;
+        case 1:
+            rgb[0] = (int) (q * 255);
+            rgb[1] = (int) (value * 255);
+            rgb[2] = (int) (p * 255);
+            break;
+        case 2:
+            rgb[0] = (int) (p * 255);
+            rgb[1] = (int) (value * 255);
+            rgb[2] = (int) (t * 255);
+            break;
+        case 3:
+            rgb[0] = (int) (p * 255);
+            rgb[1] = (int) (q * 255);
+            rgb[2] = (int) (value * 255);
+            break;
+        case 4:
+            rgb[0] = (int) (t * 255);
+            rgb[1] = (int) (p * 255);
+            rgb[2] = (int) (value * 255);
+            break;
+        case 5:
+            rgb[0] = (int) (value * 255);
+            rgb[1] = (int) (p * 255);
+            rgb[2] = (int) (q * 255);
+            break;
+        default:
+            break;
+    }
+
+    return new Color(rgb[0], rgb[1], rgb[2]);
+}
 }
