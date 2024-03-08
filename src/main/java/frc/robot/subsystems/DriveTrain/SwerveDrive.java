@@ -56,6 +56,10 @@ public class SwerveDrive extends SubsystemBase {
     public void periodic() {
         this.updateOdometry();
         SmartDashboard.putNumber("Heading", getHeading().getDegrees());
+        SmartDashboard.putNumber("LF Drive Spped", leftFrontSwerveModule.driveNEOMotorEncoder.getVelocity());
+        SmartDashboard.putNumber("RF Drive Spped", rightFrontSwerveModule.driveNEOMotorEncoder.getVelocity());
+        SmartDashboard.putNumber("LR Drive Spped", leftRearSwerveModule.driveNEOMotorEncoder.getVelocity());
+        SmartDashboard.putNumber("RR Drive Spped", rightRearSwerveModule.driveNEOMotorEncoder.getVelocity());
     }
 
     /**
