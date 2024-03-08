@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
 import java.util.random.RandomGenerator;
@@ -41,12 +42,17 @@ public class RGB extends SubsystemBase {
 
   double rgbStrength = .15;
 
-  static final double startFlashTime = 30;
-  static final int flashInterval = 20;
-  boolean displayEndOfMatchFlash = false;
+  static final double endOfMatchStartFlashTime = 30;
+  boolean startedEndOfMatchFlash = false;
+  boolean limitSwitchLastPeriodic = false;
 
   private AddressableLED m_led = new AddressableLED(0);
   public final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(212);
+
+  ArrayList<RgbFlashCommand> flashCommands = new ArrayList<>(3);
+  Color currentFlashColor = OFF;
+
+  //#region rgb zones
 
   final RGB_Zone SHOOTER_RIGHT_ZONE = new RGB_Zone(0, 41, this) {
     int oneStripLength = 21;
@@ -123,6 +129,8 @@ public class RGB extends SubsystemBase {
       }
     }
   };
+
+  //#endregion
 
       Shooter shooter;
       Intake intake;
@@ -219,17 +227,30 @@ public class RGB extends SubsystemBase {
   @Override
   public void periodic() {
     periodicCalls++;
+    updateFlashCommands();
+
+    if (shouldUseFlash()) {
+      setSolidRGBColor(currentFlashColor);
+      return;
+    }
 
     Color backgroundColor = OFF;
 
-    double matchTime = DriverStation.getMatchTime();
-    if (matchTime < startFlashTime && DriverStation.isTeleop() && periodicCalls % flashInterval == 0) { displayEndOfMatchFlash = !displayEndOfMatchFlash; }
-    if (matchTime > startFlashTime || matchTime == -1 || !DriverStation.isTeleop()) { displayEndOfMatchFlash = false; }
+    if (DriverStation.isTeleop())
+    {
+      double matchTime = DriverStation.getMatchTime();
 
-    if (displayEndOfMatchFlash) { backgroundColor = YELLOW; }
+      if (!startedEndOfMatchFlash && matchTime < endOfMatchStartFlashTime)
+      {
+        flashCommands.add(new RgbFlashCommand(YELLOW, 30, 20));
+      }
+    }
+
+    if (!limitSwitchLastPeriodic && intake.limitSwitchPressed()) {flashCommands.add(new RgbFlashCommand(ORANGE, 1, 12)); }
+
     //else if (shooter.getCurrentRunState() == ShooterRunState.SHOOT) { shooterLED(); }
     //else if (Vision.usingLimelight) { setSolidRGBColor(GREEN); }
-    else if (intake.limitSwitchPressed()) { backgroundColor = ORANGE; }
+    if (intake.limitSwitchPressed()) { backgroundColor = ORANGE; }
     else if (intake.getCurrentPivotState() == IntakePivotState.OUT || intake.getCurrentPivotAngle() < IntakeConstants.INTAKE_UP_POS) { backgroundColor = PURPLE; }
     else { backgroundColor = getAllianceColor(); }
 
@@ -241,6 +262,7 @@ public class RGB extends SubsystemBase {
       SHOOTER_LEFT_ZONE.setProgressColor(shooterRPMPercentOfMax, NEON_PINK, backgroundColor);
     }
 
+    limitSwitchLastPeriodic = intake.limitSwitchPressed();
     if (bufferDirty) {
       m_led.setData(ledBuffer);
       bufferDirty = false;
@@ -292,5 +314,62 @@ public class RGB extends SubsystemBase {
     }
 
     return new Color(rgb[0], rgb[1], rgb[2]);
-}
+  }
+
+  void updateFlashCommands()
+  {
+    for (int i = flashCommands.size() - 1; i > -1; i--)
+    {
+      flashCommands.get(i).periodicUpdate();
+
+      if (flashCommands.get(i).shouldDelete()) { flashCommands.remove(i); }
+    }
+  }
+
+  boolean shouldUseFlash()
+  {
+    for (int i = 0; i < flashCommands.size(); i++)
+    {
+      if (flashCommands.get(i).displayFlash())
+      {
+        currentFlashColor = flashCommands.get(i).flashColor();
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  class RgbFlashCommand {
+    final Color flashColor;
+    final double flashTime;
+    final int flashInterval;
+
+    double currentTime;
+    int periodicCalls;
+    boolean displayFlash;
+
+    public RgbFlashCommand(Color flashColor, double flashTime, int flashInterval)
+    {
+      this.flashColor = flashColor;
+      this.flashTime = flashTime;
+      this.flashInterval = flashInterval;
+
+      currentTime = 0;
+      periodicCalls = 0;
+      displayFlash = true;
+    }
+
+    public void periodicUpdate()
+    {
+      periodicCalls++;
+      currentTime += .02;
+
+      if (periodicCalls % flashInterval == 0) { displayFlash = !displayFlash; }
+    }
+
+    public boolean shouldDelete() { return currentTime > flashTime; }
+    public Color flashColor() { return flashColor; }
+    public boolean displayFlash() { return displayFlash; }
+  }
 }
