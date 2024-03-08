@@ -33,6 +33,7 @@ public class RGB extends SubsystemBase {
   static final Color ORANGE = new Color(255, 30, 0);
   static final Color YELLOW = new Color(255, 155, 0);
   static final Color PURPLE = new Color(170, 0, 255);
+  static final Color NEON_PINK = new Color(255, 16, 240);
 
   boolean bufferDirty = false;
 
@@ -232,14 +233,13 @@ public class RGB extends SubsystemBase {
     else if (intake.getCurrentPivotState() == IntakePivotState.OUT || intake.getCurrentPivotAngle() < IntakeConstants.INTAKE_UP_POS) { backgroundColor = PURPLE; }
     else { backgroundColor = getAllianceColor(); }
 
-    double shooterRPMPercentOfMax = shooter.getShooterRPM() / ShooterConstants.LEFT_SHOOTER_SPEED;
-    Color rainbowOne = hsvToRgb(periodicCalls % 360, 1, 1);
-    Color rainbowTwo = hsvToRgb((periodicCalls + 180) % 360, 1, 1);
+    setSolidRGBColor(backgroundColor);
 
-    SHOOTER_RIGHT_ZONE.setProgressColor(shooterRPMPercentOfMax, rainbowOne, rainbowTwo);
-    SHOOTER_LEFT_ZONE.setProgressColor(shooterRPMPercentOfMax, rainbowOne, rainbowTwo);
-    CLIMBER_RIGHT_ZONE.setProgressColor(Input.Throttle, rainbowOne, rainbowTwo);
-    CLIMBER_LEFT_ZONE.setProgressColor(Input.Throttle, rainbowOne, rainbowTwo);
+    double shooterRPMPercentOfMax = shooter.getShooterRPM() / ShooterConstants.LEFT_SHOOTER_SPEED;
+    if (shooterRPMPercentOfMax > 0) {
+      SHOOTER_RIGHT_ZONE.setProgressColor(shooterRPMPercentOfMax, NEON_PINK, backgroundColor);
+      SHOOTER_LEFT_ZONE.setProgressColor(shooterRPMPercentOfMax, NEON_PINK, backgroundColor);
+    }
 
     if (bufferDirty) {
       m_led.setData(ledBuffer);
