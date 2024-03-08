@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -133,31 +134,31 @@ public class Shooter extends SubsystemBase {
     shooterPivotEncoder.setPosition(getShooterAngle() * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE);
     switch(state) {
       case START:
-      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_START_POS, ControlType.kSmartMotion);
+      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_START_POS, CANSparkBase.ControlType.kSmartMotion);
       targetAngle = Constants.ShooterConstants.SHOOTER_START_POS;
       break;
       case VISION_SHOOT: 
       setVisionShooterAngle();
-      shooterPivotPID.setReference(visionShooterAngle * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE, ControlType.kSmartMotion);
+      shooterPivotPID.setReference(visionShooterAngle * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE, CANSparkBase.ControlType.kSmartMotion);
       targetAngle = visionShooterAngle * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
       break;
       case AMP:
-      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_DEFAULT_AMP_POS, ControlType.kSmartMotion);
+      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_DEFAULT_AMP_POS, CANSparkBase.ControlType.kSmartMotion);
       targetAngle = Constants.ShooterConstants.SHOOTER_DEFAULT_AMP_POS;
       break;
       case DEFAULT_SHOOT: 
-      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_DEFAULT_SHOOTING_POS, ControlType.kSmartMotion);
+      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_DEFAULT_SHOOTING_POS, CANSparkBase.ControlType.kSmartMotion);
       targetAngle = Constants.ShooterConstants.SHOOTER_DEFAULT_SHOOTING_POS;
       break;
       case SHOOTER_NONE:
-      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_NONE_POS, ControlType.kSmartMotion);
+      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_NONE_POS, CANSparkBase.ControlType.kSmartMotion);
       targetAngle = Constants.ShooterConstants.SHOOTER_NONE_POS;
       break;
       case STUPID_POS: 
-      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_STUPID_POS, ControlType.kSmartMotion);
+      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_STUPID_POS, CANSparkBase.ControlType.kSmartMotion);
       targetAngle = Constants.ShooterConstants.SHOOTER_STUPID_POS;
       case CLIMBING_POS: 
-      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_CLIMB_POS, ControlType.kSmartMotion);
+      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_CLIMB_POS, CANSparkBase.ControlType.kSmartMotion);
       targetAngle = Constants.ShooterConstants.SHOOTER_CLIMB_POS;
       break;
     }
@@ -170,20 +171,20 @@ public class Shooter extends SubsystemBase {
 
     switch(state) {
       case NONE:
-      leftShooterRunPID.setReference(0, ControlType.kCurrent, 1);
-      rightShooterRunPID.setReference(0, ControlType.kCurrent, 1);
+      leftShooterRunPID.setReference(0, CANSparkBase.ControlType.kCurrent, 1);
+      rightShooterRunPID.setReference(0, CANSparkBase.ControlType.kCurrent, 1);
       lTargetSpeed = 0;
       rTargetSpeed = 0;
       break;
       case AMP: 
-      leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_AMP_SPEED, ControlType.kVelocity);
-      rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_AMP_SPEED, ControlType.kVelocity);
+      leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_AMP_SPEED, CANSparkBase.ControlType.kVelocity);
+      rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_AMP_SPEED, CANSparkBase.ControlType.kVelocity);
       lTargetSpeed = Constants.ShooterConstants.LEFT_AMP_SPEED;
       rTargetSpeed = Constants.ShooterConstants.RIGHT_AMP_SPEED;
       break;
       case SHOOT:
-      leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_SHOOTER_SPEED, ControlType.kVelocity);
-      rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_SHOOTER_SPEED, ControlType.kVelocity);
+      leftShooterRunPID.setReference(Constants.ShooterConstants.LEFT_SHOOTER_SPEED, CANSparkBase.ControlType.kVelocity);
+      rightShooterRunPID.setReference(Constants.ShooterConstants.RIGHT_SHOOTER_SPEED, CANSparkBase.ControlType.kVelocity);
       lTargetSpeed = 5300;
       rTargetSpeed = 4200;
       break;
