@@ -171,8 +171,8 @@ public class Shooter extends SubsystemBase {
 
     switch(state) {
       case NONE:
-      leftShooterRunPID.setReference(0, CANSparkBase.ControlType.kCurrent, 1);
-      rightShooterRunPID.setReference(0, CANSparkBase.ControlType.kCurrent, 1);
+      leftShooterRunPID.setReference(0, CANSparkBase.ControlType.kDutyCycle);
+      rightShooterRunPID.setReference(0, CANSparkBase.ControlType.kDutyCycle);
       lTargetSpeed = 0;
       rTargetSpeed = 0;
       break;
