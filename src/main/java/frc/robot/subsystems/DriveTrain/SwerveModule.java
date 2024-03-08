@@ -19,7 +19,7 @@ public class SwerveModule {
 
     public CANSparkMax driveMotor;
     private CANSparkMax steerMotor;
-    private RelativeEncoder driveNEOMotorEncoder; // NEO build-in Encoder
+    public RelativeEncoder driveNEOMotorEncoder; // NEO build-in Encoder
 
     private CANcoder steerAngleEncoder;
 
