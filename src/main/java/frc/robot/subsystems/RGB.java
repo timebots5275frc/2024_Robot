@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.CustomTypes.RgbZones.*;
 import frc.robot.subsystems.Input.Input;
 import frc.robot.subsystems.Intake.IntakePivotState;
@@ -56,7 +57,7 @@ public class RGB extends SubsystemBase {
 
       for (int i = 0; i < oneStripLength; i++)
       {
-        float val = i / (oneStripLength - 1);
+        float val = (float)i / (oneStripLength - 1);
         rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i, val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
         rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i + oneStripLength, 1 - val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
       }
@@ -75,7 +76,7 @@ public class RGB extends SubsystemBase {
 
       for (int i = 0; i < oneStripLength; i++)
       {
-        float val = i / (oneStripLength - 1);
+        float val = (float)i / (oneStripLength - 1);
         rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i, val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
         rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i + oneStripLength, 1 - val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
       }
@@ -94,7 +95,7 @@ public class RGB extends SubsystemBase {
 
       for (int i = 0; i < oneStripLength; i++)
       {
-        float val = i / (oneStripLength - 1);
+        float val = (float)i / (oneStripLength - 1);
         rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i, val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
         rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i + oneStripLength, 1 - val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
         rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i + oneStripLength * 2, val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
@@ -104,11 +105,21 @@ public class RGB extends SubsystemBase {
   };
 
   final RGB_Zone CLIMBER_LEFT_ZONE = new RGB_Zone(148, 211, this) {
+    int oneStripLength = 16;
 
     @Override
     public void setProgressColor(double progress, Color progressFillColor, Color backgroundColor) {
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("Unimplemented method 'setProgressColor'");
+      Color dimmedProgressColor = rgbSubSystem.getDimmedColor(progressFillColor);
+      Color dimmedBackgroundColor = rgbSubSystem.getDimmedColor(backgroundColor);
+
+      for (int i = 0; i < oneStripLength; i++)
+      {
+        float val = (float)i / (oneStripLength - 1);
+        rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i, val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
+        rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i + oneStripLength, 1 - val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
+        rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i + oneStripLength * 2, val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
+        rgbSubSystem.ledBuffer.setLED(zoneStartIndex + i + oneStripLength * 3, 1 - val <= progress ? dimmedProgressColor : dimmedBackgroundColor);
+      }
     }
   };
 
@@ -168,10 +179,10 @@ public class RGB extends SubsystemBase {
     }
 
 
-  public void setAllianceColor() {
-      if (DriverStation.getAlliance().get() == Alliance.Red) { setSolidRGBColor(RED); } 
-      else if (DriverStation.getAlliance().get() == Alliance.Blue) { setSolidRGBColor(BLUE); }
-      else { setColorPattern(new Color[] { RED, BLUE }); }
+  public Color getAllianceColor() {
+      if (DriverStation.getAlliance().get() == Alliance.Red) { return RED; } 
+      else if (DriverStation.getAlliance().get() == Alliance.Blue) { return BLUE; }
+      else { return OFF; }
   }
 
   public void rainbowRGB()
@@ -206,25 +217,29 @@ public class RGB extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // //rainbowRGB();
     periodicCalls++;
 
-    // double matchTime = DriverStation.getMatchTime();
-    // if (matchTime < startFlashTime && DriverStation.isTeleop() && periodicCalls % flashInterval == 0) { displayEndOfMatchFlash = !displayEndOfMatchFlash; }
-    // if (matchTime > startFlashTime || matchTime == -1 || !DriverStation.isTeleop()) { displayEndOfMatchFlash = false; }
+    Color backgroundColor = OFF;
 
-    // if (displayEndOfMatchFlash) {  setSolidRGBColor(YELLOW); }
-    // //else if (shooter.getCurrentRunState() == ShooterRunState.SHOOT) { shooterLED(); }
-    // //else if (Vision.usingLimelight) { setSolidRGBColor(GREEN); }
-    // else if (intake.limitSwitchPressed()) { setSolidRGBColor(ORANGE); }
-    // else if (intake.getCurrentPivotState() == IntakePivotState.OUT || intake.getCurrentPivotAngle() < IntakeConstants.INTAKE_UP_POS) { setSolidRGBColor(PURPLE); }
-    // else { setAllianceColor(); }
+    double matchTime = DriverStation.getMatchTime();
+    if (matchTime < startFlashTime && DriverStation.isTeleop() && periodicCalls % flashInterval == 0) { displayEndOfMatchFlash = !displayEndOfMatchFlash; }
+    if (matchTime > startFlashTime || matchTime == -1 || !DriverStation.isTeleop()) { displayEndOfMatchFlash = false; }
 
-    Color rainbowColor = hsvToRgb(periodicCalls % 360, 1, 1);
+    if (displayEndOfMatchFlash) { backgroundColor = YELLOW; }
+    //else if (shooter.getCurrentRunState() == ShooterRunState.SHOOT) { shooterLED(); }
+    //else if (Vision.usingLimelight) { setSolidRGBColor(GREEN); }
+    else if (intake.limitSwitchPressed()) { backgroundColor = ORANGE; }
+    else if (intake.getCurrentPivotState() == IntakePivotState.OUT || intake.getCurrentPivotAngle() < IntakeConstants.INTAKE_UP_POS) { backgroundColor = PURPLE; }
+    else { backgroundColor = getAllianceColor(); }
 
-    SHOOTER_RIGHT_ZONE.setProgressColor(Input.Throttle, rainbowColor, PURPLE);
-    SHOOTER_LEFT_ZONE.setProgressColor(Input.Throttle, rainbowColor, PURPLE);
-    CLIMBER_RIGHT_ZONE.setProgressColor(Input.Throttle, rainbowColor, PURPLE);
+    double shooterRPMPercentOfMax = shooter.getShooterRPM() / ShooterConstants.LEFT_SHOOTER_SPEED;
+    Color rainbowOne = hsvToRgb(periodicCalls % 360, 1, 1);
+    Color rainbowTwo = hsvToRgb((periodicCalls + 180) % 360, 1, 1);
+
+    SHOOTER_RIGHT_ZONE.setProgressColor(shooterRPMPercentOfMax, rainbowOne, rainbowTwo);
+    SHOOTER_LEFT_ZONE.setProgressColor(shooterRPMPercentOfMax, rainbowOne, rainbowTwo);
+    CLIMBER_RIGHT_ZONE.setProgressColor(Input.Throttle, rainbowOne, rainbowTwo);
+    CLIMBER_LEFT_ZONE.setProgressColor(Input.Throttle, rainbowOne, rainbowTwo);
 
     if (bufferDirty) {
       m_led.setData(ledBuffer);
