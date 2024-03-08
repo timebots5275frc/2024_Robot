@@ -90,15 +90,25 @@ public class Shooter extends SubsystemBase {
     leftShooterRunMotor.setInverted(true);
     rightShooterRunMotor.setInverted(false);
 
-    leftShooterRunPID.setP(Constants.ShooterConstants.ShooterRunPIDs.P);
-    leftShooterRunPID.setI(Constants.ShooterConstants.ShooterRunPIDs.I);
-    leftShooterRunPID.setD(Constants.ShooterConstants.ShooterRunPIDs.D);
-    leftShooterRunPID.setFF(Constants.ShooterConstants.ShooterRunPIDs.kFF);
+    leftShooterRunPID.setP(Constants.ShooterConstants.ShooterRunPIDs.P, 0);
+    leftShooterRunPID.setI(Constants.ShooterConstants.ShooterRunPIDs.I, 0);
+    leftShooterRunPID.setD(Constants.ShooterConstants.ShooterRunPIDs.D, 0);
+    leftShooterRunPID.setFF(Constants.ShooterConstants.ShooterRunPIDs.kFF, 0);
 
-    rightShooterRunPID.setP(Constants.ShooterConstants.ShooterRunPIDs.P);
-    rightShooterRunPID.setI(Constants.ShooterConstants.ShooterRunPIDs.I);
-    rightShooterRunPID.setD(Constants.ShooterConstants.ShooterRunPIDs.D);
-    rightShooterRunPID.setFF(Constants.ShooterConstants.ShooterRunPIDs.kFF);
+    leftShooterRunPID.setP(0.008, 1);
+    leftShooterRunPID.setI(0.0, 1);
+    leftShooterRunPID.setD(0.0, 1);
+    leftShooterRunPID.setFF(0.0, 1);
+
+    rightShooterRunPID.setP(Constants.ShooterConstants.ShooterRunPIDs.P, 0);
+    rightShooterRunPID.setI(Constants.ShooterConstants.ShooterRunPIDs.I, 0);
+    rightShooterRunPID.setD(Constants.ShooterConstants.ShooterRunPIDs.D, 0);
+    rightShooterRunPID.setFF(Constants.ShooterConstants.ShooterRunPIDs.kFF, 0);
+
+    rightShooterRunPID.setP(0.008, 1);
+    rightShooterRunPID.setI(0.0, 1);
+    rightShooterRunPID.setD(0.0, 1);
+    rightShooterRunPID.setFF(0.0, 1);
 
     shooterPivotPID.setP(Constants.ShooterConstants.ShooterPivotPIDs.P);
     shooterPivotPID.setI(Constants.ShooterConstants.ShooterPivotPIDs.I);
@@ -186,11 +196,6 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean readyToShoot() {
-    // if (DriverStation.isAutonomousEnabled()) {
-    //   shootDiffMult = 2;
-    // } else {
-    //   shootDiffMult = 1;
-    // }
     boolean pivotReached = (Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET > Math.abs(targetAngle - shooterPivotEncoder.getPosition()));
     boolean lSpeedReached = (lTargetSpeed > 0 && Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_DIFFERENTIAL * shootDiffMult > Math.abs(lTargetSpeed - leftShooterRunEncoder.getVelocity()));
     boolean rSpeedReached = (rTargetSpeed > 0 && Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_DIFFERENTIAL * shootDiffMult > Math.abs(rTargetSpeed - rightShooterRunEncoder.getVelocity()));
