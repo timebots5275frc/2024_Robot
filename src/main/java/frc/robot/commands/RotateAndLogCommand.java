@@ -29,7 +29,7 @@ public class RotateAndLogCommand extends ManagerCommand {
     double distanceToTag = new Vector2(pos.x, pos.z).magnitude();
 
     Command driveCommand = new AutoVisionDrive(swerveDrive, vision, new Vector2(0, distanceToTag));
-    Command rotateCommand = new FaceAprilTag(swerveDrive);
+    Command rotateCommand = new FaceAprilTag(swerveDrive, vision);
 
     scheduleSubcommand(new SequentialCommandGroup(driveCommand, rotateCommand));
   }

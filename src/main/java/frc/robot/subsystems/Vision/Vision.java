@@ -9,10 +9,7 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.CustomTypes.Math.Vector3;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.VisionConstants.AprilTagData;
@@ -27,6 +24,12 @@ public class Vision extends SubsystemBase {
 
   private Vector3 avgAprilTagRotInRobotSpace;
   private ArrayList<Vector3> aprilTagRotInRobotSpaceValues = new ArrayList<Vector3>();
+
+  private Vector3 avgRobotPosInFieldSpace;
+  private ArrayList<Vector3> robotPosInFieldSpaceValues = new ArrayList<Vector3>();
+
+  private Vector3 avgRobotRotInFieldSpace;
+  private ArrayList<Vector3> robotRotInFieldSpaceValues = new ArrayList<Vector3>();
 
   public BooleanSupplier HasValidData = new BooleanSupplier() {
     public boolean getAsBoolean() { return hasValidData(); };
@@ -77,6 +80,15 @@ public class Vision extends SubsystemBase {
     addVector3ToArrayList(new Vector3(vals[3], vals[4], vals[5]), aprilTagRotInRobotSpaceValues);
     avgAprilTagPosInRobotSpace = getAverageOfArrayList(aprilTagPosInRobotSpaceValues);
     avgAprilTagRotInRobotSpace = getAverageOfArrayList(aprilTagRotInRobotSpaceValues);
+  }
+
+  void CalculateRobotPositionInFieldSpace()
+  {
+    double[] vals = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
+    addVector3ToArrayList(new Vector3(vals[0], vals[1], vals[2]), robotPosInFieldSpaceValues);
+    addVector3ToArrayList(new Vector3(vals[3], vals[4], vals[5]), robotRotInFieldSpaceValues);
+    avgRobotPosInFieldSpace = getAverageOfArrayList(robotPosInFieldSpaceValues);
+    avgAprilTagRotInRobotSpace = getAverageOfArrayList(robotRotInFieldSpaceValues);
   }
 
   void addVector3ToArrayList(Vector3 newVal, ArrayList<Vector3> arrayList)
@@ -150,5 +162,7 @@ public class Vision extends SubsystemBase {
   public int AprilTagID() { return aprilTagID; }
   public Vector3 AprilTagPosInRobotSpace() { return avgAprilTagPosInRobotSpace; }
   public Vector3 AprilTagRotInRobotSpace() { return avgAprilTagRotInRobotSpace; }
+  public Vector3 RobotPosInFieldSpace() { return avgRobotPosInFieldSpace; }
+  public Vector3 RobotRotInFieldSpace() { return avgRobotRotInFieldSpace; }
   public double HorizontalOffsetFromAprilTag() { return horizontalOffsetFromAprilTag; }
 }

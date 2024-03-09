@@ -22,9 +22,9 @@ public class VisionShooterCalculator {
             Vector3 aprilTagInRobotSpace = vision.AprilTagPosInRobotSpace();
             double horizontalDistanceToAprilTag = (new Vector2(aprilTagInRobotSpace.x, aprilTagInRobotSpace.z).magnitude()) * 39.37 - 7;
 
-            double C = 0.0305;
+            double C = 0.0325;
 
-            return Math.toDegrees(Math.atan2(heightDifferenceBetweenShooterAndSpeakerTargetPosition, horizontalDistanceToAprilTag)) + Math.pow(horizontalDistanceToAprilTag, 1.11) * C;
+            return Math.toDegrees(Math.atan2(heightDifferenceBetweenShooterAndSpeakerTargetPosition, horizontalDistanceToAprilTag)) + Math.pow(horizontalDistanceToAprilTag, 1.08) * C;
         }
         else { return shooter.getShooterAngle(); }
     }

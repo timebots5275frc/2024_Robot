@@ -11,14 +11,16 @@ import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionDriveCalculator;
 
 public class FaceAprilTag extends Command {
-  private SwerveDrive swerveDrive;
+  SwerveDrive swerveDrive;
+  Vision vision;
 
   boolean facingTarget = false;
 
   private static double turnSpeed = 1.5;
 
-  public FaceAprilTag(SwerveDrive swerveDrive) {
+  public FaceAprilTag(SwerveDrive swerveDrive, Vision vision) {
     this.swerveDrive = swerveDrive;
+    this.vision = vision;
 
     addRequirements(swerveDrive);
   }
@@ -33,10 +35,12 @@ public class FaceAprilTag extends Command {
   @Override
   public void execute()
   {
-    double rotationDirection = VisionDriveCalculator.rotateTowardsTarget(VisionDriveCalculator.getAngleOffsetForVision());
+    double tx = vision.HorizontalOffsetFromAprilTag();
+    double offset = VisionDriveCalculator.getAngleOffsetForVision();
+    double rotationDirection = VisionDriveCalculator.rotateTowardsTarget(offset);
 
-    SmartDashboard.putNumber("Rot Dir", rotationDirection);
-    if (Math.abs(rotationDirection) <= .05) { facingTarget = true; }
+    SmartDashboard.putNumber("Balls", Math.abs(tx + offset));
+    if (Math.abs(tx + offset) <= .85) { facingTarget = true; }
     else { swerveDrive.drive(0, 0, rotationDirection * turnSpeed, false); }
   }
 

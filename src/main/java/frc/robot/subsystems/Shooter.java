@@ -118,6 +118,7 @@ public class Shooter extends SubsystemBase {
     shooterPivotPID.setOutputRange(-1, 1);
     shooterPivotPID.setSmartMotionMaxVelocity(Constants.ShooterConstants.SHOOTER_PIVOT_MAX_VEL, 0);
     shooterPivotPID.setSmartMotionMaxAccel(Constants.ShooterConstants.SHOOTER_PIVOT_MAX_ACCEL, 0);
+    shooterPivotPID.setSmartMotionAllowedClosedLoopError(0, 0);
     VisionShooterCalculator.SetShooterReference(this);
     shooterPivotEncoder.setPosition(getShooterAngle() * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE);
 
@@ -201,6 +202,11 @@ public class Shooter extends SubsystemBase {
     boolean pivotReached = (Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET > Math.abs(targetAngle - shooterPivotEncoder.getPosition()));
     boolean lSpeedReached = (lTargetSpeed > 0 && Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_DIFFERENTIAL * shootDiffMult > Math.abs(lTargetSpeed - leftShooterRunEncoder.getVelocity()));
     boolean rSpeedReached = (rTargetSpeed > 0 && Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_DIFFERENTIAL * shootDiffMult > Math.abs(rTargetSpeed - rightShooterRunEncoder.getVelocity()));
+
+    SmartDashboard.putBoolean("Pivot reached", pivotReached);
+    SmartDashboard.putBoolean("L speed reached", lSpeedReached);
+    SmartDashboard.putBoolean("R speed reached", rSpeedReached);
+
     return pivotReached && lSpeedReached && rSpeedReached;
   }
 

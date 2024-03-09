@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
@@ -229,7 +230,7 @@ public class RGB extends SubsystemBase {
     periodicCalls++;
     updateFlashCommands();
 
-    if (shouldUseFlash()) {
+    if (shouldUseFlash() && false) {
       setSolidRGBColor(currentFlashColor);
       return;
     }
@@ -257,6 +258,7 @@ public class RGB extends SubsystemBase {
     setSolidRGBColor(backgroundColor);
 
     double shooterRPMPercentOfMax = shooter.getShooterRPM() / ShooterConstants.LEFT_SHOOTER_SPEED;
+    SmartDashboard.putNumber("Shooter RPM %", shooterRPMPercentOfMax);
     if (shooterRPMPercentOfMax > 0) {
       SHOOTER_RIGHT_ZONE.setProgressColor(shooterRPMPercentOfMax, NEON_PINK, backgroundColor);
       SHOOTER_LEFT_ZONE.setProgressColor(shooterRPMPercentOfMax, NEON_PINK, backgroundColor);

@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 
 import frc.robot.CustomTypes.Math.Vector2;
+import frc.robot.subsystems.Vision.Vision;
 
 public class SwerveDrive extends SubsystemBase {
 
@@ -47,19 +48,18 @@ public class SwerveDrive extends SubsystemBase {
     private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(kinematics, this.getHeading(), startingSwerveModulePositions);
 
     SwerveModulePosition[] currentSwerveModulePositions = startingSwerveModulePositions;
-
+    
     public void Drivetrain() {
         System.out.println("SwerveDrive.java started...");
     }
 
     @Override
     public void periodic() {
-        this.updateOdometry();
         SmartDashboard.putNumber("Heading", getHeading().getDegrees());
-        SmartDashboard.putNumber("LF Drive Spped", leftFrontSwerveModule.driveNEOMotorEncoder.getVelocity());
-        SmartDashboard.putNumber("RF Drive Spped", rightFrontSwerveModule.driveNEOMotorEncoder.getVelocity());
-        SmartDashboard.putNumber("LR Drive Spped", leftRearSwerveModule.driveNEOMotorEncoder.getVelocity());
-        SmartDashboard.putNumber("RR Drive Spped", rightRearSwerveModule.driveNEOMotorEncoder.getVelocity());
+        SmartDashboard.putNumber("LF Drive Speed", leftFrontSwerveModule.driveNEOMotorEncoder.getVelocity());
+        SmartDashboard.putNumber("RF Drive Speed", rightFrontSwerveModule.driveNEOMotorEncoder.getVelocity());
+        SmartDashboard.putNumber("LR Drive Speed", leftRearSwerveModule.driveNEOMotorEncoder.getVelocity());
+        SmartDashboard.putNumber("RR Drive Speed", rightRearSwerveModule.driveNEOMotorEncoder.getVelocity());
     }
 
     /**
