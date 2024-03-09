@@ -139,6 +139,7 @@ public class Shooter extends SubsystemBase {
       break;
       case VISION_SHOOT: 
       setVisionShooterAngle();
+      if (visionShooterAngle > 80) {visionShooterAngle = 80;}
       shooterPivotPID.setReference(visionShooterAngle * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE, CANSparkBase.ControlType.kSmartMotion);
       targetAngle = visionShooterAngle * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
       break;
