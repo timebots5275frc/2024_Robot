@@ -169,10 +169,10 @@ import frc.robot.CustomTypes.Math.Vector2;
       ba_source_left(1, "Source left", DriverStation.Alliance.Blue),
       ba_source_right(2, "Source right", DriverStation.Alliance.Blue),
       ra_speaker_aux(3, "Speaker auxillary", DriverStation.Alliance.Red),
-      ra_speaker_main(4, "Speaker main", DriverStation.Alliance.Red),
-      ra_amplifier(5, "Amplifier", DriverStation.Alliance.Red),
-      ba_amplifier(6, "Amplifier", DriverStation.Alliance.Blue),
-      ba_speaker_main(7, "Speaker main", DriverStation.Alliance.Blue),
+      ra_speaker_main(4, "Speaker main", DriverStation.Alliance.Red, 0, 16.6193978),
+      ra_amplifier(5, "Amplifier", DriverStation.Alliance.Red, -2.7389074, 14.778355),
+      ba_amplifier(6, "Amplifier", DriverStation.Alliance.Blue, -2.7389074, 1.858645),
+      ba_speaker_main(7, "Speaker main", DriverStation.Alliance.Blue, 0, 0),
       ba_speaker_aux(8, "Speaker auxillary", DriverStation.Alliance.Blue),
       ra_source_right(9, "Source right", DriverStation.Alliance.Red),
       ra_source_left(10, "Source left", DriverStation.Alliance.Red),
@@ -187,6 +187,13 @@ import frc.robot.CustomTypes.Math.Vector2;
       public final String name;
       public final DriverStation.Alliance alliance;
       private AprilTagData(int id, String name, DriverStation.Alliance alliance)
+      {
+        this.id = id;
+        this.name = name;
+        this.alliance = alliance;
+      }
+
+      private AprilTagData(int id, String name, DriverStation.Alliance alliance, double x, double y)
       {
         this.id = id;
         this.name = name;
