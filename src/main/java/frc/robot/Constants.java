@@ -287,7 +287,7 @@ import frc.robot.CustomTypes.Math.Vector2;
     public final static double SHOOTER_STUPID_POS = 78 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_CLIMB_POS = 20 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
 
-    public final static double SHOOTER_PIVOT_ALLOWED_OFFSET = 0.8;
+    public final static double SHOOTER_PIVOT_ALLOWED_OFFSET = 1;
     public final static double LEFT_SHOOTER_ALLOWED_DIFFERENTIAL = 150;
     public final static double RIGHT_SHOOTER_ALLOWED_DIFFERENTIAL = 150;
 

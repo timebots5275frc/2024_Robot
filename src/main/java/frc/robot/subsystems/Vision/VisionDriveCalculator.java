@@ -52,11 +52,11 @@ public class VisionDriveCalculator {
         {
             Vector3 aprilTagPos = vision.AprilTagPosInRobotSpace();
             Vector2 aprilTagHorizontalPos = new Vector2(aprilTagPos.x, aprilTagPos.z);
-            
+
 
             double limelightDistToAprilTag = aprilTagHorizontalPos.magnitude();
 
-            return 0;//(4.75 / (limelightDistToAprilTag * limelightDistToAprilTag)) + 9;
+            return (4.75 / (limelightDistToAprilTag * limelightDistToAprilTag)) + 9;//(17 / Math.pow(limelightDistToAprilTag, 0.8));//(4.75 / (limelightDistToAprilTag * limelightDistToAprilTag)) + 9;
         }
 
         return 0;

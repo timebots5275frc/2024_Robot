@@ -16,6 +16,7 @@ import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.IntakePivotCommand;
 import frc.robot.commands.IntakeRunCommand;
 import frc.robot.commands.ResetClimberCommand;
+import frc.robot.commands.RotateAndLogCommand;
 import frc.robot.commands.ShooterPivotCommand;
 import frc.robot.commands.ShooterRunCommand;
 import frc.robot.commands.TeleopJoystickDrive;
@@ -146,6 +147,8 @@ public class RobotContainer {
 
     new JoystickButton(driveStick, 9).onTrue(new UseLimelightCommand(true));
     new JoystickButton(driveStick, 10).onTrue(new UseLimelightCommand(false));
+
+    new JoystickButton(driveStick, 2).onTrue(new RotateAndLogCommand(vision, swerveDrive));
   }
 
   public Command getAutonomousCommand() {
