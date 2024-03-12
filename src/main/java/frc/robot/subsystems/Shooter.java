@@ -164,8 +164,6 @@ public class Shooter extends SubsystemBase {
       targetAngle = Constants.ShooterConstants.SHOOTER_CLIMB_POS;
       break;
     }
-
-    System.out.println("Setting desired shooter angle to: " + targetAngle);
   }
 
   public void shooterSetRunState(ShooterRunState state) {
@@ -203,10 +201,6 @@ public class Shooter extends SubsystemBase {
     boolean lSpeedReached = (lTargetSpeed > 0 && Constants.ShooterConstants.LEFT_SHOOTER_ALLOWED_DIFFERENTIAL * shootDiffMult > Math.abs(lTargetSpeed - leftShooterRunEncoder.getVelocity()));
     boolean rSpeedReached = (rTargetSpeed > 0 && Constants.ShooterConstants.RIGHT_SHOOTER_ALLOWED_DIFFERENTIAL * shootDiffMult > Math.abs(rTargetSpeed - rightShooterRunEncoder.getVelocity()));
 
-    SmartDashboard.putBoolean("Pivot reached", pivotReached);
-    SmartDashboard.putBoolean("L speed reached", lSpeedReached);
-    SmartDashboard.putBoolean("R speed reached", rSpeedReached);
-
     return pivotReached && lSpeedReached && rSpeedReached;
   }
 
@@ -235,16 +229,16 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+    Shooter.intakeCanMove = shooterOutOfWay();
+    Shooter.readyToShoot = readyToShoot();
+
     SmartDashboard.putNumber("Shooter Spark Max Pos", shooterPivotEncoder.getPosition());
     SmartDashboard.putNumber("Shooter CANCODER Pos", angleEncoder.getAbsolutePosition().getValueAsDouble() * 360);
     SmartDashboard.putNumber("Left shooter velocity", leftShooterRunEncoder.getVelocity());
-    SmartDashboard.putNumber("Right shooter vleocity", rightShooterRunEncoder.getVelocity());
+    SmartDashboard.putNumber("Right shooter velocity", rightShooterRunEncoder.getVelocity());
     SmartDashboard.putNumber("Right shooter Current", rightShooterRunMotor.getOutputCurrent());
     SmartDashboard.putNumber("Left Shooter Current", leftShooterRunMotor.getOutputCurrent());
-    Shooter.intakeCanMove = shooterOutOfWay();
     SmartDashboard.putBoolean("Shooter Out of way", intakeCanMove);
-    Shooter.readyToShoot = readyToShoot();
     SmartDashboard.putBoolean("Shooter Ready", readyToShoot());
-    SmartDashboard.putNumber("Target angle", visionShooterAngle);
   }
 }
