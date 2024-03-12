@@ -230,7 +230,7 @@ public class RGB extends SubsystemBase {
     periodicCalls++;
     updateFlashCommands();
 
-    if (shouldUseFlash() && false) {
+    if (shouldUseFlash()) {
       setSolidRGBColor(currentFlashColor);
       return;
     }
@@ -241,7 +241,7 @@ public class RGB extends SubsystemBase {
     {
       double matchTime = DriverStation.getMatchTime();
 
-      if (!startedEndOfMatchFlash && matchTime < endOfMatchStartFlashTime)
+      if (!startedEndOfMatchFlash && matchTime > 0 && matchTime < endOfMatchStartFlashTime)
       {
         flashCommands.add(new RgbFlashCommand(YELLOW, 30, 20));
       }
@@ -249,7 +249,6 @@ public class RGB extends SubsystemBase {
 
     if (!limitSwitchLastPeriodic && intake.limitSwitchPressed()) {flashCommands.add(new RgbFlashCommand(ORANGE, 1, 12)); }
 
-    //else if (shooter.getCurrentRunState() == ShooterRunState.SHOOT) { shooterLED(); }
     //else if (Vision.usingLimelight) { setSolidRGBColor(GREEN); }
     if (intake.limitSwitchPressed()) { backgroundColor = ORANGE; }
     else if (intake.getCurrentPivotState() == IntakePivotState.OUT || intake.getCurrentPivotAngle() < IntakeConstants.INTAKE_UP_POS) { backgroundColor = PURPLE; }
