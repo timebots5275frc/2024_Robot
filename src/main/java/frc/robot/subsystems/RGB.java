@@ -168,7 +168,7 @@ public class RGB extends SubsystemBase {
         ledBuffer.setLED(i, dimmedColor);
       }
 
-      m_led.setData(ledBuffer);
+      setBufferDirty();
     }
 
     public void setColorPattern(Color[] colors)
@@ -185,7 +185,7 @@ public class RGB extends SubsystemBase {
         ledBuffer.setLED(i, color);
       }
 
-      m_led.setData(ledBuffer);
+      setBufferDirty();
     }
 
 
@@ -201,7 +201,7 @@ public class RGB extends SubsystemBase {
         ledBuffer.setHSV(i, periodicCalls + i % 180, 255, (int)(255 * rgbStrength));
       }
 
-      m_led.setData(ledBuffer);
+      setBufferDirty();
   }
 
   public void allRandom()
@@ -210,7 +210,7 @@ public class RGB extends SubsystemBase {
         ledBuffer.setRGB(i, (int)(Math.random() * 255 * rgbStrength), (int)(Math.random() * 255 * rgbStrength), (int)(Math.random() * 255 * rgbStrength));
       }
 
-      m_led.setData(ledBuffer);
+      setBufferDirty();
   }
 
   void SetAscendingOrderRGB()
@@ -220,7 +220,7 @@ public class RGB extends SubsystemBase {
         ledBuffer.setRGB(i, val, val, val);
       }
 
-      m_led.setData(ledBuffer);
+      setBufferDirty();
   }
 
   public void setBufferDirty() { bufferDirty = true; }
