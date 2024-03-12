@@ -248,11 +248,12 @@ import frc.robot.CustomTypes.Math.Vector2;
   }
   public static class ShooterConstants {
     public static final PID_Values ShooterRunPIDs = new PID_Values(
-    0.00008,
+    0.0004,
+    // 0.0003
     0.0,
+    0.009,
     0.0,
-    0.0,
-    0.0002);
+    0.00018);
 
     public static final PID_Values ShooterPivotPIDs = new PID_Values(
     0.00003,
@@ -273,16 +274,16 @@ import frc.robot.CustomTypes.Math.Vector2;
     public final static int PIVOT_SHOOTER_ID = 30;
     public final static int PIVOT_SHOOTER_CANCODER_ID = 33;
 
-    public final static double LEFT_SHOOTER_SPEED = 5000;
-    public final static double RIGHT_SHOOTER_SPEED = 0.8 * LEFT_SHOOTER_SPEED;
+    public final static double LEFT_SHOOTER_SPEED = 5400;
+    public final static double RIGHT_SHOOTER_SPEED = 4500;
 
-    public final static double LEFT_AMP_SPEED = 731;
+    public final static double LEFT_AMP_SPEED = 425;
     public final static double RIGHT_AMP_SPEED = LEFT_AMP_SPEED;
 
     public final static double SHOOTER_RESET_POS = 65 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_START_POS = 65 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_DEFAULT_SHOOTING_POS = 60 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
-    public final static double SHOOTER_DEFAULT_AMP_POS = 56 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+    public final static double SHOOTER_DEFAULT_AMP_POS = 53.8 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_NONE_POS = 40 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_STUPID_POS = 78 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_CLIMB_POS = 20 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;

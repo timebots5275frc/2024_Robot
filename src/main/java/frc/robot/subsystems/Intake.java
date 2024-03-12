@@ -125,14 +125,14 @@ public class Intake extends SubsystemBase {
       intakeRunPID.setReference(0, ControlType.kVelocity);
       break;
       case OUTTAKE: 
-      intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED * 0.4, ControlType.kVelocity);
+      intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED * 0.5, ControlType.kVelocity);
       System.out.println("Outtaking at shooter angle: " + Shooter.targetAngle);
       break;
       case INTAKE: 
       intakeRunPID.setReference(Constants.IntakeConstants.INTAKE_RUN_SPEED, ControlType.kVelocity);
       break;
       case OUTTAKE_AMP:
-      intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED * 0.2, ControlType.kVelocity);
+      intakeRunPID.setReference(-Constants.IntakeConstants.INTAKE_RUN_SPEED * 0.3, ControlType.kVelocity);
       break;
     }
   }
