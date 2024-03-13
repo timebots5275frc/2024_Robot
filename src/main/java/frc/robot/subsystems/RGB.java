@@ -247,16 +247,20 @@ public class RGB extends SubsystemBase {
       }
     }
 
-    if (!limitSwitchLastPeriodic && intake.limitSwitchPressed()) {flashCommands.add(new RgbFlashCommand(ORANGE, 1, 12)); }
+    if (!limitSwitchLastPeriodic && intake.limitSwitchPressed()) 
+    {
+      flashCommands.add(new RgbFlashCommand(ORANGE, 2, 25));
+      System.out.println("Flash for Note");
+    }
 
     //else if (Vision.usingLimelight) { setSolidRGBColor(GREEN); }
     if (intake.limitSwitchPressed()) { backgroundColor = ORANGE; }
     else if (intake.getCurrentPivotState() == IntakePivotState.OUT || intake.getCurrentPivotAngle() < IntakeConstants.INTAKE_UP_POS) { backgroundColor = PURPLE; }
-    else { backgroundColor = getAllianceColor(); }
+    //else { backgroundColor = getAllianceColor(); }
 
     setSolidRGBColor(backgroundColor);
 
-    double shooterRPMPercentOfMax = shooter.getShooterRPM() / ShooterConstants.LEFT_SHOOTER_SPEED;
+    double shooterRPMPercentOfMax = shooter.getShooterRPM() / ((ShooterConstants.LEFT_SHOOTER_SPEED + ShooterConstants.RIGHT_SHOOTER_SPEED) / 2);
     SmartDashboard.putNumber("Shooter RPM %", shooterRPMPercentOfMax);
     if (shooterRPMPercentOfMax > 0) {
       SHOOTER_RIGHT_ZONE.setProgressColor(shooterRPMPercentOfMax, NEON_PINK, backgroundColor);
@@ -321,9 +325,10 @@ public class RGB extends SubsystemBase {
   {
     for (int i = flashCommands.size() - 1; i > -1; i--)
     {
-      flashCommands.get(i).periodicUpdate();
+      RgbFlashCommand currentCommand = flashCommands.get(i);
+      currentCommand.periodicUpdate();
 
-      if (flashCommands.get(i).shouldDelete()) { flashCommands.remove(i); }
+      if (currentCommand.shouldDelete()) { flashCommands.remove(i); }
     }
   }
 
@@ -338,6 +343,7 @@ public class RGB extends SubsystemBase {
       }
     }
 
+    currentFlashColor = OFF;
     return false;
   }
 

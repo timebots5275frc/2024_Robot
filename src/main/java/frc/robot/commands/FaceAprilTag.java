@@ -39,8 +39,7 @@ public class FaceAprilTag extends Command {
     double offset = VisionDriveCalculator.getAngleOffsetForVision();
     double rotationDirection = VisionDriveCalculator.rotateTowardsTarget(offset);
 
-    SmartDashboard.putNumber("Balls", Math.abs(tx + offset));
-    if (Math.abs(tx + offset) <= .85) { facingTarget = true; }
+    if (Math.abs(tx + offset) <= .85 && vision.hasValidData()) { facingTarget = true; }
     else { swerveDrive.drive(0, 0, rotationDirection * turnSpeed, false); }
   }
 
