@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.CustomTypes.SetUsingLimelightFalse;
 import frc.robot.CustomTypes.Math.Vector2;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Intake.IntakePivotState;
@@ -63,7 +62,7 @@ public class AutoCommands {
             driveUntilPickedUpNoteCommand(visionDriveNoteRight, intake),
             AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake),
             new AutoVisionDrive(swerveDrive, vision, taxiPos))
-            .finallyDo(new SetUsingLimelightFalse());
+            .finallyDo((boolean interuppted) -> vision.setUsingLimelight(false));
     }
 
     public static Command rightMiddleLeftAutoCommand(SwerveDrive swerveDrive, Vision vision, Shooter shooter, Intake intake)
@@ -90,7 +89,7 @@ public class AutoCommands {
             visionDriveNoteLMTransition,
             driveUntilPickedUpNoteCommand(visionDriveNoteLeft, intake),
             AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake))
-            .finallyDo(new SetUsingLimelightFalse());
+            .finallyDo((boolean interuppted) -> vision.setUsingLimelight(false));
     }
 
     public static Command shootLeftShootAutoCommand(SwerveDrive swerveDrive, Vision vision, Shooter shooter, Intake intake)
@@ -105,7 +104,7 @@ public class AutoCommands {
             new WaitCommand(.5),
             driveUntilPickedUpNoteCommand(visionDriveNoteLeft, intake),
             AutoVisionSpeakerShoot.ShootDontStopAnything(shooter, swerveDrive, vision, intake))
-            .finallyDo(new SetUsingLimelightFalse());
+            .finallyDo((boolean interuppted) -> vision.setUsingLimelight(false));
     }
 
     public static Command shootRightShootAutoCommand(SwerveDrive swerveDrive, Vision vision, Shooter shooter, Intake intake)
@@ -120,7 +119,7 @@ public class AutoCommands {
             new WaitCommand(.5),
             driveUntilPickedUpNoteCommand(visionDriveNoteRight, intake),
             AutoVisionSpeakerShoot.ShootDontStopAnything(shooter, swerveDrive, vision, intake))
-            .finallyDo(new SetUsingLimelightFalse());
+            .finallyDo((boolean interuppted) -> vision.setUsingLimelight(false));
     }
 
     public static Command shootMiddleShootAutoCommand(SwerveDrive swerveDrive, Vision vision, Shooter shooter, Intake intake)
@@ -135,6 +134,6 @@ public class AutoCommands {
             new WaitCommand(.5),
             driveUntilPickedUpNoteCommand(visionDriveNoteMiddle, intake),
             AutoVisionSpeakerShoot.ShootDontStopAnything(shooter, swerveDrive, vision, intake))
-            .finallyDo(new SetUsingLimelightFalse());
+            .finallyDo((boolean interuppted) -> vision.setUsingLimelight(false));
     }
 }

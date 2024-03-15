@@ -46,7 +46,7 @@ public class FaceAprilTag extends Command {
   @Override
   public void end(boolean a)
   {
-    Vision.Instance.setUsingLimelight(true);
+    Vision.Instance.setUsingLimelight(false);
     swerveDrive.drive(00, 00000, 0.0, false);
   }
 

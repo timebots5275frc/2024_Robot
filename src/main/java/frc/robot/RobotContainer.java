@@ -78,7 +78,7 @@ public class RobotContainer {
     shooter = new Shooter();
     intake = new Intake();
     climber = new Climber();
-    rgb = new RGB(shooter, intake);
+    rgb = new RGB(shooter, intake, climber);
 
     driveStick = new Joystick(0);
     buttonBoard = new GenericHID(1);

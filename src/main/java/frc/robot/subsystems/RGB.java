@@ -5,24 +5,20 @@
 package frc.robot.subsystems;
 
 import java.util.ArrayList;
-import java.util.Optional;
-import java.util.Random;
-import java.util.random.RandomGenerator;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Climber;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.CustomTypes.RgbZones.*;
-import frc.robot.subsystems.Input.Input;
+import frc.robot.CustomTypes.RgbZones.RGB_Zone;
 import frc.robot.subsystems.Intake.IntakePivotState;
-import frc.robot.subsystems.Shooter.ShooterRunState;
 import frc.robot.subsystems.Vision.Vision;
 
 public class RGB extends SubsystemBase {
@@ -36,6 +32,8 @@ public class RGB extends SubsystemBase {
   static final Color YELLOW = new Color(255, 155, 0);
   static final Color PURPLE = new Color(170, 0, 255);
   static final Color NEON_PINK = new Color(255, 16, 240);
+
+  static Color CurrentAllianceColor = OFF;
 
   boolean bufferDirty = false;
 
@@ -135,13 +133,16 @@ public class RGB extends SubsystemBase {
 
       Shooter shooter;
       Intake intake;
-      private double shooterSpeed;
+      Climber climber;
 
-      public RGB(Shooter shooter, Intake intake) {
+      public RGB(Shooter shooter, Intake intake, Climber climber) {
       // PWM port 9
       // Must be a PWM header, not MXP or DIO
       this.shooter = shooter;
       this.intake = intake;
+      this.climber = climber;
+
+      CurrentAllianceColor = getAllianceColor();
 
       m_led.setLength(ledBuffer.getLength());
 
@@ -232,39 +233,45 @@ public class RGB extends SubsystemBase {
 
     if (shouldUseFlash()) {
       setSolidRGBColor(currentFlashColor);
-      return;
     }
+    else {
+      Color backgroundColor = OFF;
+      //Color backgroundColor = hsvToRgb(periodicCalls % 360, 1, 1);
 
-    Color backgroundColor = OFF;
-
-    if (DriverStation.isTeleop())
-    {
-      double matchTime = DriverStation.getMatchTime();
-
-      if (!startedEndOfMatchFlash && matchTime > 0 && matchTime < endOfMatchStartFlashTime)
+      if (DriverStation.isTeleop())
       {
-        flashCommands.add(new RgbFlashCommand(YELLOW, 30, 20));
+        double matchTime = DriverStation.getMatchTime();
+
+        if (!startedEndOfMatchFlash && matchTime > 0 && matchTime < endOfMatchStartFlashTime)
+        {
+          flashCommands.add(new RgbFlashCommand(YELLOW, 30, 20));
+          startedEndOfMatchFlash = true;
+        }
       }
-    }
 
-    if (!limitSwitchLastPeriodic && intake.limitSwitchPressed()) 
-    {
-      flashCommands.add(new RgbFlashCommand(ORANGE, 2, 25));
-      System.out.println("Flash for Note");
-    }
+      if (!limitSwitchLastPeriodic && intake.limitSwitchPressed()) 
+      {
+        flashCommands.add(new RgbFlashCommand(ORANGE, 2.5, 10));
+      }
 
-    //else if (Vision.usingLimelight) { setSolidRGBColor(GREEN); }
-    if (intake.limitSwitchPressed()) { backgroundColor = ORANGE; }
-    else if (intake.getCurrentPivotState() == IntakePivotState.OUT || intake.getCurrentPivotAngle() < IntakeConstants.INTAKE_UP_POS) { backgroundColor = PURPLE; }
-    //else { backgroundColor = getAllianceColor(); }
+      if (Vision.usingLimelight) { backgroundColor = GREEN; }
+      //if (intake.limitSwitchPressed()) { backgroundColor = ORANGE; }
+      else if (intake.getCurrentPivotState() == IntakePivotState.OUT || intake.getCurrentPivotAngle() < IntakeConstants.INTAKE_UP_POS) { backgroundColor = CurrentAllianceColor; }
+      //else { backgroundColor = getAllianceColor(); }
 
-    setSolidRGBColor(backgroundColor);
+      setSolidRGBColor(backgroundColor);
 
-    double shooterRPMPercentOfMax = shooter.getShooterRPM() / ((ShooterConstants.LEFT_SHOOTER_SPEED + ShooterConstants.RIGHT_SHOOTER_SPEED) / 2);
-    SmartDashboard.putNumber("Shooter RPM %", shooterRPMPercentOfMax);
-    if (shooterRPMPercentOfMax > 0) {
-      SHOOTER_RIGHT_ZONE.setProgressColor(shooterRPMPercentOfMax, NEON_PINK, backgroundColor);
-      SHOOTER_LEFT_ZONE.setProgressColor(shooterRPMPercentOfMax, NEON_PINK, backgroundColor);
+      double shooterRPMPercentOfMax = shooter.getShooterRPM() / ((ShooterConstants.LEFT_SHOOTER_SPEED + ShooterConstants.RIGHT_SHOOTER_SPEED) / 2);
+      SmartDashboard.putNumber("Shooter RPM %", shooterRPMPercentOfMax);
+      if (shooterRPMPercentOfMax > 0) {
+        SHOOTER_RIGHT_ZONE.setProgressColor(shooterRPMPercentOfMax, PURPLE, backgroundColor);
+        SHOOTER_LEFT_ZONE.setProgressColor(shooterRPMPercentOfMax, PURPLE, backgroundColor);
+      }
+
+      double leftClimberPercent =  climber.leftClimberRotations() / ClimberConstants.CLIMBER_MAX_POS;
+      double rightClimberPercent = climber.rightClimberRotations() / ClimberConstants.CLIMBER_MAX_POS;
+      if (leftClimberPercent > 0.05) { CLIMBER_LEFT_ZONE.setProgressColor(leftClimberPercent, PURPLE, backgroundColor); }
+      if (rightClimberPercent > 0.05) { CLIMBER_RIGHT_ZONE.setProgressColor(rightClimberPercent, PURPLE, backgroundColor); }
     }
 
     limitSwitchLastPeriodic = intake.limitSwitchPressed();
@@ -272,7 +279,7 @@ public class RGB extends SubsystemBase {
       m_led.setData(ledBuffer);
       bufferDirty = false;
     }
-  }
+}
 
   public static Color hsvToRgb(float hue, float saturation, float value) {
     int[] rgb = new int[3];

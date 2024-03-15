@@ -5,13 +5,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.CustomTypes.ManagerCommand;
-import frc.robot.CustomTypes.SetUsingLimelightFalse;
 import frc.robot.CustomTypes.Math.Vector2;
 import frc.robot.CustomTypes.Math.Vector3;
 import frc.robot.subsystems.Intake;
@@ -49,7 +46,7 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
       if (stopIntake) { shootCommand.addCommands(new IntakeRunCommand(intake, IntakeRunState.NONE)); }
       if (stopShooter) { shootCommand.addCommands(new ShooterRunCommand(shooter, ShooterRunState.NONE)); }
       
-      return shootCommand.finallyDo(new SetUsingLimelightFalse());
+      return shootCommand.finallyDo((boolean interuppted) -> Vision.Instance.setUsingLimelight(false));
   }
 
   public static Command ShootVisionCommandAutoFirstShot(Shooter shooter, Intake intake, SwerveDrive swerveDrive)
@@ -67,7 +64,7 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
       new WaitCommand(.8),
       new IntakeRunCommand(intake, IntakeRunState.NONE));
 
-      return shootCommand.finallyDo(new SetUsingLimelightFalse());
+      return shootCommand.finallyDo((boolean interuppted) -> Vision.Instance.setUsingLimelight(false));
   }
 
   public static Command ShootAndStopCommand(Shooter shooter, SwerveDrive swerveDrive, Vision vision, Intake intake) {

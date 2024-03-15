@@ -127,4 +127,6 @@ public class Climber extends SubsystemBase {
   }
 
   public ClimberMode climberMode() { return currentClimberMode; }
+  public double leftClimberRotations() { return lClimberPose; }
+  public double rightClimberRotations() { return rClimberPose; }
 }
