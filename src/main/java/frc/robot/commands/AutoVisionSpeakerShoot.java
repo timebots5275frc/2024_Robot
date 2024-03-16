@@ -59,7 +59,7 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
       new ShooterRunCommand(shooter, ShooterRunState.SHOOT), 
       new WaitUntilCommand(intake.NoteReadyToFeedToShooter),
       new UseLimelightCommand(false),
-      new WaitCommand(.6),
+      new WaitCommand(.3),
       new IntakeRunCommand(intake, IntakeRunState.OUTTAKE),
       new WaitCommand(.8),
       new IntakeRunCommand(intake, IntakeRunState.NONE));

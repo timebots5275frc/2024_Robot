@@ -51,6 +51,8 @@ public class Shooter extends SubsystemBase {
 
   private double shootDiffMult;
 
+  private double count;
+
   public BooleanSupplier ShotNote = new BooleanSupplier() {
     public boolean getAsBoolean() { return false; };
   };
@@ -77,6 +79,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public Shooter() {
+    count = 0;
     leftShooterRunMotor = new CANSparkMax(Constants.ShooterConstants.LEFT_SHOOTER_ID, CANSparkLowLevel.MotorType.kBrushless);
     rightShooterRunMotor = new CANSparkMax(Constants.ShooterConstants.RIGHT_SHOOTER_ID, CANSparkLowLevel.MotorType.kBrushless);
     shooterPivotMotor = new CANSparkMax(Constants.ShooterConstants.PIVOT_SHOOTER_ID, CANSparkLowLevel.MotorType.kBrushless);
@@ -140,7 +143,7 @@ public class Shooter extends SubsystemBase {
       break;
       case VISION_SHOOT: 
       setVisionShooterAngle();
-      if (visionShooterAngle > 80) {visionShooterAngle = 80;}
+      if (visionShooterAngle > 80) {visionShooterAngle = 80;} else if (visionShooterAngle < 26) {visionShooterAngle = 26;}
       shooterPivotPID.setReference(visionShooterAngle * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE, CANSparkBase.ControlType.kSmartMotion);
       targetAngle = visionShooterAngle * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
       break;
@@ -240,5 +243,10 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Left Shooter Current", leftShooterRunMotor.getOutputCurrent());
     SmartDashboard.putBoolean("Shooter Out of way", intakeCanMove);
     SmartDashboard.putBoolean("Shooter Ready", readyToShoot());
+
+    count++;
+    // if (count % 10 == 0) {
+    //   shooterSetPivotState(ShooterPivotState.VISION_SHOOT);
+    // }
   }
 }

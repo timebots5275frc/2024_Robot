@@ -286,7 +286,7 @@ import frc.robot.CustomTypes.Math.Vector2;
     public final static double SHOOTER_DEFAULT_AMP_POS = 53.8 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_NONE_POS = 40 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_STUPID_POS = 78 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
-    public final static double SHOOTER_CLIMB_POS = 20 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+    public final static double SHOOTER_CLIMB_POS = 26 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
 
     public final static double SHOOTER_PIVOT_ALLOWED_OFFSET = 1;
     public final static double LEFT_SHOOTER_ALLOWED_DIFFERENTIAL = 150;
@@ -325,7 +325,7 @@ import frc.robot.CustomTypes.Math.Vector2;
     public static final int INTAKE_RUN_MOTOR_ID = 21;
     public static final int INTAKE_PIVOT_MOTOR_ID = 20;
     public static final int INTAKE_ANGLE_ENCODER_ID = 22;
-    public static final double INTAKE_PIVOT_GEAR_RATIO = 96;
+    public static final double INTAKE_PIVOT_GEAR_RATIO = 90;
     public static final double INTAKE_PIVOT_ROTATIONS_PER_DEGREE = INTAKE_PIVOT_GEAR_RATIO / 360;
     // Positions of intake in motor rotations
 

@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -12,6 +13,7 @@ import frc.robot.CustomTypes.Math.Vector2;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Intake.IntakePivotState;
 import frc.robot.subsystems.Intake.IntakeRunState;
+import frc.robot.subsystems.Shooter.ShooterPivotState;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Vision.Vision;
@@ -19,7 +21,7 @@ import frc.robot.subsystems.Vision.Vision;
 /** Add your docs here. */
 public class AutoCommands {
 
-    static Vector2 leftNotePos = new Vector2(-1.35, 2.55);
+    static Vector2 leftNotePos = new Vector2(-1.3/*-1.35*/, 2.45/*2.55*/);
     static Vector2 middleNotePos = new Vector2(0, 2.625);
     static Vector2 rightNotePos = new Vector2(1.2, 2.65);
     static Vector2 taxiPos = new Vector2(1.2, 2.85);
@@ -37,6 +39,19 @@ public class AutoCommands {
         return driveCommand.until(intake.NoteReadyToFeedToShooter);
     }
 
+    public static class setGyro extends InstantCommand {
+        SwerveDrive swerveDrive;
+        Vision vision;
+        public setGyro(SwerveDrive swerveDrive, Vision vision) {
+            this.swerveDrive = swerveDrive;
+            this.vision = vision;
+        }
+        @Override
+        public void initialize() {
+            swerveDrive.setGyroYaw(180 + vision.AprilTagRotInRobotSpace().y);
+        }
+    }
+
     public static Command leftMiddleRightAutoCommand(SwerveDrive swerveDrive, Vision vision, Shooter shooter, Intake intake)
     {
         AutoVisionDrive visionDriveNoteLeft = new AutoVisionDrive(swerveDrive, vision, leftNotePos);
@@ -48,16 +63,20 @@ public class AutoCommands {
         return new SequentialCommandGroup(
             new UseLimelightCommand(true),
             new WaitUntilCommand(vision.HasValidData),
+            new setGyro(swerveDrive, vision),
             AutoVisionSpeakerShoot.ShootVisionCommandAutoFirstShot(shooter, intake, swerveDrive), 
             readyIntakeToGetNoteCommand(intake),
+            new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE),
             new WaitCommand(.5),
             driveUntilPickedUpNoteCommand(visionDriveNoteLeft, intake),
             AutoVisionSpeakerShoot.ShootDontStopAnything(shooter, swerveDrive, vision, intake),
             readyIntakeToGetNoteCommand(intake),
+            new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE),
             visionDriveNoteLMTransition, 
             driveUntilPickedUpNoteCommand(visionDriveNoteMiddle, intake),
             AutoVisionSpeakerShoot.ShootDontStopAnything(shooter, swerveDrive, vision, intake),
             readyIntakeToGetNoteCommand(intake),
+            new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE),
             visionDriveNoteMRTransition,
             driveUntilPickedUpNoteCommand(visionDriveNoteRight, intake),
             AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake),
@@ -67,25 +86,29 @@ public class AutoCommands {
 
     public static Command rightMiddleLeftAutoCommand(SwerveDrive swerveDrive, Vision vision, Shooter shooter, Intake intake)
     {
-        AutoVisionDrive visionDriveNoteLeft = new AutoVisionDrive(swerveDrive, vision, leftNotePos);
-        AutoVisionDrive visionDriveNoteMiddle = new AutoVisionDrive(swerveDrive, vision, middleNotePos.substract(new Vector2(0.05, 0)));
+        AutoVisionDrive visionDriveNoteLeft = new AutoVisionDrive(swerveDrive, vision, leftNotePos.add(new Vector2(0.1, 0)));
+        AutoVisionDrive visionDriveNoteMiddle = new AutoVisionDrive(swerveDrive, vision, middleNotePos.substract(new Vector2(0.1, 0)));
         AutoVisionDrive visionDriveNoteRight = new AutoVisionDrive(swerveDrive, vision, rightNotePos);
-        AutoVisionDrive visionDriveNoteMRTransition = new AutoVisionDrive(swerveDrive, vision, rmTransPos.substract(new Vector2(.48, 0)), true);
-        AutoVisionDrive visionDriveNoteLMTransition = new AutoVisionDrive(swerveDrive, vision, lmTransPos, true);
+        AutoVisionDrive visionDriveNoteMRTransition = new AutoVisionDrive(swerveDrive, vision, rmTransPos.substract(new Vector2(.3, 0)), true);
+        AutoVisionDrive visionDriveNoteLMTransition = new AutoVisionDrive(swerveDrive, vision, lmTransPos.substract(new Vector2(0.5, 0)), true);
 
         return new SequentialCommandGroup(
             new UseLimelightCommand(true),
             new WaitUntilCommand(vision.HasValidData),
+            new setGyro(swerveDrive, vision),
             AutoVisionSpeakerShoot.ShootVisionCommandAutoFirstShot(shooter, intake, swerveDrive), 
             readyIntakeToGetNoteCommand(intake),
+            new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE),
             new WaitCommand(.5),
             driveUntilPickedUpNoteCommand(visionDriveNoteRight, intake),
             AutoVisionSpeakerShoot.ShootDontStopAnything(shooter, swerveDrive, vision, intake),
             readyIntakeToGetNoteCommand(intake),
+            new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE),
             visionDriveNoteMRTransition, 
             driveUntilPickedUpNoteCommand(visionDriveNoteMiddle, intake),
             AutoVisionSpeakerShoot.ShootDontStopAnything(shooter, swerveDrive, vision, intake),
             readyIntakeToGetNoteCommand(intake),
+            new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE),
             visionDriveNoteLMTransition,
             driveUntilPickedUpNoteCommand(visionDriveNoteLeft, intake),
             AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake))
@@ -99,11 +122,12 @@ public class AutoCommands {
         return new SequentialCommandGroup(
             new UseLimelightCommand(true),
             new WaitUntilCommand(vision.HasValidData),
+            new setGyro(swerveDrive, vision),
             AutoVisionSpeakerShoot.ShootVisionCommandAutoFirstShot(shooter, intake, swerveDrive), 
             readyIntakeToGetNoteCommand(intake),
             new WaitCommand(.5),
             driveUntilPickedUpNoteCommand(visionDriveNoteLeft, intake),
-            AutoVisionSpeakerShoot.ShootDontStopAnything(shooter, swerveDrive, vision, intake))
+            AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake))
             .finallyDo((boolean interuppted) -> vision.setUsingLimelight(false));
     }
 
@@ -114,11 +138,12 @@ public class AutoCommands {
         return new SequentialCommandGroup(
             new UseLimelightCommand(true),
             new WaitUntilCommand(vision.HasValidData),
+            new setGyro(swerveDrive, vision),
             AutoVisionSpeakerShoot.ShootVisionCommandAutoFirstShot(shooter, intake, swerveDrive), 
             readyIntakeToGetNoteCommand(intake),
             new WaitCommand(.5),
             driveUntilPickedUpNoteCommand(visionDriveNoteRight, intake),
-            AutoVisionSpeakerShoot.ShootDontStopAnything(shooter, swerveDrive, vision, intake))
+            AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake))
             .finallyDo((boolean interuppted) -> vision.setUsingLimelight(false));
     }
 
@@ -129,11 +154,12 @@ public class AutoCommands {
         return new SequentialCommandGroup(
             new UseLimelightCommand(true),
             new WaitUntilCommand(vision.HasValidData),
+            new setGyro(swerveDrive, vision),
             AutoVisionSpeakerShoot.ShootVisionCommandAutoFirstShot(shooter, intake, swerveDrive), 
             readyIntakeToGetNoteCommand(intake),
             new WaitCommand(.5),
             driveUntilPickedUpNoteCommand(visionDriveNoteMiddle, intake),
-            AutoVisionSpeakerShoot.ShootDontStopAnything(shooter, swerveDrive, vision, intake))
+            AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake))
             .finallyDo((boolean interuppted) -> vision.setUsingLimelight(false));
     }
 }

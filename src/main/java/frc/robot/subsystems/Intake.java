@@ -44,7 +44,7 @@ public class Intake extends SubsystemBase {
   };
 
   public BooleanSupplier NoteReadyToFeedToShooter = new BooleanSupplier() {
-    public boolean getAsBoolean() { return intakePivotEncoder.getPosition() > 58; };
+    public boolean getAsBoolean() { return intakePivotEncoder.getPosition() > 212 * Constants.IntakeConstants.INTAKE_PIVOT_ROTATIONS_PER_DEGREE; };
   };
 
   public enum IntakePivotState {

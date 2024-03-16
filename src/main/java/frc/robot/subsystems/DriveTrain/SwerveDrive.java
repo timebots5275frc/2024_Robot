@@ -131,6 +131,10 @@ public class SwerveDrive extends SubsystemBase {
         pigeon2Gyro.setYaw(180);
     }
 
+    public void setGyroYaw(double degrees) {
+        pigeon2Gyro.setYaw(degrees);
+    }
+
     /**
      * Returns the heading of the robot.
      * 
