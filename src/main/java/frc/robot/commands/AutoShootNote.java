@@ -36,7 +36,7 @@ public class AutoShootNote extends ManagerCommand {
   public AutoShootNote(Shooter shooter, Intake intake, ShooterRunState shooterRun) {
     this.shooter = shooter;
     this.intake = intake;
-    this.shooterPivot = ShooterPivotState.SHOOTER_NONE;
+    this.shooterPivot = ShooterPivotState.SHOOTER_45;
     this.shooterRun = shooterRun;
 
     this.setAngle = false;
@@ -49,7 +49,7 @@ public class AutoShootNote extends ManagerCommand {
     if (intake.limitSwitchPressed())
     {
       Command shootNoteIntoShooterCommand = new IntakeRunCommand(intake, IntakeRunState.OUTTAKE).until(intake.LimitSwitchIsNotPressed).andThen(new IntakeRunCommand(intake, IntakeRunState.NONE));
-      Command resetShooterCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE), new ShooterRunCommand(shooter, ShooterRunState.NONE));
+      Command resetShooterCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_45), new ShooterRunCommand(shooter, ShooterRunState.NONE));
       Command shootNoteCommand = new ShooterRunCommand(shooter, shooterRun).until(shooter.ShotNote).andThen(resetShooterCommand);
 
       SequentialCommandGroup seqCommand = new SequentialCommandGroup();

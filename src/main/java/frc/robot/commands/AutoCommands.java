@@ -39,10 +39,10 @@ public class AutoCommands {
         return driveCommand.until(intake.NoteReadyToFeedToShooter);
     }
 
-    public static class setGyro extends InstantCommand {
+    public static class visionResetGyro extends InstantCommand {
         SwerveDrive swerveDrive;
         Vision vision;
-        public setGyro(SwerveDrive swerveDrive, Vision vision) {
+        public visionResetGyro(SwerveDrive swerveDrive, Vision vision) {
             this.swerveDrive = swerveDrive;
             this.vision = vision;
         }
@@ -63,20 +63,20 @@ public class AutoCommands {
         return new SequentialCommandGroup(
             new UseLimelightCommand(true),
             new WaitUntilCommand(vision.HasValidData),
-            new setGyro(swerveDrive, vision),
+            new visionResetGyro(swerveDrive, vision),
             AutoVisionSpeakerShoot.ShootVisionCommandAutoFirstShot(shooter, intake, swerveDrive), 
             readyIntakeToGetNoteCommand(intake),
-            new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE),
+            new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_45),
             new WaitCommand(.5),
             driveUntilPickedUpNoteCommand(visionDriveNoteLeft, intake),
             AutoVisionSpeakerShoot.ShootDontStopAnything(shooter, swerveDrive, vision, intake),
             readyIntakeToGetNoteCommand(intake),
-            new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE),
+            new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_45),
             visionDriveNoteLMTransition, 
             driveUntilPickedUpNoteCommand(visionDriveNoteMiddle, intake),
             AutoVisionSpeakerShoot.ShootDontStopAnything(shooter, swerveDrive, vision, intake),
             readyIntakeToGetNoteCommand(intake),
-            new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE),
+            new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_45),
             visionDriveNoteMRTransition,
             driveUntilPickedUpNoteCommand(visionDriveNoteRight, intake),
             AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake),
@@ -95,20 +95,20 @@ public class AutoCommands {
         return new SequentialCommandGroup(
             new UseLimelightCommand(true),
             new WaitUntilCommand(vision.HasValidData),
-            new setGyro(swerveDrive, vision),
+            new visionResetGyro(swerveDrive, vision),
             AutoVisionSpeakerShoot.ShootVisionCommandAutoFirstShot(shooter, intake, swerveDrive), 
             readyIntakeToGetNoteCommand(intake),
-            new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE),
+            new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_45),
             new WaitCommand(.5),
             driveUntilPickedUpNoteCommand(visionDriveNoteRight, intake),
             AutoVisionSpeakerShoot.ShootDontStopAnything(shooter, swerveDrive, vision, intake),
             readyIntakeToGetNoteCommand(intake),
-            new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE),
+            new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_45),
             visionDriveNoteMRTransition, 
             driveUntilPickedUpNoteCommand(visionDriveNoteMiddle, intake),
             AutoVisionSpeakerShoot.ShootDontStopAnything(shooter, swerveDrive, vision, intake),
             readyIntakeToGetNoteCommand(intake),
-            new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_NONE),
+            new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_45),
             visionDriveNoteLMTransition,
             driveUntilPickedUpNoteCommand(visionDriveNoteLeft, intake),
             AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake))
@@ -122,7 +122,7 @@ public class AutoCommands {
         return new SequentialCommandGroup(
             new UseLimelightCommand(true),
             new WaitUntilCommand(vision.HasValidData),
-            new setGyro(swerveDrive, vision),
+            new visionResetGyro(swerveDrive, vision),
             AutoVisionSpeakerShoot.ShootVisionCommandAutoFirstShot(shooter, intake, swerveDrive), 
             readyIntakeToGetNoteCommand(intake),
             new WaitCommand(.5),
@@ -138,7 +138,7 @@ public class AutoCommands {
         return new SequentialCommandGroup(
             new UseLimelightCommand(true),
             new WaitUntilCommand(vision.HasValidData),
-            new setGyro(swerveDrive, vision),
+            new visionResetGyro(swerveDrive, vision),
             AutoVisionSpeakerShoot.ShootVisionCommandAutoFirstShot(shooter, intake, swerveDrive), 
             readyIntakeToGetNoteCommand(intake),
             new WaitCommand(.5),
@@ -154,7 +154,7 @@ public class AutoCommands {
         return new SequentialCommandGroup(
             new UseLimelightCommand(true),
             new WaitUntilCommand(vision.HasValidData),
-            new setGyro(swerveDrive, vision),
+            new visionResetGyro(swerveDrive, vision),
             AutoVisionSpeakerShoot.ShootVisionCommandAutoFirstShot(shooter, intake, swerveDrive), 
             readyIntakeToGetNoteCommand(intake),
             new WaitCommand(.5),
