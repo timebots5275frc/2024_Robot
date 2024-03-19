@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.subsystems.Vision.AutoTargetStateManager;
 import frc.robot.subsystems.Vision.VisionShooterCalculator;
 
 public class Shooter extends SubsystemBase {
@@ -52,7 +53,6 @@ public class Shooter extends SubsystemBase {
   private double shootDiffMult;
 
   private double count;
-  private boolean autoTargeting;
 
   public BooleanSupplier ShotNote = new BooleanSupplier() {
     public boolean getAsBoolean() { return false; };
@@ -126,7 +126,6 @@ public class Shooter extends SubsystemBase {
     shooterPivotEncoder.setPosition(getShooterAngle() * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE);
 
     shootDiffMult = 1;
-    autoTargeting = false;
   }
 
   public void updateVisionShooterAngle() {
@@ -225,10 +224,6 @@ public class Shooter extends SubsystemBase {
     return Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET > Math.abs(targetAngle - shooterPivotEncoder.getPosition());
   }
 
-  public void toggleAutoTargeting() {
-    autoTargeting = !autoTargeting;
-  }
-
   public BooleanSupplier reachedTargetAngle = new BooleanSupplier(){
     public boolean getAsBoolean() {return targetAngleReached();}
   };
@@ -250,7 +245,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putBoolean("Shooter Out of way", intakeCanMove);
     SmartDashboard.putBoolean("Shooter Ready", readyToShoot());
 
-    if (autoTargeting) {
+    if (AutoTargetStateManager.isAutoTargeting) {
       count++;
         if (count % 10 == 0) {
           setShooterToVisionShootAngle();
