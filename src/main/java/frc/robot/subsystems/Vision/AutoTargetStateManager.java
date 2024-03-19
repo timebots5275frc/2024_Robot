@@ -5,5 +5,6 @@ public class AutoTargetStateManager {
 
     public static void toggleAutoTarget() {
         isAutoTargeting = !isAutoTargeting;
+        Vision.Instance.setUsingLimelight(isAutoTargeting);
     }
 }

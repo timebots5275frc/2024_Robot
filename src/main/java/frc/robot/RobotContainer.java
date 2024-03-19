@@ -150,7 +150,7 @@ public class RobotContainer {
     new JoystickButton(driveStick, 9).onTrue(new UseLimelightCommand(true));
     new JoystickButton(driveStick, 10).onTrue(new UseLimelightCommand(false));
 
-    new JoystickButton(driveStick, 2).onTrue(new RotateAndLogCommand(vision, swerveDrive));
+    //new JoystickButton(driveStick, 2).onTrue(new RotateAndLogCommand(vision, swerveDrive));
 
     new JoystickButton(driveStick, 2).onTrue(new ToggleAutoTarget());
   }

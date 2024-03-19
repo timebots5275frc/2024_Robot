@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Vision.AutoTargetStateManager;
+import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionDriveCalculator;
 import frc.robot.subsystems.Vision.VisionFollowAprilTag;
 import frc.robot.subsystems.Input.Input;
@@ -66,8 +67,13 @@ public class TeleopJoystickDrive extends Command {
         if (!AutoTargetStateManager.isAutoTargeting) {
             drivetrain.drive(inputVelocity.x, inputVelocity.y, inputRotationVelocity, fieldRelative);
         } else {
-            double C = 0.01;
-            double turnSpeed = SillyMath.clamp(VisionDriveCalculator.getAngleOffsetForVision() * C, 0, Constants.DriveConstants.MAX_TWIST_RATE);
+            double C = 4;
+            double turnSpeed;
+            if (Constants.VisionConstants.AprilTagData.isSpeakerTag(Constants.VisionConstants.AprilTagData.getTag(Vision.Instance.AprilTagID()))) {
+                turnSpeed = VisionDriveCalculator.rotateTowardsTarget(VisionDriveCalculator.getAngleOffsetForVision()) * C;
+            } else {
+                turnSpeed = 0;
+            }
             drivetrain.drive(inputVelocity.x, inputVelocity.y, turnSpeed, fieldRelative);
         }
     }
