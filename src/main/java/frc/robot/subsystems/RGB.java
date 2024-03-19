@@ -19,6 +19,7 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.CustomTypes.RgbZones.RGB_Zone;
 import frc.robot.subsystems.Intake.IntakePivotState;
+import frc.robot.subsystems.Shooter.ShooterRunState;
 import frc.robot.subsystems.Vision.Vision;
 
 public class RGB extends SubsystemBase {
@@ -26,6 +27,9 @@ public class RGB extends SubsystemBase {
   static final Color RED = new Color(255, 0, 0);
   static final Color GREEN = new Color(0, 255, 0);
   static final Color BLUE = new Color(0, 0, 255);
+
+  static final Color DARK_RED = new Color(150, 0, 0);
+  static final Color DARK_GREEN = new Color(0, 150, 0);
 
   static final Color OFF = new Color(0, 0, 0);
   static final Color ORANGE = new Color(255, 30, 0);
@@ -50,6 +54,8 @@ public class RGB extends SubsystemBase {
 
   ArrayList<RgbFlashCommand> flashCommands = new ArrayList<>(3);
   Color currentFlashColor = OFF;
+
+  ShooterRunState lastShooterRunState = ShooterRunState.NONE;
 
   //#region rgb zones
 
@@ -261,11 +267,15 @@ public class RGB extends SubsystemBase {
 
       setSolidRGBColor(backgroundColor);
 
-      double shooterRPMPercentOfMax = shooter.getShooterRPM() / ((ShooterConstants.LEFT_SHOOTER_SPEED + ShooterConstants.RIGHT_SHOOTER_SPEED) / 2);
-      SmartDashboard.putNumber("Shooter RPM %", shooterRPMPercentOfMax);
+      ShooterRunState currentShooterRunState =  shooter.getCurrentRunState();
+      if (currentShooterRunState == ShooterRunState.AMP || currentShooterRunState == ShooterRunState.SHOOT) { lastShooterRunState = currentShooterRunState; }
+
+      double targetSpeed = lastShooterRunState == ShooterRunState.AMP ? (ShooterConstants.LEFT_AMP_SPEED + ShooterConstants.RIGHT_AMP_SPEED) / 2 : (ShooterConstants.LEFT_SHOOTER_SPEED + ShooterConstants.RIGHT_SHOOTER_SPEED) / 2;
+      double shooterRPMPercentOfMax = shooter.getShooterRPM() / targetSpeed;
       if (shooterRPMPercentOfMax > 0) {
-        SHOOTER_RIGHT_ZONE.setProgressColor(shooterRPMPercentOfMax, PURPLE, backgroundColor);
-        SHOOTER_LEFT_ZONE.setProgressColor(shooterRPMPercentOfMax, PURPLE, backgroundColor);
+        Color fillColor = lerpColor(DARK_RED, DARK_GREEN, shooterRPMPercentOfMax * shooterRPMPercentOfMax);
+        SHOOTER_RIGHT_ZONE.setProgressColor(shooterRPMPercentOfMax, fillColor, backgroundColor);
+        SHOOTER_LEFT_ZONE.setProgressColor(shooterRPMPercentOfMax, fillColor, backgroundColor);
       }
 
       double leftClimberPercent =  climber.leftClimberRotations() / ClimberConstants.CLIMBER_MAX_POS;
@@ -326,6 +336,11 @@ public class RGB extends SubsystemBase {
     }
 
     return new Color(rgb[0], rgb[1], rgb[2]);
+  }
+
+  public Color lerpColor(Color startColor, Color endColor, double t)
+  {
+    return new Color (startColor.red + ((endColor.red - startColor.red) * t), startColor.green + ((endColor.green - startColor.green) * t), startColor.blue + ((endColor.blue - startColor.blue) * t));
   }
 
   void updateFlashCommands()

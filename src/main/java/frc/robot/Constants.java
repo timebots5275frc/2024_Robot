@@ -25,14 +25,14 @@ import frc.robot.CustomTypes.Math.Vector2;
 
       // #region <Robot 2024 Constants>
       public static final SwerveCanIDs Robot2024Can = new SwerveCanIDs(
-          1, // LEFT_FRONT_DRIVE_MOTOR_ID 
-          2, // LEFT_FRONT_STEER_MOTOR_ID 
+          2, // LEFT_FRONT_DRIVE_MOTOR_ID 
+          1, // LEFT_FRONT_STEER_MOTOR_ID 
           3, // RIGHT_FRONT_DRIVE_MOTOR_ID 
           4, // RIGHT_FRONT_STEER_MOTOR_ID 
           5, // LEFT_REAR_DRIVE_MOTOR_ID 
           6, // LEFT_REAR_STEER_MOTOR_ID 
-          7, // RIGHT_REAR_DRIVE_MOTOR_ID 
-          8, // RIGHT_REAR_STEER_MOTOR_ID 
+          8, // RIGHT_REAR_DRIVE_MOTOR_ID 
+          7, // RIGHT_REAR_STEER_MOTOR_ID 
           10, // LEFT_FRONT_STEER_ENCODER_ID 
           11, // RIGHT_FRONT_STEER_ENCODER_ID 
           12, // LEFT_REAR_STEER_ENCODER_ID 
@@ -277,8 +277,8 @@ import frc.robot.CustomTypes.Math.Vector2;
     public final static double LEFT_SHOOTER_SPEED = 5400;
     public final static double RIGHT_SHOOTER_SPEED = 4500;
 
-    public final static double LEFT_AMP_SPEED = 425;
-    public final static double RIGHT_AMP_SPEED = LEFT_AMP_SPEED;
+    public final static double LEFT_AMP_SPEED = 300;
+    public final static double RIGHT_AMP_SPEED = LEFT_AMP_SPEED * 2;
 
     public final static double SHOOTER_RESET_POS = 65 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_START_POS = 65 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
