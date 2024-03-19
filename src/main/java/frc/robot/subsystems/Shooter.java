@@ -52,6 +52,7 @@ public class Shooter extends SubsystemBase {
   private double shootDiffMult;
 
   private double count;
+  private boolean autoTargeting;
 
   public BooleanSupplier ShotNote = new BooleanSupplier() {
     public boolean getAsBoolean() { return false; };
@@ -125,9 +126,10 @@ public class Shooter extends SubsystemBase {
     shooterPivotEncoder.setPosition(getShooterAngle() * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE);
 
     shootDiffMult = 1;
+    autoTargeting = false;
   }
 
-  public void setVisionShooterAngle() {
+  public void updateVisionShooterAngle() {
     visionShooterAngle = VisionShooterCalculator.GetSpeakerShooterAngle();
   }
 
@@ -141,10 +143,7 @@ public class Shooter extends SubsystemBase {
       targetAngle = Constants.ShooterConstants.SHOOTER_START_POS;
       break;
       case VISION_SHOOT: 
-      setVisionShooterAngle();
-      if (visionShooterAngle > 80) {visionShooterAngle = 80;} else if (visionShooterAngle < 26) {visionShooterAngle = 26;}
-      shooterPivotPID.setReference(visionShooterAngle * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE, CANSparkBase.ControlType.kSmartMotion);
-      targetAngle = visionShooterAngle * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+      setShooterToVisionShootAngle();
       break;
       case AMP:
       shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_DEFAULT_AMP_POS, CANSparkBase.ControlType.kSmartMotion);
@@ -163,6 +162,13 @@ public class Shooter extends SubsystemBase {
       targetAngle = Constants.ShooterConstants.SHOOTER_CLIMB_POS;
       break;
     }
+  }
+
+  public void setShooterToVisionShootAngle() {
+    updateVisionShooterAngle();
+    if (visionShooterAngle > 80) {visionShooterAngle = 80;} else if (visionShooterAngle < 26) {visionShooterAngle = 26;}
+    shooterPivotPID.setReference(visionShooterAngle * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE, CANSparkBase.ControlType.kSmartMotion);
+    targetAngle = visionShooterAngle * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
   }
 
   public void shooterSetRunState(ShooterRunState state) {
@@ -219,6 +225,10 @@ public class Shooter extends SubsystemBase {
     return Constants.ShooterConstants.SHOOTER_PIVOT_ALLOWED_OFFSET > Math.abs(targetAngle - shooterPivotEncoder.getPosition());
   }
 
+  public void toggleAutoTargeting() {
+    autoTargeting = !autoTargeting;
+  }
+
   public BooleanSupplier reachedTargetAngle = new BooleanSupplier(){
     public boolean getAsBoolean() {return targetAngleReached();}
   };
@@ -240,9 +250,11 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putBoolean("Shooter Out of way", intakeCanMove);
     SmartDashboard.putBoolean("Shooter Ready", readyToShoot());
 
-    count++;
-    // if (count % 10 == 0) {
-    //   shooterSetPivotState(ShooterPivotState.VISION_SHOOT);
-    // }
+    if (autoTargeting) {
+      count++;
+        if (count % 10 == 0) {
+          setShooterToVisionShootAngle();
+        }
+    }
   }
 }
