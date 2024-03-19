@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.subsystems.Vision.AutoTargetStateManager;
 import frc.robot.subsystems.Vision.VisionShooterCalculator;
 
 public class Shooter extends SubsystemBase {
@@ -127,7 +128,7 @@ public class Shooter extends SubsystemBase {
     shootDiffMult = 1;
   }
 
-  public void setVisionShooterAngle() {
+  public void updateVisionShooterAngle() {
     visionShooterAngle = VisionShooterCalculator.GetSpeakerShooterAngle();
   }
 
@@ -141,10 +142,7 @@ public class Shooter extends SubsystemBase {
       targetAngle = Constants.ShooterConstants.SHOOTER_START_POS;
       break;
       case VISION_SHOOT: 
-      setVisionShooterAngle();
-      if (visionShooterAngle > 80) {visionShooterAngle = 80;} else if (visionShooterAngle < 26) {visionShooterAngle = 26;}
-      shooterPivotPID.setReference(visionShooterAngle * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE, CANSparkBase.ControlType.kSmartMotion);
-      targetAngle = visionShooterAngle * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
+      setShooterToVisionShootAngle();
       break;
       case AMP:
       shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_DEFAULT_AMP_POS, CANSparkBase.ControlType.kSmartMotion);
@@ -163,6 +161,13 @@ public class Shooter extends SubsystemBase {
       targetAngle = Constants.ShooterConstants.SHOOTER_CLIMB_POS;
       break;
     }
+  }
+
+  public void setShooterToVisionShootAngle() {
+    updateVisionShooterAngle();
+    if (visionShooterAngle > 80) {visionShooterAngle = 80;} else if (visionShooterAngle < 26) {visionShooterAngle = 26;}
+    shooterPivotPID.setReference(visionShooterAngle * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE, CANSparkBase.ControlType.kSmartMotion);
+    targetAngle = visionShooterAngle * Constants.ShooterConstants.SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
   }
 
   public void shooterSetRunState(ShooterRunState state) {
@@ -240,9 +245,11 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putBoolean("Shooter Out of way", intakeCanMove);
     SmartDashboard.putBoolean("Shooter Ready", readyToShoot());
 
-    count++;
-    // if (count % 10 == 0) {
-    //   shooterSetPivotState(ShooterPivotState.VISION_SHOOT);
-    // }
+    if (AutoTargetStateManager.isAutoTargeting) {
+      count++;
+        if (count % 10 == 0) {
+          setShooterToVisionShootAngle();
+        }
+    }
   }
 }

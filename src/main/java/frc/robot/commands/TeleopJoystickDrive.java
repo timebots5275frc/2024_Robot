@@ -10,8 +10,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
+import frc.robot.subsystems.Vision.AutoTargetStateManager;
+import frc.robot.subsystems.Vision.VisionDriveCalculator;
 import frc.robot.subsystems.Vision.VisionFollowAprilTag;
 import frc.robot.subsystems.Input.Input;
+import frc.robot.CustomTypes.Math.SillyMath;
 import frc.robot.CustomTypes.Math.Vector2;
 
 public class TeleopJoystickDrive extends Command {
@@ -60,7 +63,13 @@ public class TeleopJoystickDrive extends Command {
         
         SmartDashboard.putNumber("Throttle teleJoy", throttle);
 
-        drivetrain.drive(inputVelocity.x, inputVelocity.y, inputRotationVelocity, fieldRelative);
+        if (!AutoTargetStateManager.isAutoTargeting) {
+            drivetrain.drive(inputVelocity.x, inputVelocity.y, inputRotationVelocity, fieldRelative);
+        } else {
+            double C = 0.01;
+            double turnSpeed = SillyMath.clamp(VisionDriveCalculator.getAngleOffsetForVision() * C, 0, Constants.DriveConstants.MAX_TWIST_RATE);
+            drivetrain.drive(inputVelocity.x, inputVelocity.y, turnSpeed, fieldRelative);
+        }
     }
 
     @Override

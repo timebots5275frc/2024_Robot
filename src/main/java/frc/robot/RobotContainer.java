@@ -20,6 +20,7 @@ import frc.robot.commands.RotateAndLogCommand;
 import frc.robot.commands.ShooterPivotCommand;
 import frc.robot.commands.ShooterRunCommand;
 import frc.robot.commands.TeleopJoystickDrive;
+import frc.robot.commands.ToggleAutoTarget;
 import frc.robot.commands.UseLimelightCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
@@ -32,6 +33,7 @@ import frc.robot.subsystems.Intake.IntakePivotState;
 import frc.robot.subsystems.Intake.IntakeRunState;
 import frc.robot.subsystems.Shooter.ShooterPivotState;
 import frc.robot.subsystems.Shooter.ShooterRunState;
+import frc.robot.subsystems.Vision.AutoTargetStateManager;
 import frc.robot.subsystems.Vision.Vision;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -149,6 +151,8 @@ public class RobotContainer {
     new JoystickButton(driveStick, 10).onTrue(new UseLimelightCommand(false));
 
     new JoystickButton(driveStick, 2).onTrue(new RotateAndLogCommand(vision, swerveDrive));
+
+    new JoystickButton(driveStick, 2).onTrue(new ToggleAutoTarget());
   }
 
   public Command getAutonomousCommand() {
