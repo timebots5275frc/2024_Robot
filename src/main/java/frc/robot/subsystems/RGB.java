@@ -241,9 +241,9 @@ public class RGB extends SubsystemBase {
       setSolidRGBColor(currentFlashColor);
     }
     else {
-      Color backgroundColor = OFF;
-      //Color backgroundColor = hsvToRgb(periodicCalls % 360, 1, 1);
+      Color backgroundColor = hsvToRgb(periodicCalls % 360, 1, .1f);
 
+      // if in teleop, check for end of match and start blinking when match time reaches certain time
       if (DriverStation.isTeleop())
       {
         double matchTime = DriverStation.getMatchTime();
@@ -255,18 +255,16 @@ public class RGB extends SubsystemBase {
         }
       }
 
-      if (!limitSwitchLastPeriodic && intake.limitSwitchPressed()) 
-      {
-        flashCommands.add(new RgbFlashCommand(ORANGE, 2.5, 10));
-      }
+      // if pick up note, flash orange
+      if (!limitSwitchLastPeriodic && intake.limitSwitchPressed()) { flashCommands.add(new RgbFlashCommand(ORANGE, 2, 10)); }
 
+      // flow statement for rgb colors
       if (Vision.usingLimelight) { backgroundColor = GREEN; }
-      //if (intake.limitSwitchPressed()) { backgroundColor = ORANGE; }
       else if (intake.getCurrentPivotState() == IntakePivotState.OUT || intake.getCurrentPivotAngle() < IntakeConstants.INTAKE_UP_POS) { backgroundColor = CurrentAllianceColor; }
-      //else { backgroundColor = getAllianceColor(); }
 
       setSolidRGBColor(backgroundColor);
 
+      // set shooter progress rgb
       ShooterRunState currentShooterRunState =  shooter.getCurrentRunState();
       if (currentShooterRunState == ShooterRunState.AMP || currentShooterRunState == ShooterRunState.SHOOT) { lastShooterRunState = currentShooterRunState; }
 
@@ -278,6 +276,7 @@ public class RGB extends SubsystemBase {
         SHOOTER_LEFT_ZONE.setProgressColor(shooterRPMPercentOfMax, fillColor, backgroundColor);
       }
 
+      // set climber progress rgb
       double leftClimberPercent =  climber.leftClimberRotations() / ClimberConstants.CLIMBER_MAX_POS;
       double rightClimberPercent = climber.rightClimberRotations() / ClimberConstants.CLIMBER_MAX_POS;
       if (leftClimberPercent > 0.05) { CLIMBER_LEFT_ZONE.setProgressColor(leftClimberPercent, PURPLE, backgroundColor); }
