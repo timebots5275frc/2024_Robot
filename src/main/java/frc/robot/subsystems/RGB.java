@@ -241,7 +241,8 @@ public class RGB extends SubsystemBase {
       setSolidRGBColor(currentFlashColor);
     }
     else {
-      Color backgroundColor = hsvToRgb(periodicCalls % 360, 1, .1f);
+      //Color backgroundColor = hsvToRgb(periodicCalls % 360, 1, 1);
+      Color backgroundColor = OFF;
 
       // if in teleop, check for end of match and start blinking when match time reaches certain time
       if (DriverStation.isTeleop())
