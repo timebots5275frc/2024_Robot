@@ -39,7 +39,7 @@ public class FaceAprilTag extends Command {
     double offset = VisionDriveCalculator.getAngleOffsetForVision();
     double rotationDirection = VisionDriveCalculator.rotateTowardsTarget(offset);
 
-    if (Math.abs(tx + offset) <= .85 && vision.hasValidData()) { facingTarget = true; }
+    if (Math.abs(tx + offset) <= .8 && vision.hasValidData()) { facingTarget = true; }
     else { swerveDrive.drive(0, 0, rotationDirection * turnSpeed, false); }
   }
 

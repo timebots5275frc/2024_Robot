@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
@@ -30,6 +31,7 @@ public class RGB extends SubsystemBase {
 
   static final Color DARK_RED = new Color(150, 0, 0);
   static final Color DARK_GREEN = new Color(0, 150, 0);
+  static final Color DARK_BLUE = new Color(0, 0, 150);
 
   static final Color OFF = new Color(0, 0, 0);
   static final Color ORANGE = new Color(255, 30, 0);
@@ -152,7 +154,6 @@ public class RGB extends SubsystemBase {
 
       m_led.setLength(ledBuffer.getLength());
 
-      setColorPattern(new Color[] { BLUE, BLUE, RED, RED } );
       SHOOTER_RIGHT_ZONE.setSolidColor(ORANGE);
       SHOOTER_LEFT_ZONE.setSolidColor(RED);
       CLIMBER_LEFT_ZONE.setSolidColor(PURPLE);
@@ -197,9 +198,17 @@ public class RGB extends SubsystemBase {
 
 
   public Color getAllianceColor() {
-      if (DriverStation.getAlliance().get() == Alliance.Red) { return RED; } 
-      else if (DriverStation.getAlliance().get() == Alliance.Blue) { return BLUE; }
+    Optional<Alliance> alliance = DriverStation.getAlliance();
+
+    if (alliance.isPresent())
+    {
+      Alliance a = alliance.get();
+      if (a == Alliance.Red) { return RED; } 
+      else if (a == Alliance.Blue) { return BLUE; }
       else { return OFF; }
+    }
+
+    return OFF;
   }
 
   public void rainbowRGB()
@@ -241,8 +250,12 @@ public class RGB extends SubsystemBase {
       setSolidRGBColor(currentFlashColor);
     }
     else {
-      //Color backgroundColor = hsvToRgb(periodicCalls % 360, 1, 1);
       Color backgroundColor = OFF;
+
+      if (!DriverStation.isTeleop() || !DriverStation.isEnabled())
+      {
+        backgroundColor = hsvToRgb(periodicCalls * 1.5f % 360, 1, 1);
+      }
 
       // if in teleop, check for end of match and start blinking when match time reaches certain time
       if (DriverStation.isTeleop())

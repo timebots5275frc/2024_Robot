@@ -153,8 +153,8 @@ public class Shooter extends SubsystemBase {
       targetAngle = Constants.ShooterConstants.SHOOTER_DEFAULT_SHOOTING_POS;
       break;
       case SHOOTER_45:
-      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_45_POS, CANSparkBase.ControlType.kSmartMotion);
-      targetAngle = Constants.ShooterConstants.SHOOTER_45_POS;
+      shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_35_POS, CANSparkBase.ControlType.kSmartMotion);
+      targetAngle = Constants.ShooterConstants.SHOOTER_35_POS;
       break;
       case CLIMBING_POS: 
       shooterPivotPID.setReference(Constants.ShooterConstants.SHOOTER_CLIMB_POS, CANSparkBase.ControlType.kSmartMotion);

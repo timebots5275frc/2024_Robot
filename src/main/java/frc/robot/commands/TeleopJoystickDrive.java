@@ -26,6 +26,7 @@ public class TeleopJoystickDrive extends Command {
 
     private Joystick driveStick;
     private boolean fieldRelative;
+    private double C;
 
     /**
      * Creates a new DefaultDrive.
@@ -41,6 +42,8 @@ public class TeleopJoystickDrive extends Command {
         this.vision_followAprilTag = new VisionFollowAprilTag(_swerveDrive);
 
         addRequirements(_swerveDrive);
+
+        C = 6;
     }
 
     public void SetFieldRelative(boolean setboolfieldRelative) {
@@ -50,6 +53,7 @@ public class TeleopJoystickDrive extends Command {
 
     @Override
     public void initialize() {
+        AutoTargetStateManager.onStart();
         //drivetrain.resetPigeon();
     }
 
@@ -67,14 +71,16 @@ public class TeleopJoystickDrive extends Command {
         if (!AutoTargetStateManager.isAutoTargeting) {
             drivetrain.drive(inputVelocity.x, inputVelocity.y, inputRotationVelocity, fieldRelative);
         } else {
-            double C = 4;
-            double turnSpeed;
+            double turnVelocity;
             if (Constants.VisionConstants.AprilTagData.isSpeakerTag(Constants.VisionConstants.AprilTagData.getTag(Vision.Instance.AprilTagID()))) {
-                turnSpeed = VisionDriveCalculator.rotateTowardsTarget(VisionDriveCalculator.getAngleOffsetForVision()) * C;
+                double turnDirection = VisionDriveCalculator.rotateTowardsTarget(VisionDriveCalculator.getAngleOffsetForVision());
+                int sign = turnDirection > 0 ? 1 : -1;
+                turnVelocity = (turnDirection * turnDirection) * C * sign;
+                if (Math.abs(turnVelocity) < .4) { turnVelocity = 0; }
             } else {
-                turnSpeed = 0;
+                turnVelocity = 0;
             }
-            drivetrain.drive(inputVelocity.x, inputVelocity.y, turnSpeed, fieldRelative);
+            drivetrain.drive(inputVelocity.x, inputVelocity.y, turnVelocity, fieldRelative);
         }
     }
 

@@ -134,9 +134,9 @@ public class RobotContainer {
     new JoystickButton(buttonBoard, 7).onTrue(new ShooterRunCommand(shooter, ShooterRunState.AMP));
 
 
-    new JoystickButton(buttonBoard, 8).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_45));
+    new JoystickButton(buttonBoard, 5).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_45));
     new JoystickButton(buttonBoard, 3).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.DEFAULT_SHOOT));
-    new JoystickButton(buttonBoard, 5).onTrue(new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.OUT), new WaitCommand(0.5), new ShooterPivotCommand(shooter, ShooterPivotState.CLIMBING_POS)));
+    new JoystickButton(buttonBoard, 8).onTrue(new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.OUT), new WaitCommand(0.5), new ShooterPivotCommand(shooter, ShooterPivotState.CLIMBING_POS)));
     new JoystickButton(buttonBoard, 4).onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.AMP));
   
     new JoystickButton(driveStick, 1).onTrue(AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake));
@@ -152,7 +152,7 @@ public class RobotContainer {
 
     //new JoystickButton(driveStick, 2).onTrue(new RotateAndLogCommand(vision, swerveDrive));
 
-    new JoystickButton(driveStick, 2).onTrue(new ToggleAutoTarget());
+    //new JoystickButton(driveStick, 2).onTrue(new ToggleAutoTarget());
   }
 
   public Command getAutonomousCommand() {

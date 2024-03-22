@@ -7,4 +7,9 @@ public class AutoTargetStateManager {
         isAutoTargeting = !isAutoTargeting;
         Vision.Instance.setUsingLimelight(isAutoTargeting);
     }
+
+    public static void onStart()
+    {
+        isAutoTargeting = false;
+    }
 }
