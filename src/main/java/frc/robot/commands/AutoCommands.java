@@ -24,7 +24,8 @@ public class AutoCommands {
     static Vector2 leftNotePos = new Vector2(-1.3/*-1.35*/, 2.45/*2.55*/);
     static Vector2 middleNotePos = new Vector2(0, 2.625);
     static Vector2 rightNotePos = new Vector2(1.2, 2.65);
-    static Vector2 taxiPos = new Vector2(1.2, 2.85);
+    static Vector2 taxiPositionBlue = new Vector2(3, 3.125);
+    static Vector2 taxiPositionRed = new Vector2(-3, 3.125);
 
     static Vector2 lmTransPos = new Vector2((leftNotePos.x + middleNotePos.x) / 2 + .48, 1.75);
     static Vector2 rmTransPos = new Vector2((rightNotePos.x + middleNotePos.x) / 2, 1.75);
@@ -79,8 +80,7 @@ public class AutoCommands {
             new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_45),
             visionDriveNoteMRTransition,
             driveUntilPickedUpNoteCommand(visionDriveNoteRight, intake),
-            AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake),
-            new AutoVisionDrive(swerveDrive, vision, taxiPos))
+            AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake))
             .finallyDo((boolean interuppted) -> vision.setUsingLimelight(false));
     }
 
@@ -89,8 +89,8 @@ public class AutoCommands {
         AutoVisionDrive visionDriveNoteLeft = new AutoVisionDrive(swerveDrive, vision, leftNotePos.add(new Vector2(0.1, 0)));
         AutoVisionDrive visionDriveNoteMiddle = new AutoVisionDrive(swerveDrive, vision, middleNotePos.substract(new Vector2(0.1, 0)));
         AutoVisionDrive visionDriveNoteRight = new AutoVisionDrive(swerveDrive, vision, rightNotePos);
-        AutoVisionDrive visionDriveNoteMRTransition = new AutoVisionDrive(swerveDrive, vision, rmTransPos.substract(new Vector2(.6, .25)), true);
-        AutoVisionDrive visionDriveNoteLMTransition = new AutoVisionDrive(swerveDrive, vision, lmTransPos.substract(new Vector2(0.7, .1)), true);
+        AutoVisionDrive visionDriveNoteMRTransition = new AutoVisionDrive(swerveDrive, vision, rmTransPos.substract(new Vector2(.6, .25)), true); /*.43, 0 sub*/
+        AutoVisionDrive visionDriveNoteLMTransition = new AutoVisionDrive(swerveDrive, vision, lmTransPos.substract(new Vector2(0.7, .1)), true); /*.43, 0 sub*/
 
         return new SequentialCommandGroup(
             new UseLimelightCommand(true),
@@ -160,6 +160,54 @@ public class AutoCommands {
             new WaitCommand(.5),
             driveUntilPickedUpNoteCommand(visionDriveNoteMiddle, intake),
             AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake))
+            .finallyDo((boolean interuppted) -> vision.setUsingLimelight(false));
+    }
+
+    public static Command blueSideOneNoteTaxiNoTurn(SwerveDrive swerveDrive, Vision vision, Shooter shooter, Intake intake)
+    {
+        AutoVisionDrive visionDriveTaxiBlue = new AutoVisionDrive(swerveDrive, vision, taxiPositionBlue);
+
+        return new SequentialCommandGroup(
+            new UseLimelightCommand(true),
+            new visionResetGyro(swerveDrive, vision),
+            AutoVisionSpeakerShoot.ShootVisionCommandAutoFirstShot(shooter, intake, swerveDrive),
+            visionDriveTaxiBlue)
+            .finallyDo((boolean interuppted) -> vision.setUsingLimelight(false));
+    }
+
+    public static Command redSideOneNoteTaxiNoTurn(SwerveDrive swerveDrive, Vision vision, Shooter shooter, Intake intake)
+    {
+        AutoVisionDrive visionDriveTaxiRed = new AutoVisionDrive(swerveDrive, vision, taxiPositionRed);
+
+        return new SequentialCommandGroup(
+            new UseLimelightCommand(true),
+            new visionResetGyro(swerveDrive, vision),
+            AutoVisionSpeakerShoot.ShootVisionCommandAutoFirstShot(shooter, intake, swerveDrive),
+            visionDriveTaxiRed)
+            .finallyDo((boolean interuppted) -> vision.setUsingLimelight(false));
+    }
+
+    public static Command blueSideOneNoteTaxiTurn(SwerveDrive swerveDrive, Vision vision, Shooter shooter, Intake intake)
+    {
+        AutoVisionDrive visionDriveTaxiBlue = new AutoVisionDrive(swerveDrive, vision, taxiPositionBlue);
+
+        return new SequentialCommandGroup(
+            new UseLimelightCommand(true),
+            new visionResetGyro(swerveDrive, vision),
+            AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake),
+            visionDriveTaxiBlue)
+            .finallyDo((boolean interuppted) -> vision.setUsingLimelight(false));
+    }
+
+    public static Command redSideOneNoteTaxiTurn(SwerveDrive swerveDrive, Vision vision, Shooter shooter, Intake intake)
+    {
+        AutoVisionDrive visionDriveTaxiRed = new AutoVisionDrive(swerveDrive, vision, taxiPositionRed);
+
+        return new SequentialCommandGroup(
+            new UseLimelightCommand(true),
+            new visionResetGyro(swerveDrive, vision),
+            AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake),
+            visionDriveTaxiRed)
             .finallyDo((boolean interuppted) -> vision.setUsingLimelight(false));
     }
 }

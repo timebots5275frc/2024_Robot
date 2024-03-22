@@ -90,12 +90,17 @@ public class RobotContainer {
 
     autoChooser = new SendableChooser<Command>();
     autoChooser.setDefaultOption("None", null);
-    autoChooser.addOption("Vision Shoot", AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake));
+    autoChooser.addOption("Vision Shoot Turn", AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake));
+    autoChooser.addOption("Vision Shoot No Turn", AutoVisionSpeakerShoot.ShootVisionCommandAutoFirstShot(shooter, intake, swerveDrive));
     autoChooser.addOption("4-Note LMR", AutoCommands.leftMiddleRightAutoCommand(swerveDrive, vision, shooter, intake));
     autoChooser.addOption("4-Note RML", AutoCommands.rightMiddleLeftAutoCommand(swerveDrive, vision, shooter, intake));
     autoChooser.addOption("2-Note L", AutoCommands.shootLeftShootAutoCommand(swerveDrive, vision, shooter, intake));
     autoChooser.addOption("2-Note R", AutoCommands.shootRightShootAutoCommand(swerveDrive, vision, shooter, intake));
     autoChooser.addOption("2-Note M", AutoCommands.shootMiddleShootAutoCommand(swerveDrive, vision, shooter, intake));
+    autoChooser.addOption("Blue Taxi No Turn", AutoCommands.blueSideOneNoteTaxiNoTurn(swerveDrive, vision, shooter, intake));
+    autoChooser.addOption("Red Taxi No Turn", AutoCommands.redSideOneNoteTaxiNoTurn(swerveDrive, vision, shooter, intake));
+    autoChooser.addOption("Blue Taxi Turn", AutoCommands.blueSideOneNoteTaxiTurn(swerveDrive, vision, shooter, intake));
+    autoChooser.addOption("Red Taxi Turn", AutoCommands.redSideOneNoteTaxiTurn(swerveDrive, vision, shooter, intake));
     SmartDashboard.putData(autoChooser);
 
     configureBindings();
