@@ -57,6 +57,9 @@ public class RGB extends SubsystemBase {
   ArrayList<RgbFlashCommand> flashCommands = new ArrayList<>(3);
   Color currentFlashColor = OFF;
 
+  boolean setBackground = true;
+  Color[] idleColors = new Color[8];
+
   ShooterRunState lastShooterRunState = ShooterRunState.NONE;
 
   //#region rgb zones
@@ -205,10 +208,10 @@ public class RGB extends SubsystemBase {
       Alliance a = alliance.get();
       if (a == Alliance.Red) { return RED; } 
       else if (a == Alliance.Blue) { return BLUE; }
-      else { return OFF; }
+      else { return PURPLE; }
     }
 
-    return OFF;
+    return PURPLE;
   }
 
   public void rainbowRGB()
@@ -251,10 +254,24 @@ public class RGB extends SubsystemBase {
     }
     else {
       Color backgroundColor = OFF;
+      setBackground = true;
 
       if (!DriverStation.isTeleop() || !DriverStation.isEnabled())
       {
-        backgroundColor = hsvToRgb(periodicCalls * 1.5f % 360, 1, 1);
+        setBackground = false;
+        Color colorOne = hsvToRgb(periodicCalls * 1.5f % 360, 1, 1);
+        Color colorTwo = hsvToRgb(((periodicCalls * 1.5f) + 45) % 360, 1, 1);
+
+        idleColors[0] = colorOne;
+        idleColors[1] = colorOne;
+        idleColors[2] = colorOne;
+        idleColors[3] = colorOne;
+        idleColors[4] = colorTwo;
+        idleColors[5] = colorTwo;
+        idleColors[6] = colorTwo;
+        idleColors[7] = colorTwo;
+
+        setColorPattern(idleColors);
       }
 
       // if in teleop, check for end of match and start blinking when match time reaches certain time
@@ -276,7 +293,7 @@ public class RGB extends SubsystemBase {
       if (Vision.usingLimelight) { backgroundColor = GREEN; }
       else if (intake.getCurrentPivotState() == IntakePivotState.OUT || intake.getCurrentPivotAngle() < IntakeConstants.INTAKE_UP_POS) { backgroundColor = CurrentAllianceColor; }
 
-      setSolidRGBColor(backgroundColor);
+      if (setBackground) { setSolidRGBColor(backgroundColor); }
 
       // set shooter progress rgb
       ShooterRunState currentShooterRunState =  shooter.getCurrentRunState();
@@ -284,7 +301,7 @@ public class RGB extends SubsystemBase {
 
       double targetSpeed = lastShooterRunState == ShooterRunState.AMP ? (ShooterConstants.LEFT_AMP_SPEED + ShooterConstants.RIGHT_AMP_SPEED) / 2 : (ShooterConstants.LEFT_SHOOTER_SPEED + ShooterConstants.RIGHT_SHOOTER_SPEED) / 2;
       double shooterRPMPercentOfMax = shooter.getShooterRPM() / targetSpeed;
-      if (shooterRPMPercentOfMax > 0) {
+      if (shooterRPMPercentOfMax > 0.05) {
         Color fillColor = lerpColor(DARK_RED, DARK_GREEN, shooterRPMPercentOfMax * shooterRPMPercentOfMax);
         SHOOTER_RIGHT_ZONE.setProgressColor(shooterRPMPercentOfMax, fillColor, backgroundColor);
         SHOOTER_LEFT_ZONE.setProgressColor(shooterRPMPercentOfMax, fillColor, backgroundColor);

@@ -277,8 +277,8 @@ import frc.robot.CustomTypes.Math.Vector2;
     public final static double LEFT_SHOOTER_SPEED = 5400;
     public final static double RIGHT_SHOOTER_SPEED = 4500;
 
-    public final static double LEFT_AMP_SPEED = 350;
-    public final static double RIGHT_AMP_SPEED = 650;
+    public final static double LEFT_AMP_SPEED = 300;
+    public final static double RIGHT_AMP_SPEED = 600;
 
     public final static double SHOOTER_RESET_POS = 65 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;
     public final static double SHOOTER_START_POS = 65 * SHOOTER_PIVOT_ROTATIONS_PER_DEGREE;

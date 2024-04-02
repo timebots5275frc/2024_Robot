@@ -152,8 +152,10 @@ public class RobotContainer {
     new JoystickButton(buttonBoard, 10).whileTrue(new ClimberCommand(climber, ClimberMode.RETRACT));
     new JoystickButton(driveStick, 12).whileTrue(new ResetClimberCommand(climber));
 
-    new JoystickButton(driveStick, 9).onTrue(new UseLimelightCommand(true));
+    //new JoystickButton(driveStick, 9).onTrue(new UseLimelightCommand(true));
     new JoystickButton(driveStick, 10).onTrue(new UseLimelightCommand(false));
+    new JoystickButton(driveStick, 9).onTrue(new IntakeRunCommand(intake, IntakeRunState.INTAKE).until(intake.LimitSwitchIsPressed));
+
 
     //new JoystickButton(driveStick, 2).onTrue(new RotateAndLogCommand(vision, swerveDrive));
 

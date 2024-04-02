@@ -99,20 +99,20 @@ public class Shooter extends SubsystemBase {
     leftShooterRunPID.setD(Constants.ShooterConstants.ShooterRunPIDs.D, 0);
     leftShooterRunPID.setFF(Constants.ShooterConstants.ShooterRunPIDs.kFF, 0);
 
-    leftShooterRunPID.setP(0.0001, 1);
+    leftShooterRunPID.setP(0.00014, 1);
     leftShooterRunPID.setI(0.0, 1);
     leftShooterRunPID.setD(0.003, 1);
-    leftShooterRunPID.setFF(0.000192, 1);
+    leftShooterRunPID.setFF(0.000196, 1);
 
     rightShooterRunPID.setP(Constants.ShooterConstants.ShooterRunPIDs.P, 0);
     rightShooterRunPID.setI(Constants.ShooterConstants.ShooterRunPIDs.I, 0);
     rightShooterRunPID.setD(Constants.ShooterConstants.ShooterRunPIDs.D, 0);
     rightShooterRunPID.setFF(Constants.ShooterConstants.ShooterRunPIDs.kFF, 0);
 
-    rightShooterRunPID.setP(0.0001, 1);
+    rightShooterRunPID.setP(0.00014, 1);
     rightShooterRunPID.setI(0.0, 1);
     rightShooterRunPID.setD(0.003, 1);
-    rightShooterRunPID.setFF(0.000192, 1);
+    rightShooterRunPID.setFF(0.000196, 1);
 
     shooterPivotPID.setP(Constants.ShooterConstants.ShooterPivotPIDs.P);
     shooterPivotPID.setI(Constants.ShooterConstants.ShooterPivotPIDs.I);

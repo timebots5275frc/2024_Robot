@@ -106,7 +106,7 @@ public class Intake extends SubsystemBase {
       intakePivotEncoder.setPosition((intakeAngleEncoder.getAbsolutePosition().getValueAsDouble() * 360) * Constants.IntakeConstants.INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
       switch(state) {
         case NONE:
-        intakePivotPID.setReference(0, ControlType.kCurrent, 1);
+        intakePivotPID.setReference(0, ControlType.kDutyCycle, 1);
         break;
         case OUT:
         intakePivotPID.setReference(Constants.IntakeConstants.INTAKE_OUT_POS, ControlType.kSmartMotion);

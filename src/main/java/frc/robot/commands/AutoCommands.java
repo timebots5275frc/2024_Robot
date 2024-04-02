@@ -89,8 +89,10 @@ public class AutoCommands {
         AutoVisionDrive visionDriveNoteLeft = new AutoVisionDrive(swerveDrive, vision, leftNotePos.add(new Vector2(0.1, 0)));
         AutoVisionDrive visionDriveNoteMiddle = new AutoVisionDrive(swerveDrive, vision, middleNotePos.substract(new Vector2(0.1, 0)));
         AutoVisionDrive visionDriveNoteRight = new AutoVisionDrive(swerveDrive, vision, rightNotePos);
-        AutoVisionDrive visionDriveNoteMRTransition = new AutoVisionDrive(swerveDrive, vision, rmTransPos.substract(new Vector2(.6, .25)), true); /*.43, 0 sub*/
-        AutoVisionDrive visionDriveNoteLMTransition = new AutoVisionDrive(swerveDrive, vision, lmTransPos.substract(new Vector2(0.7, .1)), true); /*.43, 0 sub*/
+        //AutoVisionDrive visionDriveNoteMRTransition = new AutoVisionDrive(swerveDrive, vision, rmTransPos.substract(new Vector2(.6, .25)), true); /*.43, 0 sub*/
+        //AutoVisionDrive visionDriveNoteLMTransition = new AutoVisionDrive(swerveDrive, vision, lmTransPos.substract(new Vector2(0.7, .1)), true); /*.43, 0 sub*/
+        AutoVisionDrive visionDriveNoteMRTransition = new AutoVisionDrive(swerveDrive, vision, rmTransPos.substract(new Vector2(.43, 0)), true); /*.43, 0 sub*/
+        AutoVisionDrive visionDriveNoteLMTransition = new AutoVisionDrive(swerveDrive, vision, lmTransPos.substract(new Vector2(0.43, 0)), true);
 
         return new SequentialCommandGroup(
             new UseLimelightCommand(true),
