@@ -159,7 +159,7 @@ public class RobotContainer {
 
     //new JoystickButton(driveStick, 2).onTrue(new RotateAndLogCommand(vision, swerveDrive));
 
-    //new JoystickButton(driveStick, 2).onTrue(new ToggleAutoTarget());
+    new JoystickButton(driveStick, 2).onTrue(new ToggleAutoTarget());
   }
 
   public Command getAutonomousCommand() {

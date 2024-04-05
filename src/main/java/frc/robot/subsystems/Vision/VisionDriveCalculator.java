@@ -7,13 +7,15 @@ import frc.robot.CustomTypes.Math.Vector2;
 import frc.robot.CustomTypes.Math.Vector3;
 
 public class VisionDriveCalculator {
-    static Vision vision;
+    public static Vision vision;
 
     public static void SetVisionReference(Vision vision) { VisionDriveCalculator.vision = vision; }
 
     public static double rotateTowardsTarget(double offset)
     {
-        return -SillyMath.clamp((vision.HorizontalOffsetFromAprilTag() + offset) / 22, -1, 1);
+        double x = (vision.HorizontalOffsetFromAprilTag() + offset);
+        int sign = x > 0 ? 1 : -1;
+        return -SillyMath.clamp(((.5*Math.pow(x,2)) / (Math.abs(x)+100))*sign , -2, 2);
     }
 
     public static AprilTagMoveVelocity GetVelocityToAprilTagOffset(Vector2 aprilTagOffset)

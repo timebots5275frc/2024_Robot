@@ -27,6 +27,7 @@ import frc.robot.Constants.DriveConstants;
 
 import frc.robot.CustomTypes.Math.Vector2;
 import frc.robot.subsystems.Vision.Vision;
+import frc.robot.subsystems.Vision.VisionDriveCalculator;
 
 public class SwerveDrive extends SubsystemBase {
 
@@ -60,6 +61,7 @@ public class SwerveDrive extends SubsystemBase {
         SmartDashboard.putNumber("RF Drive Speed", rightFrontSwerveModule.driveNEOMotorEncoder.getVelocity());
         SmartDashboard.putNumber("LR Drive Speed", leftRearSwerveModule.driveNEOMotorEncoder.getVelocity());
         SmartDashboard.putNumber("RR Drive Speed", rightRearSwerveModule.driveNEOMotorEncoder.getVelocity());
+        SmartDashboard.putNumber("tx + offset", VisionDriveCalculator.vision.HorizontalOffsetFromAprilTag()+VisionDriveCalculator.getAngleOffsetForVision());
     }
 
     /**

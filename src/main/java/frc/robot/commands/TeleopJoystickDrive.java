@@ -75,8 +75,8 @@ public class TeleopJoystickDrive extends Command {
             if (Constants.VisionConstants.AprilTagData.isSpeakerTag(Constants.VisionConstants.AprilTagData.getTag(Vision.Instance.AprilTagID()))) {
                 double turnDirection = VisionDriveCalculator.rotateTowardsTarget(VisionDriveCalculator.getAngleOffsetForVision());
                 int sign = turnDirection > 0 ? 1 : -1;
-                turnVelocity = (turnDirection * turnDirection) * C * sign;
-                if (Math.abs(turnVelocity) < .4) { turnVelocity = 0; }
+                turnVelocity = (turnDirection);
+                if (Math.abs(turnVelocity) < .05) { turnVelocity = 0; }
             } else {
                 turnVelocity = 0;
             }
