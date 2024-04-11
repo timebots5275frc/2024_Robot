@@ -89,6 +89,9 @@ public class SwerveDrive extends SubsystemBase {
 
         SmartDashboard.putString("Odometry Pos", this.getOdometryPosition().toString());
         SmartDashboard.putString("Odometry Rot", m_odometry.getPoseMeters().getRotation().toString());
+        SmartDashboard.putNumber("rot velo", rot);
+        SmartDashboard.putNumber("y velo", ySpeed);
+        SmartDashboard.putNumber("x velo", xSpeed);
     }
 
     /**
