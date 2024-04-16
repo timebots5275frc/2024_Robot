@@ -1,5 +1,6 @@
 package frc.robot.subsystems.Vision;
 
+import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.CustomTypes.Math.SillyMath;
@@ -9,13 +10,37 @@ import frc.robot.CustomTypes.Math.Vector3;
 public class VisionDriveCalculator {
     public static Vision vision;
 
+    public static double max = 0;
+
+    public static double min = 0;
+
+    public static boolean wasNan = false;
+
     public static void SetVisionReference(Vision vision) { VisionDriveCalculator.vision = vision; }
 
     public static double rotateTowardsTarget(double offset)
     {
         double x = (vision.HorizontalOffsetFromAprilTag() + offset);
         int sign = x > 0 ? 1 : -1;
-        return -SillyMath.clamp(((Math.pow(x,2)) / (Math.abs(x)+100))*sign , -2, 2);
+        double value = -SillyMath.clamp(((Math.pow(x,2)) / ((Math.abs(x)+100)*sign)) , -2, 2);
+
+        if (!wasNan&&Double.isNaN(value)) {
+            wasNan = true;
+            System.out.println("Was NAN\n" + x + "\n" + value + "\n" + offset);
+        }
+        if(wasNan){
+            return 0;
+        }
+        SmartDashboard.putBoolean("Was Nan", wasNan);
+        if (value > max) {
+            max = value;
+            SmartDashboard.putNumber("Max thing", value);
+        }
+        if (value < min) {
+            min = value;
+            SmartDashboard.putNumber("Min thing", value);
+        }
+        return value;
     }
 
     public static AprilTagMoveVelocity GetVelocityToAprilTagOffset(Vector2 aprilTagOffset)
@@ -59,7 +84,11 @@ public class VisionDriveCalculator {
             double limelightDistToAprilTag = aprilTagHorizontalPos.magnitude();
 
             //return (4.75 / (limelightDistToAprilTag * limelightDistToAprilTag)) + 9;
-            return (14 / Math.pow(limelightDistToAprilTag, 0.7));//(4.75 / (limelightDistToAprilTag * limelightDistToAprilTag)) + 9;
+            double value = (14 / Math.pow(limelightDistToAprilTag, 0.7));//(4.75 / (limelightDistToAprilTag * limelightDistToAprilTag)) + 9;
+            if(Double.isInfinite(value)){
+                System.out.println("Dis to april tag: " + limelightDistToAprilTag);
+            }
+            return value;
         }
 
         return 0;
