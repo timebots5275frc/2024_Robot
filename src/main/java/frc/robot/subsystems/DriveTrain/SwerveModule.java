@@ -1,7 +1,6 @@
 package frc.robot.subsystems.DriveTrain;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkLowLevel;
@@ -27,13 +26,10 @@ public class SwerveModule {
     private PIDController steerAnglePID;
     private SparkPIDController steerMotorVelocityPID;
     private SparkPIDController driveMotorVelocityPID;
-    private int driveMotorID;
 
     public SwerveModule(int driveMotorID, int steerMotorID, int steerEncoderId) {
 
-        this.driveMotorID = driveMotorID;
-
-        driveMotor = new CANSparkMax(this.driveMotorID, CANSparkLowLevel.MotorType.kBrushless);
+        driveMotor = new CANSparkMax(driveMotorID, CANSparkLowLevel.MotorType.kBrushless);
         steerMotor = new CANSparkMax(steerMotorID, CANSparkLowLevel.MotorType.kBrushless);
 
         steerAngleEncoder = new CANcoder(steerEncoderId);
@@ -106,10 +102,7 @@ public class SwerveModule {
             SmartDashboard.putNumber(name + " DriveMotorSpeed", driveSpeed);
         }
 
-        if(driveMotorVelocityPID.setReference(driveMotorRpm, CANSparkMax.ControlType.kVelocity)!=REVLibError.kOk){
-            System.out.println("Bad");
-        }
-        SmartDashboard.putNumber(String.valueOf(driveMotorID), driveMotorRpm);
+        driveMotorVelocityPID.setReference(driveMotorRpm, CANSparkMax.ControlType.kVelocity);
     }
 
     /**
