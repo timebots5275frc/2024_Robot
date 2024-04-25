@@ -106,10 +106,7 @@ public class Vision extends SubsystemBase {
       out = out.add(arrayList.get(i));
     }
 
-    if (arrayList.size() == 0) { 
-      System.out.println("Return 0");
-      return Vector3.zero; 
-    }
+    if (arrayList.size() == 0) { return Vector3.zero; }
     return out.divideBy(arrayList.size());
   }
 
