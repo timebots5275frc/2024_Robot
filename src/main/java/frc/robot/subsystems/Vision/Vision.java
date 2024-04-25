@@ -76,19 +76,28 @@ public class Vision extends SubsystemBase {
   void CalculateTargetTransformInRobotSpace()
   {
     double[] vals = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
-    addVector3ToArrayList(new Vector3(vals[0], vals[1], vals[2]), aprilTagPosInRobotSpaceValues);
-    addVector3ToArrayList(new Vector3(vals[3], vals[4], vals[5]), aprilTagRotInRobotSpaceValues);
-    avgAprilTagPosInRobotSpace = getAverageOfArrayList(aprilTagPosInRobotSpaceValues);
-    avgAprilTagRotInRobotSpace = getAverageOfArrayList(aprilTagRotInRobotSpaceValues);
+    if(vals[0]!=0){
+      addVector3ToArrayList(new Vector3(vals[0], vals[1], vals[2]), aprilTagPosInRobotSpaceValues);
+      addVector3ToArrayList(new Vector3(vals[3], vals[4], vals[5]), aprilTagRotInRobotSpaceValues);
+      avgAprilTagPosInRobotSpace = getAverageOfArrayList(aprilTagPosInRobotSpaceValues);
+      avgAprilTagRotInRobotSpace = getAverageOfArrayList(aprilTagRotInRobotSpaceValues);
+    } else {
+      System.out.println("Bad Data");
+    }
   }
 
   void CalculateRobotPositionInFieldSpace()
   {
     double[] vals = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
-    addVector3ToArrayList(new Vector3(vals[0], vals[1], vals[2]), robotPosInFieldSpaceValues);
-    addVector3ToArrayList(new Vector3(vals[3], vals[4], vals[5]), robotRotInFieldSpaceValues);
-    avgRobotPosInFieldSpace = getAverageOfArrayList(robotPosInFieldSpaceValues);
-    avgAprilTagRotInRobotSpace = getAverageOfArrayList(robotRotInFieldSpaceValues);
+    if (vals[0]!=0) {
+      addVector3ToArrayList(new Vector3(vals[0], vals[1], vals[2]), robotPosInFieldSpaceValues);
+      addVector3ToArrayList(new Vector3(vals[3], vals[4], vals[5]), robotRotInFieldSpaceValues);
+      avgRobotPosInFieldSpace = getAverageOfArrayList(robotPosInFieldSpaceValues);
+      avgAprilTagRotInRobotSpace = getAverageOfArrayList(robotRotInFieldSpaceValues);
+    } else {
+      System.out.println("Bad Data");
+    }
+    
   }
 
   void addVector3ToArrayList(Vector3 newVal, ArrayList<Vector3> arrayList)
