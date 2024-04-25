@@ -1,8 +1,5 @@
 package frc.robot;
 
-import org.ejml.simple.SimpleMatrix;
-
-import edu.wpi.first.math.Matrix;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.CustomTypes.PID_Values;
 import frc.robot.CustomTypes.SwerveCanIDs;
@@ -155,7 +152,7 @@ import frc.robot.CustomTypes.Math.Vector2;
       public static final double AUTO_ODOMETRY_DRIVE_TARGET_ALLOWED_ERROR = .1; // in meters
       public static final double AUTO_ODOMETRY_DRIVE_SLOWDOWN_DISTANCE = .6; // in meters
   }
-  
+
   public static final class VisionConstants {
     public static final boolean ENABLE_LIMELIGHT_LIGHT_ON_ENABLE = true;
     public static final int VALUES_TO_AVERAGE = 3;
