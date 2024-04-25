@@ -248,7 +248,7 @@ public class Shooter extends SubsystemBase {
     if (AutoTargetStateManager.isAutoTargeting) {
       count++;
         if (count % 10 == 0) {
-          setShooterToVisionShootAngle();
+          //setShooterToVisionShootAngle();
         }
     }
   }

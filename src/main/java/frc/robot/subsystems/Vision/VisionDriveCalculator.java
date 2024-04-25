@@ -26,7 +26,7 @@ public class VisionDriveCalculator {
 
         if (!wasNan&&Double.isNaN(value)) {
             wasNan = true;
-            System.out.println("Was NAN\n" + "x " + x + "\n" + "value " + value + "\n" + "offset " + offset + "\n" + "LimeLight tx: " + vision.horizontalOffsetFromAprilTag);
+            System.out.println("Was NAN\n" + x + "\n" + value + "\n" + offset);
         }
         if(wasNan){
             return 0;

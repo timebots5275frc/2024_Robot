@@ -5,10 +5,8 @@
 package frc.robot.subsystems.Vision;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.math.Vector;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,15 +15,9 @@ import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.VisionConstants.AprilTagData;
 
 public class Vision extends SubsystemBase {
-  ArrayList<Vector3> lastValues;
-  boolean once=true;
-  Vector3 oldOut;
-  double[] oldLL;
-  int oldId;
-  int oldtv;
 
   private int aprilTagID = -1;
-  double horizontalOffsetFromAprilTag;
+  private double horizontalOffsetFromAprilTag;
 
   private Vector3 avgAprilTagPosInRobotSpace;
   private ArrayList<Vector3> aprilTagPosInRobotSpaceValues = new ArrayList<Vector3>();
@@ -84,23 +76,19 @@ public class Vision extends SubsystemBase {
   void CalculateTargetTransformInRobotSpace()
   {
     double[] vals = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
-    if(vals[0]!=0){
-      addVector3ToArrayList(new Vector3(vals[0], vals[1], vals[2]), aprilTagPosInRobotSpaceValues);
-      addVector3ToArrayList(new Vector3(vals[3], vals[4], vals[5]), aprilTagRotInRobotSpaceValues);
-      avgAprilTagPosInRobotSpace = getAverageOfArrayList(aprilTagPosInRobotSpaceValues);
-      avgAprilTagRotInRobotSpace = getAverageOfArrayList(aprilTagRotInRobotSpaceValues);
-    } else {
-      System.out.println("Bad Data");
-    }
+    addVector3ToArrayList(new Vector3(vals[0], vals[1], vals[2]), aprilTagPosInRobotSpaceValues);
+    addVector3ToArrayList(new Vector3(vals[3], vals[4], vals[5]), aprilTagRotInRobotSpaceValues);
+    avgAprilTagPosInRobotSpace = getAverageOfArrayList(aprilTagPosInRobotSpaceValues);
+    avgAprilTagRotInRobotSpace = getAverageOfArrayList(aprilTagRotInRobotSpaceValues);
   }
 
   void CalculateRobotPositionInFieldSpace()
   {
-    //double[] vals = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
-    //addVector3ToArrayList(new Vector3(vals[0], vals[1], vals[2]), robotPosInFieldSpaceValues);
-    //addVector3ToArrayList(new Vector3(vals[3], vals[4], vals[5]), robotRotInFieldSpaceValues);
-    //avgRobotPosInFieldSpace = getAverageOfArrayList(robotPosInFieldSpaceValues);
-    //avgAprilTagRotInRobotSpace = getAverageOfArrayList(robotRotInFieldSpaceValues);
+    double[] vals = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
+    addVector3ToArrayList(new Vector3(vals[0], vals[1], vals[2]), robotPosInFieldSpaceValues);
+    addVector3ToArrayList(new Vector3(vals[3], vals[4], vals[5]), robotRotInFieldSpaceValues);
+    avgRobotPosInFieldSpace = getAverageOfArrayList(robotPosInFieldSpaceValues);
+    avgAprilTagRotInRobotSpace = getAverageOfArrayList(robotRotInFieldSpaceValues);
   }
 
   void addVector3ToArrayList(Vector3 newVal, ArrayList<Vector3> arrayList)
@@ -122,23 +110,6 @@ public class Vision extends SubsystemBase {
       System.out.println("Return 0");
       return Vector3.zero; 
     }
-    if(VisionDriveCalculator.wasNan&&once){
-      System.out.println("Array Size" + lastValues.size());
-      System.out.println("out" + oldOut);
-      System.out.println("Limelight Values" + Arrays.toString(oldLL));
-      System.out.println("tv "+oldtv);
-      System.out.println("tid "+oldId);
-      for(int i=0; i<lastValues.size(); i++){
-        System.out.println(lastValues.get(i));
-      }
-      once=false;
-    }
-    lastValues=(ArrayList<Vector3>) arrayList.clone();
-    oldOut=out;
-    oldId= (int)NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDouble(-1.0);
-    oldtv= (int)NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
-    oldLL = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetpose_robotspace").getDoubleArray(new double[6]);;
-    
     return out.divideBy(arrayList.size());
   }
 
