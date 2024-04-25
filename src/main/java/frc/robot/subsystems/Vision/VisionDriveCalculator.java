@@ -22,25 +22,7 @@ public class VisionDriveCalculator {
     {
         double x = (vision.HorizontalOffsetFromAprilTag() + offset);
         int sign = x > 0 ? 1 : -1;
-        double value = -SillyMath.clamp(((Math.pow(x,2)) / ((Math.abs(x)+100)*sign)) , -2, 2);
-
-        if (!wasNan&&Double.isNaN(value)) {
-            wasNan = true;
-            System.out.println("Was NAN\n" + "x " + x + "\n" + "value " + value + "\n" + "offset " + offset + "\n" + "LimeLight tx: " + vision.horizontalOffsetFromAprilTag);
-        }
-        if(wasNan){
-            return 0;
-        }
-        SmartDashboard.putBoolean("Was Nan", wasNan);
-        if (value > max) {
-            max = value;
-            SmartDashboard.putNumber("Max thing", value);
-        }
-        if (value < min) {
-            min = value;
-            SmartDashboard.putNumber("Min thing", value);
-        }
-        return value;
+        return -SillyMath.clamp(((.5*Math.pow(x,2)) / (Math.abs(x)+100))*sign , -2, 2);
     }
 
     public static AprilTagMoveVelocity GetVelocityToAprilTagOffset(Vector2 aprilTagOffset)
