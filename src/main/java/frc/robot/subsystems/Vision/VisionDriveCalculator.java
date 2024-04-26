@@ -15,7 +15,7 @@ public class VisionDriveCalculator {
     {
         double x = (vision.HorizontalOffsetFromAprilTag() + offset);
         int sign = x > 0 ? 1 : -1;
-        return -SillyMath.clamp(((.5*Math.pow(x,2)) / (Math.abs(x)+100))*sign , -2, 2);
+        return -SillyMath.clamp(((.5*Math.pow(x,2)) / (Math.abs(x)+100))*sign , -1, 1);
     }
 
     public static AprilTagMoveVelocity GetVelocityToAprilTagOffset(Vector2 aprilTagOffset)

@@ -43,7 +43,7 @@ public class TeleopJoystickDrive extends Command {
 
         addRequirements(_swerveDrive);
 
-        C = 6;
+        C = 3;
     }
 
     public void SetFieldRelative(boolean setboolfieldRelative) {
@@ -74,8 +74,19 @@ public class TeleopJoystickDrive extends Command {
             double turnVelocity;
             if (Constants.VisionConstants.AprilTagData.isSpeakerTag(Constants.VisionConstants.AprilTagData.getTag(Vision.Instance.AprilTagID()))) {
                 double turnDirection = VisionDriveCalculator.rotateTowardsTarget(VisionDriveCalculator.getAngleOffsetForVision());
-                int sign = turnDirection > 0 ? 1 : -1;
-                turnVelocity = (turnDirection);
+                int sign;
+                if(turnDirection==0){
+                    sign=0;
+                } else if(turnDirection>0){
+                    sign=1;
+                } else{
+                    sign=-1;
+                }
+                double dis_to_tag = Math.sqrt(Math.pow(Vision.Instance.AprilTagPosInRobotSpace().x,2)+Math.pow(Vision.Instance.AprilTagPosInRobotSpace().z,2));
+                double x = (sign-turnDirection)*Math.pow(1.3*dis_to_tag,1.2);
+                turnVelocity = turnDirection*C/x;
+                turnVelocity = SillyMath.clamp(turnVelocity,-4,4);
+                SmartDashboard.putNumber("dis_to_tag", dis_to_tag);
                 if (Math.abs(turnVelocity) < .05) { turnVelocity = 0; }
             } else {
                 turnVelocity = 0;
