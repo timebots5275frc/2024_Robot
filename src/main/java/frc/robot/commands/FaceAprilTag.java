@@ -16,7 +16,7 @@ public class FaceAprilTag extends Command {
 
   boolean facingTarget = false;
 
-  private static double turnSpeed = 1.5;
+  private static double turnSpeed = 3;
 
   public FaceAprilTag(SwerveDrive swerveDrive, Vision vision) {
     this.swerveDrive = swerveDrive;

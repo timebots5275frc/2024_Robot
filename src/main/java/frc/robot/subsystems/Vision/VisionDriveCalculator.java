@@ -10,12 +10,17 @@ public class VisionDriveCalculator {
     public static Vision vision;
 
     public static void SetVisionReference(Vision vision) { VisionDriveCalculator.vision = vision; }
-
     public static double rotateTowardsTarget(double offset)
     {
+        double minP=.05;
         double x = (vision.HorizontalOffsetFromAprilTag() + offset);
         int sign = x > 0 ? 1 : -1;
-        return -SillyMath.clamp(((.5*Math.pow(x,2)) / (Math.abs(x)+100))*sign , -1, 1);
+        double turnP =  -SillyMath.clamp(((.5*Math.pow(x,2)) / (Math.abs(x)+100))*sign , -1, 1);
+        SmartDashboard.putNumber("turnP", turnP);
+        if(Math.abs(turnP)<minP&&x!=0){
+            return minP*sign;
+        }
+        return turnP;
     }
 
     public static AprilTagMoveVelocity GetVelocityToAprilTagOffset(Vector2 aprilTagOffset)

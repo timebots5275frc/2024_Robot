@@ -43,7 +43,7 @@ public class TeleopJoystickDrive extends Command {
 
         addRequirements(_swerveDrive);
 
-        C = 3;
+        C = 6;
     }
 
     public void SetFieldRelative(boolean setboolfieldRelative) {
@@ -67,6 +67,8 @@ public class TeleopJoystickDrive extends Command {
         double inputRotationVelocity = joystickTwist * throttle * Constants.DriveConstants.MAX_TWIST_RATE;
         
         SmartDashboard.putNumber("Throttle teleJoy", throttle);
+        SmartDashboard.putNumber("y velo", inputVelocity.y);
+
 
         if (!AutoTargetStateManager.isAutoTargeting) {
             drivetrain.drive(inputVelocity.x, inputVelocity.y, inputRotationVelocity, fieldRelative);
@@ -83,13 +85,15 @@ public class TeleopJoystickDrive extends Command {
                     sign=-1;
                 }
                 double dis_to_tag = Math.sqrt(Math.pow(Vision.Instance.AprilTagPosInRobotSpace().x,2)+Math.pow(Vision.Instance.AprilTagPosInRobotSpace().z,2));
-                double x = (sign-turnDirection)*Math.pow(1.3*dis_to_tag,1.2);
-                turnVelocity = turnDirection*C/x;
+                double x = Math.pow(1.3*dis_to_tag,1.2);
+                double k = SillyMath.clamp(Math.abs(inputVelocity.y*.5),1,4); 
+                turnVelocity = ((turnDirection*C)/x)*k;
                 turnVelocity = SillyMath.clamp(turnVelocity,-4,4);
                 SmartDashboard.putNumber("dis_to_tag", dis_to_tag);
+                SmartDashboard.putNumber("turn_velo", turnVelocity);
                 if (Math.abs(turnVelocity) < .05) { turnVelocity = 0; }
             } else {
-                turnVelocity = 0;
+                turnVelocity = .001;
             }
             drivetrain.drive(inputVelocity.x, inputVelocity.y, turnVelocity, fieldRelative);
         }

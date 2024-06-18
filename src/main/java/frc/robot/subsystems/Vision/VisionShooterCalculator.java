@@ -25,7 +25,7 @@ public class VisionShooterCalculator {
             //double C = 0.0355;
             //double C = 0.034;
             //double C = 0.03475;
-            double C = 0.038;
+            double C = 0.039;
 
             return Math.toDegrees(Math.atan2(heightDifferenceBetweenShooterAndSpeakerTargetPosition, horizontalDistanceToAprilTag)) + Math.pow(horizontalDistanceToAprilTag, 1.08) * C;
         }
