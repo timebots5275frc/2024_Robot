@@ -26,6 +26,7 @@ public class TeleopJoystickDrive extends Command {
 
     private Joystick driveStick;
     private boolean fieldRelative;
+    private boolean usingJoystick;
     private double C;
 
     /**
@@ -34,13 +35,12 @@ public class TeleopJoystickDrive extends Command {
      * @param subsystem The drive subsystem this command wil run on.
      * @param joystick  The control input for driving
      */
-    public TeleopJoystickDrive(SwerveDrive _swerveDrive, Joystick _driveStick, Input input_, boolean _fieldRelative) {
+    public TeleopJoystickDrive(SwerveDrive _swerveDrive, Input input_, boolean _fieldRelative) {
         this.drivetrain = _swerveDrive;
-        this.driveStick = _driveStick;
         this.input = input_;
         this.fieldRelative = _fieldRelative;
         this.vision_followAprilTag = new VisionFollowAprilTag(_swerveDrive);
-
+        usingJoystick = this.input.usingJoystick;
         addRequirements(_swerveDrive);
 
         C = 3;
@@ -59,17 +59,27 @@ public class TeleopJoystickDrive extends Command {
 
     @Override
     public void execute() {
-        Vector2 joystickInput = input.JoystickInput();
-        double joystickTwist = input.JoystickTwist();
-        double throttle = (-driveStick.getThrottle() + 1) / 2; // between 0 and 1 = 0% and 100%
-
-        Vector2 inputVelocity = joystickInput.times(throttle * Constants.DriveConstants.MAX_DRIVE_SPEED);
-        double inputRotationVelocity = joystickTwist * throttle * Constants.DriveConstants.MAX_TWIST_RATE;
+        Vector2 moveInput;
+        double turnInput;
+        double speedPercent = 0;
+        if (usingJoystick) {
+            moveInput = input.JoystickInput();
+            turnInput = input.JoystickTwist();
+            speedPercent = (-input.getThrottle() + 1) / 2; // between 0 and 1 = 0% and 100%
+        }
+        else {
+            moveInput = input.ControllerInput();
+            turnInput = input.ControllerTurn();
+            speedPercent = input.getControllerSpeed();
+        }
         
-        SmartDashboard.putNumber("Throttle teleJoy", throttle);
+        Vector2 inputVelocity = moveInput.times(speedPercent * Constants.DriveConstants.MAX_DRIVE_SPEED);
+        double inputRotationVelocity = turnInput * speedPercent * Constants.DriveConstants.MAX_TWIST_RATE;
+            
+        SmartDashboard.putNumber("Throttle teleJoy", speedPercent);
 
         if (!AutoTargetStateManager.isAutoTargeting) {
-            drivetrain.drive(inputVelocity.x, inputVelocity.y, inputRotationVelocity, fieldRelative);
+            drivetrain.drive(moveInput.x, moveInput.y, inputRotationVelocity, fieldRelative);
         } else {
             double turnVelocity;
             if (Constants.VisionConstants.AprilTagData.isSpeakerTag(Constants.VisionConstants.AprilTagData.getTag(Vision.Instance.AprilTagID()))) {
