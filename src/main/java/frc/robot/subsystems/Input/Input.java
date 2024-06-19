@@ -44,7 +44,7 @@ public class Input extends SubsystemBase {
     } else {
       controller = (XboxController) driveInput;
       usingJoystick = false;
-      controllerSpeed = 0.5;
+      controllerSpeed = 0.6;
     }
   }
 
@@ -88,11 +88,11 @@ public class Input extends SubsystemBase {
   }
 
   public void incrementControllerSpeed() {
-    if (controllerSpeed + 0.1 <= 1) { controllerSpeed += 0.1; }
+    if (controllerSpeed + 0.2 <= 1) { controllerSpeed += 0.2; }
   }
 
   public void decrementControllerSpeed() {
-    if (controllerSpeed - 0.1 >= 0) { controllerSpeed -= 0.1; }
+    if (controllerSpeed - 0.2 >= 0) { controllerSpeed -= 0.2; }
   }
 
   public double getControllerSpeed() {

@@ -79,7 +79,7 @@ public class TeleopJoystickDrive extends Command {
         SmartDashboard.putNumber("Throttle teleJoy", speedPercent);
 
         if (!AutoTargetStateManager.isAutoTargeting) {
-            drivetrain.drive(moveInput.x, moveInput.y, inputRotationVelocity, fieldRelative);
+            drivetrain.drive(inputVelocity.x, inputVelocity.y, inputRotationVelocity, fieldRelative);
         } else {
             double turnVelocity;
             if (Constants.VisionConstants.AprilTagData.isSpeakerTag(Constants.VisionConstants.AprilTagData.getTag(Vision.Instance.AprilTagID()))) {

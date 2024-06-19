@@ -52,6 +52,7 @@ import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -91,7 +92,7 @@ public class RobotContainer {
     rgb = new RGB(shooter, intake, climber);
 
     buttonBoard = new GenericHID(1);
-    if (usingJoystick) {Joystick driveStick = new Joystick(0); driveInput = driveStick; } else {XboxController controller = new XboxController(0); driveInput = controller; }
+    if (usingJoystick) {Joystick driveStick = new Joystick(0); driveInput = driveStick; } else {XboxController controller = new XboxController(0); driveInput = controller;}
     input = new Input(driveInput);
     vision = new Vision();
     joyDrive = new TeleopJoystickDrive(swerveDrive, input, true);
@@ -140,7 +141,18 @@ public class RobotContainer {
       new JoystickButton(driveInput, 6).onTrue(new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.OUT), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.INTAKE)));
 
     } else {
-      new Trigger(((XboxController) driveInput).getRightTriggerAxis() > 0.1)
+      CommandXboxController commandController = new CommandXboxController(0);
+      commandController.back().onTrue(new InstantCommand(swerveDrive::resetPigeon, swerveDrive));
+      commandController.a().onTrue(new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.AMP), new ShooterRunCommand(shooter, ShooterRunState.AMP)));
+      commandController.x().onTrue(new ShooterPivotCommand(shooter, ShooterPivotState.SHOOTER_45));
+      commandController.b().onTrue(new ShooterRunCommand(shooter, ShooterRunState.NONE));
+      commandController.y().onTrue(new ShooterRunCommand(shooter, ShooterRunState.SHOOT));
+      commandController.rightStick().onTrue(new InstantCommand(input::incrementControllerSpeed));
+      commandController.leftStick().onTrue(new InstantCommand(input::decrementControllerSpeed));
+      commandController.rightBumper().onTrue(new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.OUT), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.INTAKE)));
+      commandController.leftBumper().onTrue(new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.IN), new IntakeRunCommand(intake, IntakeRunState.NONE)));
+      commandController.rightTrigger(.5).onTrue(AutoVisionSpeakerShoot.ShootAndStopCommand(shooter, swerveDrive, vision, intake));
+      commandController.leftTrigger(.5).onTrue(new SequentialCommandGroup(new IntakeRunCommand(intake, IntakeRunState.OUTTAKE), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.NONE)));
     }
 
     new JoystickButton(buttonBoard, 6).onTrue(new SequentialCommandGroup(new IntakeRunCommand(intake, IntakeRunState.OUTTAKE), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.NONE)));
