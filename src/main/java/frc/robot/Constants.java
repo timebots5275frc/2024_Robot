@@ -112,6 +112,7 @@ import frc.robot.CustomTypes.Math.Vector2;
       public static final double MAX_DRIVE_SPEED = 3.5; // meters/second
       public static final double MAX_STEER_RATE = .5; // rotations/second of a wheel for steer.
       public static final double MAX_TWIST_RATE = .6 * 2.0 * Math.PI; // radians/second of the robot rotation.
+      public static final double CONTROLLER_TWIST_RATE = 2; // constant turn rate for using controller
 
       // #region <Misc CAN IDs>
         public static final int PIGEON_IMU_ID = 9;

@@ -99,6 +99,19 @@ public class Input extends SubsystemBase {
     return controllerSpeed;
   }
 
+  public void flipRumble() {
+    System.out.println("Flip rumble");
+    rumbleController(GenericHID.RumbleType.kBothRumble, 1);
+  }
+
+  public void stopRumble() {
+    rumbleController(GenericHID.RumbleType.kBothRumble, 0.0);
+  }
+
+  public void rumbleController(GenericHID.RumbleType rumbleType, double Throttle) {
+    controller.setRumble(rumbleType, Throttle);
+  }
+
   public Vector2 JoystickInput() { return joystickInput; }
   public double JoystickTwist() { return joystickTwist; }
   public Vector2 ControllerInput() {return controllerInput; }

@@ -15,6 +15,7 @@ import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -45,6 +46,10 @@ public class Intake extends SubsystemBase {
 
   public BooleanSupplier NoteReadyToFeedToShooter = new BooleanSupplier() {
     public boolean getAsBoolean() { return intakePivotEncoder.getPosition() > 212 * Constants.IntakeConstants.INTAKE_PIVOT_ROTATIONS_PER_DEGREE; };
+  };
+
+  public BooleanSupplier ReadyToIntake = new BooleanSupplier() {
+    public boolean getAsBoolean() { return (limitSwitchPressed() && intakePivotEncoder.getPosition() < Constants.IntakeConstants.INTAKE_UP_POS); };
   };
 
   public enum IntakePivotState {
@@ -181,6 +186,7 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Intake run speed", intakeRunEncoder.getVelocity());
     SmartDashboard.putBoolean("Inside threshold", targetReached);
     SmartDashboard.putBoolean("Note ready to feed", NoteReadyToFeedToShooter.getAsBoolean());
+    SmartDashboard.putBoolean("Intake Ready To Flip", ReadyToIntake.getAsBoolean());
     if (targetReached) {
       intakeSetPivotState(IntakePivotState.NONE);
     }

@@ -141,6 +141,7 @@ public class RobotContainer {
       new JoystickButton(driveInput, 6).onTrue(new SequentialCommandGroup(new IntakePivotCommand(intake, IntakePivotState.OUT), new WaitCommand(0.5), new IntakeRunCommand(intake, IntakeRunState.INTAKE)));
 
     } else {
+      new Trigger(intake.ReadyToIntake).onTrue(new SequentialCommandGroup(new InstantCommand(input::flipRumble), new WaitCommand(0.2), new InstantCommand(input::stopRumble)));
       CommandXboxController commandController = new CommandXboxController(0);
       commandController.back().onTrue(new InstantCommand(swerveDrive::resetPigeon, swerveDrive));
       commandController.a().onTrue(new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.AMP), new ShooterRunCommand(shooter, ShooterRunState.AMP)));
@@ -168,7 +169,7 @@ public class RobotContainer {
 
     new JoystickButton(buttonBoard, 12).whileTrue(new ClimberCommand(climber, ClimberMode.EXTEND));
     new JoystickButton(buttonBoard, 10).whileTrue(new ClimberCommand(climber, ClimberMode.RETRACT));
-
+    
   }
 
   public Command getAutonomousCommand() {
