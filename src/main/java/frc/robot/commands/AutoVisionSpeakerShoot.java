@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.CustomTypes.ManagerCommand;
-import frc.robot.CustomTypes.Math.Vector2;
-import frc.robot.CustomTypes.Math.Vector3;
+//import frc.robot.CustomTypes.Math.Vector2;
+//import frc.robot.CustomTypes.Math.Vector3;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Intake.IntakePivotState;
 import frc.robot.subsystems.Intake.IntakeRunState;
@@ -104,9 +104,9 @@ public class AutoVisionSpeakerShoot extends ManagerCommand {
 
     if (vision.hasValidData())
     {
-      Vector3 aprilTagPosInTargetSpace = vision.AprilTagPosInRobotSpace();
-      Vector2 xzPlaneAprilTagPosition = new Vector2(aprilTagPosInTargetSpace.x, aprilTagPosInTargetSpace.z);
-      double aprilTagDistance = xzPlaneAprilTagPosition.magnitude();
+      //Vector3 aprilTagPosInTargetSpace = vision.AprilTagPosInRobotSpace();
+      //Vector2 xzPlaneAprilTagPosition = new Vector2(aprilTagPosInTargetSpace.x, aprilTagPosInTargetSpace.z);
+     // double aprilTagDistance = xzPlaneAprilTagPosition.magnitude();
 
       Command shootNoteCommand = new SequentialCommandGroup(new ShooterPivotCommand(shooter, ShooterPivotState.VISION_SHOOT), new ShooterRunCommand(shooter, ShooterRunState.SHOOT), new WaitUntilCommand(shooter.ReadyToShoot), new IntakeRunCommand(intake, IntakeRunState.OUTTAKE), new WaitCommand(1), new ShooterRunCommand(shooter, ShooterRunState.NONE), new IntakeRunCommand(intake, IntakeRunState.NONE));
       Command rotateTowardsAprilTagCommand = new AutoVisionRotate(swerveDrive, 3);

@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 
-import edu.wpi.first.wpilibj.Joystick;
+//import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -24,7 +24,7 @@ public class TeleopJoystickDrive extends Command {
     private Input input;
     private VisionFollowAprilTag vision_followAprilTag;
 
-    private Joystick driveStick;
+    //private Joystick driveStick;
     private boolean fieldRelative;
     private boolean usingJoystick;
     private double C;
@@ -92,14 +92,14 @@ public class TeleopJoystickDrive extends Command {
             double turnVelocity;
             if (Constants.VisionConstants.AprilTagData.isSpeakerTag(Constants.VisionConstants.AprilTagData.getTag(Vision.Instance.AprilTagID()))) {
                 double turnDirection = VisionDriveCalculator.rotateTowardsTarget(VisionDriveCalculator.getAngleOffsetForVision());
-                int sign;
-                if(turnDirection==0){
-                    sign=0;
-                } else if(turnDirection>0){
-                    sign=1;
-                } else{
-                    sign=-1;
-                }
+                //int sign;
+                //if(turnDirection==0){
+                //    sign=0;
+                //} else if(turnDirection>0){
+                //    sign=1;
+                //} else{
+                //    sign=-1;
+                //}
                 double dis_to_tag = Math.sqrt(Math.pow(Vision.Instance.AprilTagPosInRobotSpace().x,2)+Math.pow(Vision.Instance.AprilTagPosInRobotSpace().z,2));
                 double x = Math.pow(1.3*dis_to_tag,1.2);
                 double k = SillyMath.clamp(Math.abs(inputVelocity.y*.5),1,4); 
