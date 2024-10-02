@@ -130,7 +130,18 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void resetPigeon() {
-        pigeon2Gyro.setYaw(180);
+
+        try{
+            System.out.println("Reset Gyro");
+            if(VisionDriveCalculator.vision.hasValidData())
+            {
+            pigeon2Gyro.setYaw(VisionDriveCalculator.vision.AprilTagRotInRobotSpace().y+180);
+            System.out.println(VisionDriveCalculator.vision.AprilTagRotInRobotSpace().y); 
+            }
+            else{pigeon2Gyro.setYaw(180);}
+        } 
+        catch(ArithmeticException e){System.out.println(e);}
+
     }
 
     public void setGyroYaw(double degrees) {

@@ -84,7 +84,7 @@ public class RobotContainer {
   SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
-    boolean usingJoystick = false;
+    boolean usingJoystick = true;
     swerveDrive = new SwerveDrive();
     shooter = new Shooter();
     intake = new Intake();
